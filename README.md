@@ -1,53 +1,66 @@
-# Avance Work Companion Repository
+# Avance Professional Development App
 
 ## Overview
-This repository contains the complete documentation, build instructions, and organizational structure for the Avance Work Companion – a private web application designed to help Josh excel in his part-time IT support role at Avance Business Technology.
+The Avance Professional Development app is a private web application designed to support professional growth in Managed Service Provider (MSP) IT roles. It provides practical training tools, scenario practice, and progress tracking to help build skills in helpdesk support, endpoint management, Microsoft 365 administration, networking, cybersecurity, and client communication.
+
+## Features
+- **MSP Skills Matrix**: Browse and track readiness across 14 MSP skill categories, from helpdesk triage to client communication.
+- **MSP Scenario Trainer**: Practice realistic ticket scenarios with feedback on troubleshooting approach, safety, and escalation judgment.
+- **Ticket Notes Trainer**: Learn to write professional, clear ticket notes with before/after examples, practice prompts, and a quality rubric.
+- **Evidence Pack**: Generate manager-safe professional development summaries based on completed activities.
+- **MSP Roadmap**: View an 8-stage progression from Level 1 helpdesk foundations to L2 readiness and client ownership.
+- **Saved Local Progress**: Progress and preferences are saved in browser localStorage for continuity across sessions.
+
+## Current Implementation Status
+The app currently includes the MSP Professional Development features listed above. Other planned features (Work Logs, Tasks, Knowledge Base, Playbooks, Clients, Learning Tracker, etc.) are documented in `TODO.md` but not yet implemented. Accessing these routes will result in 404 errors until they are built.
+
+## Known Issues
+- On the MSP Scenario Trainer page (`/msp-scenarios`), the "Scenario progress" select dropdown shows a black background when opened, making options invisible (though selection still works).
+- The Evidence Pack page lacks a "Copy to clipboard" button for the Markdown summary.
+- The Ticket Notes Trainer is not accessible via navigation (only direct URL).
+
+These issues are noted for future code updates.
+
+## App Location
+The application source code is located in the `/app` folder.
+
+## Running Locally
+To run the app locally:
+
+1. Navigate to the app directory:
+   ```
+   cd app
+   ```
+
+2. Install dependencies:
+   ```
+   npm install
+   ```
+
+3. Start the development server:
+   ```
+   npm run dev
+   ```
+
+The app will be available at `http://localhost:3000`.
+
+## Building the App
+To build the app for production:
+
+```
+npm run build
+```
+
+This generates optimized static files in the `.next` folder.
 
 ## Repository Structure
+- `docs/`: Documentation including requirements, architecture, guides, and QA materials.
+- `app/`: Next.js application source code.
+- `build/`: Build prompts and instructions.
+- `archive/`: Archived files.
 
-### Root Files
-- `VISION.md` - Unified vision document reconciling all source materials
-- `TODO.md` - Implementation roadmap and backlog
-
-### docs/
-Documentation organized by category:
-- `vision/` - Product vision documents
-- `requirements/` - PRD, user stories, acceptance criteria
-- `architecture/` - Technical architecture, IA, UI/UX guides
-- `professional_development/` - MSP Skills Academy specification and PD growth TODOs
-- `research/` - Background research on Avance and industry context
-- `guides/` - User guides, checklists, plans, and quick references
-- `resources/` - Supporting files (PDFs, spreadsheets, etc.)
-
-### build/
-Build instructions and prompts for creating the application:
-- `master_prompt.md` - Main Claude Code prompt
-- `second_pass_prompt.md` - Refinement prompt
-- `claude_code_prompt.md` - Alternative build prompt
-
-### app/
-Reserved for the application source code (to be built using the prompts in `build/`)
-
-### archive/
-Archived files, downloads, and backups (not part of active development)
-
-## Key Documents
-- Start with `VISION.md` for the overall vision
-- `docs/vision/product_vision.md` for product vision
-- `docs/requirements/prd.md` for requirements
-- `docs/professional_development/msp_skills_academy.md` for the MSP professional development feature specification
-- `docs/professional_development/msp_pd_growth_todo.md` for the MSP PD implementation checklist
-- `docs/guides/first_week_quick_ref.md` for practical usage
-- `build/master_prompt.md` to build the app
-
-## Vision Summary
-The Avance Work Companion supports Josh's part-time MSP work through preparation, knowledge capture, task management, continuity, and professional development in IT MSP skills. It's a personal, local-first web app built with Next.js, TypeScript, and Tailwind CSS.
-
-## No Competing Visions
-All source documents align on a consistent vision of a practical, personal work companion for regional IT support work.
-
-## Professional Development Focus
-The app and documentation emphasize Josh's growth in overall IT MSP skills as a core purpose, integrated throughout preparation, tracking, reflection, scenario practice, ticket note quality, client communication, and professional evidence generation.
+## Deployment
+See `docs/deployment/vercel_deployment.md` for Vercel deployment instructions.
 
 ## Getting Started
 1. Read `VISION.md`
