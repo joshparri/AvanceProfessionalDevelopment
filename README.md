@@ -66,8 +66,9 @@ See `docs/deployment/vercel_deployment.md` for Vercel deployment instructions.
 1. Read `VISION.md`
 2. Review `docs/vision/` and `docs/requirements/`
 3. Review `docs/professional_development/msp_skills_academy.md`
-4. Use `build/master_prompt.md` with Claude Code to build the app
-5. Follow `docs/guides/` for usage and planning
+5. Review `docs/guides/prompt_pack_recommendations.md` for AI coaching and prompt pack guidance
+6. Use `build/master_prompt.md` with Claude Code to build the app
+7. Follow `docs/guides/` for usage and planning
 
 ## Maintenance
 - Update documents as Josh learns more about Avance

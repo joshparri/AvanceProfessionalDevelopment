@@ -166,6 +166,26 @@ This TODO list outlines all remaining tasks to build and optimize the Avance Wor
 - [ ] Connect completed scenarios, notes, and evidence outputs to existing learning/PD records where practical
 - [ ] Update app navigation with MSP professional development sections
 
+### 4.4 Prompt Pack & Coaching Improvements
+- [ ] Create `docs/guides/prompt_pack_recommendations.md` to capture AI prompt packs and enhancement ideas for both Avance apps
+- [ ] Update the browser title for Avance Work Companion from the placeholder label to `Avance Work Companion`
+- [ ] Update the browser title for Avance PD from `Create Next App` to `Avance PD`
+- [ ] Add visual overdue indicators for follow-ups and pending tasks across dashboards
+- [ ] Add quick-add buttons for common log types such as ticket notes, client calls, and learning actions
+- [ ] Add a daily briefing flow summarising next shift, open follow-ups, pending tasks, and recent work logs
+- [ ] Add a healthy-shift coaching flow for water, eye breaks, outdoor minutes, and quick reset suggestions
+- [ ] Add a repeat-issue coach flow to identify recurring problems and propose playbooks or knowledge notes
+- [ ] Add a work log summariser to convert raw capture into concise ticket notes with actions and tags
+- [ ] Add a micro-learning booster to recommend relevant learning content based on current tasks
+- [ ] Add a backup reminder flow for export and Supabase sync with weekly prompts
+- [ ] Add a PD focus overview flow summarising learning progress, hours, targets, and the next best move
+- [ ] Add a weekly retrospective flow that reviews recent logs, pending tasks, and improvement suggestions
+- [ ] Add a task breakdown flow that turns pending tasks into smaller steps with estimated durations
+- [ ] Add a follow-up triage flow for client/third-party tickets with concise action suggestions or message templates
+- [ ] Add a learning cockpit navigator to recommend modules aligned with current tasks or gaps
+- [ ] Add a progress analytics flow showing hours worked, tasks completed, and skills practised
+- [ ] Add feature ideas for weekly calendar view, task-to-learning linking, and simple analytics
+
 ## Phase 5: Advanced Features & Integration
 
 ### 5.1 Data Management
