@@ -32,6 +32,7 @@ archive/
 
 # private source documents / exports
 docs/resources/
+docs/Avance KB_s/
 
 # OS/editor
 .DS_Store

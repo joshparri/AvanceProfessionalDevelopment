@@ -16,8 +16,8 @@ The app currently includes the MSP Professional Development features listed abov
 
 ## Known Issues
 - On the MSP Scenario Trainer page (`/msp-scenarios`), the "Scenario progress" select dropdown shows a black background when opened, making options invisible (though selection still works).
-- The Evidence Pack page lacks a "Copy to clipboard" button for the Markdown summary.
-- The Ticket Notes Trainer is not accessible via navigation (only direct URL).
+- The KB Learning Machine currently uses localStorage only; there is no import from private Avance KB PDFs.
+- The KB Learning Machine has seeded field cards and local practice evidence, but not manual card create/edit/delete yet.
 
 These issues are noted for future code updates.
 
