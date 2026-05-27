@@ -6,6 +6,7 @@ The Avance Professional Development app is a private web application designed to
 ## Features
 - **MSP Skills Matrix**: Browse and track readiness across 14 MSP skill categories, from helpdesk triage to client communication.
 - **MSP Scenario Trainer**: Practice realistic ticket scenarios with feedback on troubleshooting approach, safety, and escalation judgment.
+- **Interactive Learning Cockpit**: Practise selected activities with free-text flashcards, step-by-step troubleshooting, and role-play chat drills.
 - **Ticket Notes Trainer**: Learn to write professional, clear ticket notes with before/after examples, practice prompts, and a quality rubric.
 - **Evidence Pack**: Generate manager-safe professional development summaries based on completed activities.
 - **MSP Roadmap**: View an 8-stage progression from Level 1 helpdesk foundations to L2 readiness and client ownership.
@@ -18,6 +19,7 @@ The app currently includes the MSP Professional Development features listed abov
 - On the MSP Scenario Trainer page (`/msp-scenarios`), the "Scenario progress" select dropdown shows a black background when opened, making options invisible (though selection still works).
 - The KB Learning Machine currently uses localStorage only; there is no import from private Avance KB PDFs.
 - The KB Learning Machine has seeded field cards and local practice evidence, but not manual card create/edit/delete yet.
+- Learning Cockpit role-play currently uses a deterministic local coach; no GROQ/LLM API integration exists in this repo yet.
 
 These issues are noted for future code updates.
 
