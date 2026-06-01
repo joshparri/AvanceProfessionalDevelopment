@@ -4,16 +4,27 @@
 The Avance Professional Development app is a private web application designed to support professional growth in Managed Service Provider (MSP) IT roles. It provides practical training tools, scenario practice, and progress tracking to help build skills in helpdesk support, endpoint management, Microsoft 365 administration, networking, cybersecurity, and client communication.
 
 ## Features
-- **MSP Skills Matrix**: Browse and track readiness across 14 MSP skill categories, from helpdesk triage to client communication.
-- **MSP Scenario Trainer**: Practice realistic ticket scenarios with feedback on troubleshooting approach, safety, and escalation judgment.
-- **Interactive Learning Cockpit**: Practise selected activities with free-text flashcards, step-by-step troubleshooting, and role-play chat drills.
-- **Ticket Notes Trainer**: Learn to write professional, clear ticket notes with before/after examples, practice prompts, and a quality rubric.
-- **Evidence Pack**: Generate manager-safe professional development summaries based on completed activities.
-- **MSP Roadmap**: View an 8-stage progression from Level 1 helpdesk foundations to L2 readiness and client ownership.
-- **Local Backup & Settings**: A new Settings page now supports theme preference, export/import backup, and full data reset.
+- **Dashboard / daily briefing**: Daily shift summary, pre-shift checklist, recent logs, and learning recommendations.
+- **Shifts**: Scheduled shift list and shift detail pages with prep checklist support.
+- **Work Logs**: Work log capture with recent activity and time tracking.
+- **Tasks**: Task list and task management workflow.
+- **KB Learning Machine**: Knowledge capture and practice decks for MSP topics.
+- **Ticket Notes Trainer**: Practice writing better notes with examples and guidance.
+- **Evidence Pack**: Generate professional development summaries from completed activities.
+- **Learning Cockpit**: Learning activities and practice recommendations for MSP skills.
+- **MSP Skills Matrix**: Progress tracker for MSP skill readiness.
+- **MSP Scenario Trainer**: Scenario practice with troubleshooting guidance.
+- **MSP Roadmap**: Progression path from foundational helpdesk work toward client ownership.
+- **Vendor Remote Session workflow**: Guided remote support session handling.
+- **Monitoring Alert Sanitizer**: Alert sanitization workflow and route.
+- **Change Guardrail**: Change planning and risk guardrails.
+- **Security Alert Triage**: Security alert review and response guidance.
+- **Health & Outdoors**: Wellbeing and outdoors support content.
+- **Onsite Checklist**: Onsite visit preparation checklist.
+- **Settings / local backup / theme preferences**: Export/import backup, theme switching, and reset.
 
 ## Current Implementation Status
-The app currently includes the MSP Professional Development features listed above. Other planned features (Work Logs, Tasks, Knowledge Base, Playbooks, Clients, Learning Tracker, etc.) are documented in `TODO.md` but not yet implemented. Accessing these routes will result in 404 errors until they are built.
+The app currently includes the MSP professional development features listed above and a growing set of workflow pages under `/app`. Many planned workflows and page refinements are tracked in `TODO.md`, but the app already includes core live routes for shifts, work logs, tasks, KB learning, scenario training, and more.
 
 ## Known Issues
 - On the MSP Scenario Trainer page (`/msp-scenarios`), the "Scenario progress" select dropdown shows a black background when opened, making options invisible (though selection still works).
@@ -29,22 +40,17 @@ The application source code is located in the `/app` folder.
 ## Running Locally
 To run the app locally:
 
-1. Navigate to the app directory:
-   ```
-   cd app
-   ```
-
-2. Install dependencies:
+1. Install dependencies:
    ```
    npm install
    ```
 
-3. Start the development server:
+2. Start the development server:
    ```
    npm run dev
    ```
 
-The app will be available at `http://localhost:3000`.
+The app will be available at `http://localhost:5173` by default.
 
 ## Building the App
 To build the app for production:
@@ -53,7 +59,7 @@ To build the app for production:
 npm run build
 ```
 
-This generates optimized static files in the `.next` folder.
+This generates optimized static files in the `dist` folder.
 
 ## Repository Structure
 - `docs/`: Documentation including requirements, architecture, guides, and QA materials.

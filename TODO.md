@@ -156,13 +156,13 @@ This TODO list outlines all remaining tasks to build and optimize the Avance Wor
 - [x] Document MSP PD implementation checklist in `docs/professional_development/msp_pd_growth_todo.md`
 - [x] Document two-app prompt-pack roadmap in `docs/implementation-plans/two-app-prompt-pack-roadmap.md`
 - [ ] Create MSP skill taxonomy data file (`app/src/data/mspSkills.ts`)
-- [ ] Create realistic MSP scenario data file (`app/src/data/mspScenarios.ts`)
-- [ ] Add MSP Skills Matrix page (`/msp-skills`)
-- [ ] Add MSP Scenario Trainer page (`/msp-scenarios`)
-- [ ] Add Ticket Notes Trainer page (`/ticket-notes`)
-- [ ] Add Evidence Pack page (`/evidence-pack`)
-- [ ] Add MSP Roadmap page (`/msp-roadmap`)
-- [ ] Add client communication practice prompts and model responses
+ [ ] Create realistic MSP scenario data file (`app/src/data/mspScenarios.ts`)
+ [x] Add MSP Skills Matrix page (`/msp-skills`)
+ [x] Add MSP Scenario Trainer page (`/msp-scenarios`)
+ [x] Add Ticket Notes Trainer page (`/ticket-notes`)
+ [x] Add Evidence Pack page (`/evidence-pack`)
+ [x] Add MSP Roadmap page (`/msp-roadmap`)
+ [ ] Add client communication practice prompts and model responses
 - [ ] Add simple rule-based next best action recommendations
 - [ ] Connect completed scenarios, notes, and evidence outputs to existing learning/PD records where practical
 - [ ] Update app navigation with MSP professional development sections
