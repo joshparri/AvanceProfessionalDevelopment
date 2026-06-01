@@ -6,6 +6,7 @@ import { cn } from '@/lib/utils';
 import { DarkModeToggle } from '@/components/DarkModeToggle';
 import {
   Home,
+  ScanText,
   Calendar,
   Target,
   ClipboardList,
@@ -32,6 +33,7 @@ const navigation = [
   { name: 'Learning Cockpit', href: '/learning-cockpit', icon: Lightbulb },
   { name: 'AvanceGame', href: '/avance-game', icon: Gamepad2 },
   { name: 'Security Triage', href: '/security-alert-triage', icon: ShieldAlert },
+  { name: 'Alert Sanitizer', href: '/monitoring-alert-sanitizer', icon: ScanText },
   { name: 'Tool Primers', href: '/tool-primers', icon: Wrench },
   { name: 'Ticket Notes', href: '/ticket-notes', icon: ClipboardCheck },
   { name: 'Evidence Pack', href: '/evidence-pack', icon: Archive },
