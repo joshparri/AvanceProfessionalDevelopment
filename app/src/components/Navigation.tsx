@@ -22,6 +22,7 @@ import {
   HeartPulse,
   BookOpen,
   Gamepad2,
+  GitPullRequestArrow,
 } from 'lucide-react';
 
 const navigation = [
@@ -36,6 +37,7 @@ const navigation = [
   { name: 'Security Triage', href: '/security-alert-triage', icon: ShieldAlert },
   { name: 'Alert Sanitizer', href: '/monitoring-alert-sanitizer', icon: ScanText },
   { name: 'Vendor Sessions', href: '/vendor-remote-session', icon: ScreenShare },
+  { name: 'Change Guardrail', href: '/change-guardrail', icon: GitPullRequestArrow },
   { name: 'Tool Primers', href: '/tool-primers', icon: Wrench },
   { name: 'Ticket Notes', href: '/ticket-notes', icon: ClipboardCheck },
   { name: 'Evidence Pack', href: '/evidence-pack', icon: Archive },
