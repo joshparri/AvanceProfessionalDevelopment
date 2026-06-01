@@ -98,4 +98,172 @@ export const toolPrimers: ToolPrimer[] = [
       },
     ],
   },
+  {
+    id: 'ironscales-phishing-setup',
+    title: 'IRONSCALES & Phishing Setup',
+    description:
+      'A focused setup primer for phishing reporting, mailbox scoping, VIP impersonation tagging, and safe migration away from older email security tools.',
+    priority: 'high',
+    tags: ['ironscales', 'phishing', 'email-security', 'm365', 'change-control'],
+    sections: [
+      {
+        title: 'Pre-flight checks',
+        steps: [
+          'Confirm the approved client scope and whether this is a new deployment, adjustment, or migration from another email security tool.',
+          'Confirm licensed mailbox count before enabling protection. Do not assume shared mailboxes or unlicensed accounts need the same treatment.',
+          'Confirm the 911/report-phishing mailbox naming convention and whether it already exists.',
+          'Confirm whether an older email security platform must be disabled only after the replacement is active.',
+        ],
+        warning:
+          'Treat email security changes as tenant-impacting. Ask a senior technician before broad policy changes, country blocks, or decommissioning an old platform.',
+      },
+      {
+        title: 'Setup path',
+        steps: [
+          'Create or verify the phishing reporting mailbox using the approved naming convention.',
+          'Deploy the report-phishing button to the approved user scope.',
+          'Enable IRONSCALES protection only for the approved licensed mailbox scope.',
+          'Tag CEO, director, finance, and other approved high-risk roles for VIP impersonation protection.',
+          'Review country blocking against local guidance. Do not blindly follow outdated vendor documentation.',
+          'Confirm alerts, reporting flow, and user-visible behavior after deployment.',
+        ],
+      },
+      {
+        title: 'Ticket note checklist',
+        steps: [
+          'Record approved scope and senior approval source.',
+          'Record mailbox count and role categories, not user-sensitive details.',
+          'Record report button deployment status.',
+          'Record old-platform decommission status if relevant.',
+          'Record follow-up owner for any campaigns, training, or unresolved policy questions.',
+        ],
+      },
+    ],
+  },
+  {
+    id: 'device-setup-handoff',
+    title: 'Device Setup & Handoff Checklist',
+    description:
+      'Repeatable setup flow for Windows and Mac devices, covering identity, productivity apps, endpoint tooling, handoff, and billing checks.',
+    priority: 'high',
+    tags: ['device-setup', 'windows', 'mac', 'entra', 'onedrive', 'billing'],
+    sections: [
+      {
+        title: 'Setup checks',
+        steps: [
+          'Confirm device type, intended user role, required account platform, and whether the job is covered by an agreement.',
+          'Install or verify Office apps, Outlook profile requirements, OneDrive sync, browser defaults, and required line-of-business apps.',
+          'Enroll or join the device through the approved identity path, such as Entra, local domain, or Google Credential Provider for Windows.',
+          'Install and confirm RMM, endpoint protection, backup agent, and any required compliance tooling.',
+          'Confirm updates, restart state, disk encryption expectations, and local admin/support access method.',
+        ],
+      },
+      {
+        title: 'Handoff checks',
+        steps: [
+          'Confirm the user can sign in and open the required apps.',
+          'Confirm Outlook/mail, OneDrive/files, printing, and browser access where in scope.',
+          'Capture customer pickup or sign-off in the approved ticket system.',
+          'Record exceptions such as missing passwords, pending licensing, vendor app work, or hardware accessories.',
+          'If non-agreement work was completed, mark billing handoff clearly.',
+        ],
+      },
+    ],
+  },
+  {
+    id: 'windows-performance-triage',
+    title: 'Windows Performance Triage',
+    description:
+      'Decision tree for slow laptops, freezing after login, high CPU, OneDrive pressure, and endpoint-agent performance concerns.',
+    priority: 'medium',
+    tags: ['performance', 'windows', 'sentinelone', 'onedrive', 'hardware'],
+    sections: [
+      {
+        title: 'First checks',
+        steps: [
+          'Check Task Manager for CPU, memory, disk, startup app, and endpoint-agent pressure.',
+          'Check OneDrive sync backlog, large libraries, sync errors, and whether thumbnails/files are constantly processing.',
+          'Check pending restart, Windows Update, storage pressure, and obvious hardware symptoms.',
+          'Check device architecture. ARM/Snapdragon devices may struggle with a standard MSP stack if tooling compatibility is poor.',
+          'Ask whether the issue affects one user profile, all users on the device, or many devices.',
+        ],
+      },
+      {
+        title: 'Decision points',
+        steps: [
+          'If an endpoint agent is the top consumer, escalate before disabling or uninstalling protection.',
+          'If OneDrive is the main pressure source, reduce sync scope or resolve sync errors before recommending replacement hardware.',
+          'If the device is low-spec or incompatible with the required stack, document why an x64 business-grade replacement may be more reliable.',
+          'If symptoms continue after safe cleanup, updates, restart, and profile checks, escalate for deeper diagnostics.',
+        ],
+        warning:
+          'Do not disable security tooling as a performance fix unless a senior technician approves a reversible test and confirms the device will return to the standard baseline.',
+      },
+    ],
+  },
+  {
+    id: 'profile-migration-identity-transition',
+    title: 'Profile Migration & Identity Transition',
+    description:
+      'Primer for cached credential issues, new Windows profile decisions, Forensit migration, JumpCloud-to-Entra moves, and GCPW transitions.',
+    priority: 'medium',
+    tags: ['profile-migration', 'forensit', 'entra', 'gcpw', 'jumpcloud'],
+    sections: [
+      {
+        title: 'When to use this',
+        steps: [
+          'Use when Windows keeps old tenancy credentials, apps loop authentication, or a device is moving between identity providers.',
+          'Use when a profile must move from local/domain/JumpCloud identity to Entra or Google Credential Provider for Windows.',
+          'Use when creating a new Windows profile may be faster and safer than clearing many cached credentials manually.',
+        ],
+      },
+      {
+        title: 'Migration checks',
+        steps: [
+          'Confirm Windows edition supports the planned migration path.',
+          'Confirm old and new identity providers, device management owner, and sign-in method.',
+          'Back up or confirm user data sync before profile migration.',
+          'Use Forensit or the approved migration process when preserving profile state is required.',
+          'Document PST/export or mail archive tasks separately if another technician owns them.',
+          'For GCPW, confirm exact case-sensitive configuration in Google Admin before rollout.',
+        ],
+      },
+      {
+        title: 'Stop conditions',
+        steps: [
+          'Stop if the user has unsynced local data and no backup has been confirmed.',
+          'Stop if the target identity provider is not ready or licensing/enrollment is unclear.',
+          'Stop if the migration could strand remote access and no local admin/support path exists.',
+        ],
+      },
+    ],
+  },
+  {
+    id: 'kb-maintenance-tracker',
+    title: 'Knowledge Base Maintenance Tracker',
+    description:
+      'Workflow for updating stale KB articles, vendor/admin portal links, screenshots, affected article counts, and publish status.',
+    priority: 'medium',
+    tags: ['knowledge-base', 'halo', 'documentation', 'maintenance'],
+    sections: [
+      {
+        title: 'Update workflow',
+        steps: [
+          'Identify the stale KB article, old process/link, new process/link, and affected article count.',
+          'Update screenshots or placeholders when the vendor UI changed.',
+          'Record reviewer, publish status, and whether related articles need the same update.',
+          'Add a follow-up reminder if the update depends on a senior review or vendor confirmation.',
+        ],
+      },
+      {
+        title: 'Note scaffold',
+        steps: [
+          'Issue: KB article contained stale vendor/admin portal guidance.',
+          'What changed: Updated process/link/screenshot to current approved workflow.',
+          'Validation: Checked affected articles and confirmed no client-sensitive values were added.',
+          'Next step: Publish, review, or monitor for related stale articles.',
+        ],
+      },
+    ],
+  },
 ];
