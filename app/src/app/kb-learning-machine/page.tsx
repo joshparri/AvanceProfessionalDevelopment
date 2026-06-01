@@ -29,6 +29,8 @@ import {
   type KbFieldCard,
   type KbReviewRating,
 } from '@/data/kbFieldCards';
+import { db, initDatabase } from '@/lib/db';
+import { KnowledgeCategory } from '@/types';
 import {
   buildKbFlashcards,
   buildKbScenarioPrompt,
@@ -100,7 +102,48 @@ const toTicketNoteMarkdown = (note: TicketNoteDraft) =>
 
 export default function KbLearningMachinePage() {
   const [progress, setProgress] = useState<KbProgressByCardId>(() => getKbLearningProgress());
-  const cards = useMemo(() => mergeKbCardsWithProgress(kbFieldCards, progress), [progress]);
+  const [dbCards, setDbCards] = useState<KbFieldCard[] | null>(null);
+
+  // Load KB cards from IndexedDB; seed from static defaults on first run.
+  useState(() => {
+    void (async () => {
+      try {
+        await initDatabase();
+        const count = await db.knowledgeEntries.count();
+        if (count === 0) {
+          // seed entries with full card JSON in `content`
+          const toAdd = kbFieldCards.map((card) => ({
+            id: card.id,
+            title: card.title,
+            content: JSON.stringify(card),
+            category: (KnowledgeCategory.PROCEDURE as any) || 'other',
+            tags: [],
+            relatedTasks: [],
+            createdAt: new Date(),
+            updatedAt: new Date(),
+          }));
+          await db.knowledgeEntries.bulkAdd(toAdd);
+          setDbCards(kbFieldCards);
+        } else {
+          const entries = await db.knowledgeEntries.toArray();
+          const parsed = entries
+            .map((e) => {
+              try {
+                return JSON.parse(e.content) as KbFieldCard;
+              } catch (err) {
+                return null;
+              }
+            })
+            .filter(Boolean) as KbFieldCard[];
+          if (parsed.length > 0) setDbCards(parsed);
+        }
+      } catch (err) {
+        console.error('KB seed/read failed', err);
+      }
+    })();
+  });
+
+  const cards = useMemo(() => mergeKbCardsWithProgress(dbCards ?? kbFieldCards, progress), [dbCards, progress]);
   const [selectedCardId, setSelectedCardId] = useState(cards[0]?.id ?? '');
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('all');
