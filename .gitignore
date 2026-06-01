@@ -29,6 +29,7 @@ app-checkpoint-*/
 *-checkpoint-*/
 app.zip
 archive/
+dist/
 
 # private source documents / exports
 docs/resources/
