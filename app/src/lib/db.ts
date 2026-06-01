@@ -262,7 +262,8 @@ export const migrateStaleSeededShiftDates = async (now = new Date()) => {
     }
 
     await db.workLogs.where('shiftId').anyOf(Array.from(updates.keys())).modify((log) => {
-      const targetDate = updates.get(log.shiftId);
+      if (!log.shiftId) return;
+      const targetDate = updates.get(log.shiftId as string);
       if (targetDate) {
         log.date = targetDate;
       }
