@@ -11,7 +11,7 @@ export type EducationalGamePlatform = {
   name: string;
   provider: string;
   url: string;
-  /** Internal Avance PD route; when set, tile links in-app instead of opening url in new tab */
+  /** Internal Avance Work Companion route; when set, tile links in-app instead of opening url in new tab */
   internalPath?: string;
   isBuiltIn?: boolean;
   category: EducationalGameCategory;
@@ -140,7 +140,7 @@ export const educationalGamePlatforms: EducationalGamePlatform[] = [
     isBuiltIn: true,
     category: 'it-gamified',
     categoryLabel: educationalGameCategoryLabels['it-gamified'],
-    tagline: 'Live-service style MSP practice inside Avance PD',
+    tagline: 'Live-service style MSP practice inside Avance Work Companion',
     description:
       'Built-in sub-app combining daily events, just-one-more challenge loops, variable mystery drops, cohort ranking, IT skill trees, streaks, XP, and modes inspired by Duolingo, GeoGuessr, Elevate, Khan Academy, Coolmath, CMD Challenge, and SadServers.',
     gameplayHighlights: [
@@ -151,7 +151,7 @@ export const educationalGamePlatforms: EducationalGamePlatform[] = [
       'External labs unlock after your first boss victory',
     ],
     bestFor: 'Daily 5-minute IT habit loops without leaving Avance Professional Development.',
-    platforms: ['Built into Avance PD'],
+    platforms: ['Built into Avance Work Companion'],
     costNote: 'Free — runs in your browser; progress saved locally.',
   },
 ];

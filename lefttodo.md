@@ -97,11 +97,11 @@ These items should be tackled first.
 - Proposed improvements call for PendingActionTracker, OnsiteChecklist, tool primers, alert sanitization, and daily briefing flow.
 
 ## Immediate next actions
-- [ ] Fix app metadata and browser title branding
+- [x] Fix app metadata and browser title branding
 - [ ] Add persistent follow-up tracking to the dashboard
 - [ ] Add Evidence Pack copy-summary button
 - [ ] Fix MSP scenario dropdown styling and persistence
-- [ ] Create initial Work Log and Task skeleton with local persistence
+- [x] Create initial Work Log and Task skeleton with local persistence
 
 ## Progress tracking
 - [x] Universal search added

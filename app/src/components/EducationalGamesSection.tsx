@@ -44,7 +44,7 @@ export function EducationalGamesSection() {
         <LearningIllustration variant="external-learning" size="sm" decorative />
         <p className="text-xs leading-relaxed text-slate-600 dark:text-slate-400">
           Top free options for adults—plus AvanceGame, built into this app. External platforms open in a new tab;
-          AvanceGame keeps streaks, XP, and MSP modes inside Avance PD.
+          AvanceGame keeps streaks, XP, and MSP modes inside Avance Work Companion.
         </p>
       </div>
 

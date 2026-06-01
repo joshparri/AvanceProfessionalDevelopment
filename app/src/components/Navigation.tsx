@@ -49,7 +49,7 @@ export function Navigation() {
           <div className="flex min-w-0 flex-1">
             <div className="flex-shrink-0 flex items-center">
               <h1 className="text-lg font-bold tracking-tight text-slate-900 dark:text-white sm:text-xl">
-                <span className="text-blue-600 dark:text-blue-400">Avance</span> Academy
+                <span className="text-blue-600 dark:text-blue-400">Avance</span> Work Companion
               </h1>
             </div>
             <div

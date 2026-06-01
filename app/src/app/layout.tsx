@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Avance PD",
-  description: "Local-first MSP professional development and KB learning app.",
+  title: "Avance Work Companion",
+  description: "Local-first MSP work companion for logs, tasks, knowledge, and coaching.",
 };
 
 export default function RootLayout({

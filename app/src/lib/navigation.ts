@@ -19,6 +19,7 @@ import {
   Gamepad2,
   GitPullRequestArrow,
   Settings,
+  CheckSquare,
 } from 'lucide-react';
 
 export interface NavigationItem {
@@ -50,6 +51,13 @@ export const navigation: NavigationItem[] = [
     icon: NotebookText,
     description: 'Search, filter, and review work log entries, notes, and tags.',
     tags: ['work logs', 'notes', 'search', 'activity'],
+  },
+  {
+    name: 'Tasks',
+    href: '/tasks',
+    icon: CheckSquare,
+    description: 'Capture and manage follow-up tasks with priority, due date, and status.',
+    tags: ['tasks', 'todo', 'priority', 'follow-up'],
   },
   {
     name: 'Onsite Checklist',
