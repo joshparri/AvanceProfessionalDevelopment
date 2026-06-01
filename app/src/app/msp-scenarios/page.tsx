@@ -170,6 +170,7 @@ export default function MspScenariosPage() {
                         )
                       }
                       className="mt-2 h-10 w-full rounded-md border border-slate-300 bg-white px-3 text-sm text-slate-900 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 md:w-64"
+                      style={{ colorScheme: 'light' }}
                     >
                       {mspScenarioStatusOptions.map((option) => (
                         <option key={option} value={option}>
