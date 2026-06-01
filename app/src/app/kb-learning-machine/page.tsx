@@ -508,6 +508,7 @@ export default function KbLearningMachinePage() {
                       <div className="flex flex-wrap items-center gap-2">
                         <h2 className="text-xl font-semibold text-gray-900 dark:text-white">{selectedCard.title}</h2>
                         <Badge variant="outline">{selectedCard.category}</Badge>
+                        <Button variant="destructive" size="sm" onClick={() => handleDeleteCard(selectedCard.id)}>Delete Card</Button>
                       </div>
                       <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">{selectedCard.whenToUse}</p>
                     </div>
