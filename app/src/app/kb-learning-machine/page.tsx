@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Layout } from '@/components/Layout';
 import { Button } from '@/components/ui/button';
@@ -105,7 +105,7 @@ export default function KbLearningMachinePage() {
   const [dbCards, setDbCards] = useState<KbFieldCard[] | null>(null);
 
   // Load KB cards from IndexedDB; seed from static defaults on first run.
-  useState(() => {
+  useEffect(() => {
     void (async () => {
       try {
         await initDatabase();
@@ -141,7 +141,44 @@ export default function KbLearningMachinePage() {
         console.error('KB seed/read failed', err);
       }
     })();
-  });
+  }, []);
+
+  const handleAddCard = async () => {
+    const id = crypto.randomUUID();
+    const newCard: KbFieldCard = {
+      id,
+      title: 'New KB card',
+      category: 'General',
+      whenToUse: '',
+      prerequisites: [],
+      firstChecks: [],
+      coreSteps: [],
+      commonMistake: '',
+      escalateIf: '',
+      relatedSkill: '',
+      confidence: 'recognise',
+      reviewDueDate: new Date().toISOString(),
+      reviewHistory: [],
+    };
+    await db.knowledgeEntries.add({
+      id: newCard.id,
+      title: newCard.title,
+      content: JSON.stringify(newCard),
+      category: (KnowledgeCategory.OTHER as any) || 'other',
+      tags: [],
+      relatedTasks: [],
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
+    setDbCards((prev) => (prev ? [newCard, ...prev] : [newCard]));
+    setSelectedCardId(newCard.id);
+  };
+
+  const handleDeleteCard = async (cardId: string) => {
+    await db.knowledgeEntries.delete(cardId);
+    setDbCards((prev) => (prev ? prev.filter((c) => c.id !== cardId) : prev));
+    if (selectedCardId === cardId) setSelectedCardId('');
+  };
 
   const cards = useMemo(() => mergeKbCardsWithProgress(dbCards ?? kbFieldCards, progress), [dbCards, progress]);
   const [selectedCardId, setSelectedCardId] = useState(cards[0]?.id ?? '');
@@ -315,6 +352,7 @@ export default function KbLearningMachinePage() {
             <Button variant="outline" size="sm" asChild>
               <Link href="/evidence-pack">Evidence Pack</Link>
             </Button>
+            <Button variant="outline" size="sm" onClick={() => handleAddCard()}>New Card</Button>
           </>
         }
       >
