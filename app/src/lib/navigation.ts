@@ -1,0 +1,180 @@
+import type { LucideIcon } from 'lucide-react';
+import {
+  Home,
+  ScanText,
+  Calendar,
+  ScreenShare,
+  Target,
+  ClipboardList,
+  ClipboardCheck,
+  Archive,
+  Map,
+  Brain,
+  Lightbulb,
+  NotebookText,
+  ShieldAlert,
+  Wrench,
+  HeartPulse,
+  BookOpen,
+  Gamepad2,
+  GitPullRequestArrow,
+  Settings,
+} from 'lucide-react';
+
+export interface NavigationItem {
+  name: string;
+  href: string;
+  icon: LucideIcon;
+  description: string;
+  tags: string[];
+}
+
+export const navigation: NavigationItem[] = [
+  {
+    name: 'Dashboard',
+    href: '/',
+    icon: Home,
+    description: 'Overview of tasks, progress, and coaching actions across the app.',
+    tags: ['dashboard', 'overview', 'home', 'summary'],
+  },
+  {
+    name: 'Shifts',
+    href: '/shifts',
+    icon: Calendar,
+    description: 'View shift details, schedules, and shift-specific action items.',
+    tags: ['shifts', 'schedule', 'roster', 'work hours'],
+  },
+  {
+    name: 'Work Logs',
+    href: '/work-logs',
+    icon: NotebookText,
+    description: 'Search, filter, and review work log entries, notes, and tags.',
+    tags: ['work logs', 'notes', 'search', 'activity'],
+  },
+  {
+    name: 'Onsite Checklist',
+    href: '/onsite-checklist',
+    icon: ClipboardCheck,
+    description: 'Use the onsite checklist for pre-, onsite, and post-visit readiness.',
+    tags: ['checklist', 'onsite', 'visit', 'preparation'],
+  },
+  {
+    name: 'MSP Skills',
+    href: '/msp-skills',
+    icon: Target,
+    description: 'Track skills readiness, search MSP competencies, and plan learning.',
+    tags: ['skills', 'msp', 'competencies', 'learning'],
+  },
+  {
+    name: 'MSP Scenarios',
+    href: '/msp-scenarios',
+    icon: ClipboardList,
+    description: 'Browse MSP scenarios, related skills, and customer conversation practice.',
+    tags: ['scenarios', 'practice', 'skills', 'customer'],
+  },
+  {
+    name: 'Decision Tree',
+    href: '/decision-tree',
+    icon: Map,
+    description: 'Navigate decision pathways and recommended next steps for common issues.',
+    tags: ['decision tree', 'logic', 'choices', 'workflows'],
+  },
+  {
+    name: 'MSP Quiz',
+    href: '/msp-quiz',
+    icon: Brain,
+    description: 'Practice MSP knowledge with quizzes and learning reinforcement.',
+    tags: ['quiz', 'practice', 'knowledge', 'assessment'],
+  },
+  {
+    name: 'Learning Cockpit',
+    href: '/learning-cockpit',
+    icon: Lightbulb,
+    description: 'Connect learning goals, activities, and performance metrics in one place.',
+    tags: ['learning cockpit', 'goals', 'activities', 'performance'],
+  },
+  {
+    name: 'AvanceGame',
+    href: '/avance-game',
+    icon: Gamepad2,
+    description: 'Play the Avance learning game and challenge your MSP skills in scenarios.',
+    tags: ['game', 'learning', 'challenges', 'practice'],
+  },
+  {
+    name: 'Security Triage',
+    href: '/security-alert-triage',
+    icon: ShieldAlert,
+    description: 'Triage security alerts, investigate incidents, and review remediation workflows.',
+    tags: ['security', 'alert', 'triage', 'investigation'],
+  },
+  {
+    name: 'Alert Sanitizer',
+    href: '/monitoring-alert-sanitizer',
+    icon: ScanText,
+    description: 'Filter, clean, and triage noisy monitoring alerts more efficiently.',
+    tags: ['alert sanitizer', 'monitoring', 'noise', 'cleanup'],
+  },
+  {
+    name: 'Vendor Sessions',
+    href: '/vendor-remote-session',
+    icon: ScreenShare,
+    description: 'Manage vendor remote session requests, status, and coordination notes.',
+    tags: ['vendor', 'remote', 'sessions', 'coordination'],
+  },
+  {
+    name: 'Change Guardrail',
+    href: '/change-guardrail',
+    icon: GitPullRequestArrow,
+    description: 'Review change guidance, guardrails, and safe implementation steps.',
+    tags: ['change management', 'guardrail', 'risk', 'process'],
+  },
+  {
+    name: 'Tool Primers',
+    href: '/tool-primers',
+    icon: Wrench,
+    description: 'Access primers for tools, systems, and operational best practices.',
+    tags: ['tool primers', 'tools', 'systems', 'reference'],
+  },
+  {
+    name: 'Ticket Notes',
+    href: '/ticket-notes',
+    icon: ClipboardCheck,
+    description: 'Capture, edit, and reuse standard ticket notes and incident summaries.',
+    tags: ['ticket notes', 'documentation', 'incident', 'notes'],
+  },
+  {
+    name: 'Evidence Pack',
+    href: '/evidence-pack',
+    icon: Archive,
+    description: 'Generate evidence summaries, readiness reports, and practice insights.',
+    tags: ['evidence', 'reports', 'readiness', 'practice'],
+  },
+  {
+    name: 'KB Learning Machine',
+    href: '/kb-learning-machine',
+    icon: BookOpen,
+    description: 'Search KB cards, run spaced reviews, and practice knowledge checks.',
+    tags: ['kb', 'learning machine', 'cards', 'review'],
+  },
+  {
+    name: 'Health & Outdoors',
+    href: '/health-outdoors',
+    icon: HeartPulse,
+    description: 'Explore health actions, outdoor wellbeing prompts, and research-backed habits.',
+    tags: ['health', 'outdoors', 'wellbeing', 'research'],
+  },
+  {
+    name: 'MSP Roadmap',
+    href: '/msp-roadmap',
+    icon: Map,
+    description: 'Plan your MSP development roadmap with skill targets and progress markers.',
+    tags: ['roadmap', 'plan', 'skills', 'development'],
+  },
+  {
+    name: 'Settings',
+    href: '/settings',
+    icon: Settings,
+    description: 'Configure app preferences, display settings, and local customization.',
+    tags: ['settings', 'preferences', 'theme', 'customization'],
+  },
+];

@@ -1,58 +1,17 @@
 'use client';
 
 import Link from 'next/link';
-import { useLayoutEffect, useRef } from 'react';
-import { usePathname } from 'next/navigation';
+import { useLayoutEffect, useRef, useState, useEffect, FormEvent } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { DarkModeToggle } from '@/components/DarkModeToggle';
-import {
-  Home,
-  ScanText,
-  Calendar,
-  ScreenShare,
-  Target,
-  ClipboardList,
-  ClipboardCheck,
-  Archive,
-  Map,
-  Brain,
-  Lightbulb,
-  NotebookText,
-  ShieldAlert,
-  Wrench,
-  HeartPulse,
-  BookOpen,
-  Gamepad2,
-  GitPullRequestArrow,
-  Settings,
-} from 'lucide-react';
-
-const navigation = [
-  { name: 'Dashboard', href: '/', icon: Home },
-  { name: 'Shifts', href: '/shifts', icon: Calendar },
-  { name: 'Work Logs', href: '/work-logs', icon: NotebookText },
-  { name: 'Onsite Checklist', href: '/onsite-checklist', icon: ClipboardCheck },
-  { name: 'MSP Skills', href: '/msp-skills', icon: Target },
-  { name: 'MSP Scenarios', href: '/msp-scenarios', icon: ClipboardList },
-  { name: 'Decision Tree', href: '/decision-tree', icon: Map },
-  { name: 'MSP Quiz', href: '/msp-quiz', icon: Brain },
-  { name: 'Learning Cockpit', href: '/learning-cockpit', icon: Lightbulb },
-  { name: 'AvanceGame', href: '/avance-game', icon: Gamepad2 },
-  { name: 'Security Triage', href: '/security-alert-triage', icon: ShieldAlert },
-  { name: 'Alert Sanitizer', href: '/monitoring-alert-sanitizer', icon: ScanText },
-  { name: 'Vendor Sessions', href: '/vendor-remote-session', icon: ScreenShare },
-  { name: 'Change Guardrail', href: '/change-guardrail', icon: GitPullRequestArrow },
-  { name: 'Tool Primers', href: '/tool-primers', icon: Wrench },
-  { name: 'Ticket Notes', href: '/ticket-notes', icon: ClipboardCheck },
-  { name: 'Evidence Pack', href: '/evidence-pack', icon: Archive },
-  { name: 'KB Learning Machine', href: '/kb-learning-machine', icon: BookOpen },
-  { name: 'Health & Outdoors', href: '/health-outdoors', icon: HeartPulse },
-  { name: 'MSP Roadmap', href: '/msp-roadmap', icon: Map },
-  { name: 'Settings', href: '/settings', icon: Settings },
-];
+import { Search } from 'lucide-react';
+import { navigation } from '@/lib/navigation';
 
 export function Navigation() {
   const pathname = usePathname();
+  const router = useRouter();
+  const [searchQuery, setSearchQuery] = useState('');
   const navRef = useRef<HTMLDivElement | null>(null);
   const scrollKey = 'avance-nav-scroll-left';
 
@@ -63,9 +22,23 @@ export function Navigation() {
     }
   }, [pathname]);
 
+  useEffect(() => {
+    if (pathname !== '/search') {
+      setSearchQuery('');
+    }
+  }, [pathname]);
+
   const storeScrollPosition = () => {
     if (navRef.current) {
       sessionStorage.setItem(scrollKey, String(navRef.current.scrollLeft));
+    }
+  };
+
+  const handleSearchSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const query = searchQuery.trim();
+    if (query) {
+      router.push(`/search?q=${encodeURIComponent(query)}`);
     }
   };
 
@@ -105,6 +78,22 @@ export function Navigation() {
                 );
               })}
             </div>
+            <form onSubmit={handleSearchSubmit} className="hidden sm:flex sm:items-center sm:ml-4 sm:min-w-[240px]">
+              <label htmlFor="global-search" className="sr-only">
+                Search the app
+              </label>
+              <div className="relative flex-1">
+                <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                <input
+                  id="global-search"
+                  type="search"
+                  value={searchQuery}
+                  onChange={(event) => setSearchQuery(event.target.value)}
+                  placeholder="Search app..."
+                  className="w-full rounded-lg border border-slate-200 bg-white py-2 pl-9 pr-3 text-sm text-slate-800 shadow-sm outline-none transition-colors focus:border-blue-400 focus:ring-2 focus:ring-blue-200 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100 dark:focus:border-blue-500 dark:focus:ring-blue-500/20"
+                />
+              </div>
+            </form>
           </div>
           <div className="ml-3 flex shrink-0 items-center border-l border-slate-200 pl-3 dark:border-slate-700">
             <DarkModeToggle showLabel />
@@ -119,6 +108,20 @@ export function Navigation() {
           <DarkModeToggle showLabel />
         </div>
         <div className="space-y-1 pb-3 pt-1">
+          <Link
+            href="/search"
+            className={cn(
+              'block pl-3 pr-4 py-2 border-l-4 text-base font-medium',
+              pathname === '/search'
+                ? 'bg-blue-50 border-blue-500 text-blue-700 dark:bg-blue-900 dark:border-blue-400 dark:text-blue-300'
+                : 'border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:border-gray-600 dark:hover:text-gray-300'
+            )}
+          >
+            <div className="flex items-center">
+              <Search className="w-5 h-5 mr-3" />
+              Search
+            </div>
+          </Link>
           {navigation.map((item) => {
             const Icon = item.icon;
             const isActive = pathname === item.href;
