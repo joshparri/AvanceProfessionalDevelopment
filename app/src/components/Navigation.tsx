@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { useLayoutEffect, useRef } from 'react';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { DarkModeToggle } from '@/components/DarkModeToggle';
@@ -52,6 +53,21 @@ const navigation = [
 
 export function Navigation() {
   const pathname = usePathname();
+  const navRef = useRef<HTMLDivElement | null>(null);
+  const scrollKey = 'avance-nav-scroll-left';
+
+  useLayoutEffect(() => {
+    const savedScrollLeft = sessionStorage.getItem(scrollKey);
+    if (navRef.current && savedScrollLeft !== null) {
+      navRef.current.scrollLeft = Number(savedScrollLeft);
+    }
+  }, [pathname]);
+
+  const storeScrollPosition = () => {
+    if (navRef.current) {
+      sessionStorage.setItem(scrollKey, String(navRef.current.scrollLeft));
+    }
+  };
 
   return (
     <nav className="sticky top-0 z-40 border-b border-slate-200/80 bg-white/90 backdrop-blur-md dark:border-slate-800 dark:bg-slate-950/90">
@@ -63,7 +79,11 @@ export function Navigation() {
                 <span className="text-blue-600 dark:text-blue-400">Avance</span> Academy
               </h1>
             </div>
-            <div className="hidden sm:ml-6 sm:flex sm:space-x-1 sm:overflow-x-auto">
+            <div
+              ref={navRef}
+              className="hidden sm:ml-6 sm:flex sm:space-x-1 sm:overflow-x-auto"
+              onScroll={storeScrollPosition}
+            >
               {navigation.map((item) => {
                 const Icon = item.icon;
                 const isActive = pathname === item.href;
@@ -71,6 +91,7 @@ export function Navigation() {
                   <Link
                     key={item.name}
                     href={item.href}
+                    onClick={storeScrollPosition}
                     className={cn(
                       'inline-flex items-center rounded-lg px-2.5 py-2 text-sm font-medium transition-colors',
                       isActive
