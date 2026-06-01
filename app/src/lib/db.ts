@@ -12,6 +12,7 @@ import {
   Playbook,
   LearningItem,
   Invoice,
+  WorkCategory,
 } from '@/types';
 
 const touchUpdatedAt = (modifications: object) => {
@@ -169,6 +170,21 @@ export class AvanceDatabase extends Dexie {
 // Create and export a singleton instance
 export const db = new AvanceDatabase();
 
+export const DEFAULT_APP_SETTINGS_ID = 'default';
+
+const defaultAppSettings: AppSettings = {
+  id: DEFAULT_APP_SETTINGS_ID,
+  theme: 'system',
+  notifications: true,
+  autoBackup: true,
+  defaultWorkCategory: WorkCategory.SUPPORT,
+  workingHours: {
+    start: '08:30',
+    end: '17:00',
+  },
+  updatedAt: new Date(),
+};
+
 // Initialize the database
 export const initDatabase = async () => {
   try {
@@ -179,6 +195,41 @@ export const initDatabase = async () => {
     throw error;
   }
 };
+
+export const getAppSettings = async (): Promise<AppSettings> => {
+  const settings = await db.appSettings.get(DEFAULT_APP_SETTINGS_ID);
+  if (settings) {
+    return settings;
+  }
+
+  await db.appSettings.put(defaultAppSettings);
+  return defaultAppSettings;
+};
+
+export const saveAppSettings = async (updates: Partial<AppSettings>): Promise<AppSettings> => {
+  const existing = await getAppSettings();
+  const updated: AppSettings = {
+    ...existing,
+    ...updates,
+    updatedAt: new Date(),
+  };
+  await db.appSettings.put(updated);
+  return updated;
+};
+
+export const getDataCounts = async () => ({
+  shifts: await db.shifts.count(),
+  workLogs: await db.workLogs.count(),
+  tasks: await db.tasks.count(),
+  pdAchievements: await db.pdAchievements.count(),
+  pdGoals: await db.pdGoals.count(),
+  clients: await db.clients.count(),
+  projects: await db.projects.count(),
+  knowledgeEntries: await db.knowledgeEntries.count(),
+  playbooks: await db.playbooks.count(),
+  learningItems: await db.learningItems.count(),
+  invoices: await db.invoices.count(),
+});
 
 // Utility functions for database operations
 export const clearAllData = async () => {

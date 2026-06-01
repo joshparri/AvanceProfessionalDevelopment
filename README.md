@@ -10,7 +10,7 @@ The Avance Professional Development app is a private web application designed to
 - **Ticket Notes Trainer**: Learn to write professional, clear ticket notes with before/after examples, practice prompts, and a quality rubric.
 - **Evidence Pack**: Generate manager-safe professional development summaries based on completed activities.
 - **MSP Roadmap**: View an 8-stage progression from Level 1 helpdesk foundations to L2 readiness and client ownership.
-- **Saved Local Progress**: Progress and preferences are saved in browser localStorage for continuity across sessions.
+- **Local Backup & Settings**: A new Settings page now supports theme preference, export/import backup, and full data reset.
 
 ## Current Implementation Status
 The app currently includes the MSP Professional Development features listed above. Other planned features (Work Logs, Tasks, Knowledge Base, Playbooks, Clients, Learning Tracker, etc.) are documented in `TODO.md` but not yet implemented. Accessing these routes will result in 404 errors until they are built.

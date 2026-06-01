@@ -23,6 +23,7 @@ import {
   BookOpen,
   Gamepad2,
   GitPullRequestArrow,
+  Settings,
 } from 'lucide-react';
 
 const navigation = [
@@ -45,6 +46,7 @@ const navigation = [
   { name: 'KB Learning Machine', href: '/kb-learning-machine', icon: BookOpen },
   { name: 'Health & Outdoors', href: '/health-outdoors', icon: HeartPulse },
   { name: 'MSP Roadmap', href: '/msp-roadmap', icon: Map },
+  { name: 'Settings', href: '/settings', icon: Settings },
 ];
 
 export function Navigation() {
