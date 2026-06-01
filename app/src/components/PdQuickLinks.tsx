@@ -9,12 +9,14 @@ import {
   Gamepad2,
   Lightbulb,
   Map,
+  ShieldAlert,
   Target,
 } from 'lucide-react';
 
 const links = [
   { href: '/learning-cockpit', label: 'Learning Cockpit', icon: Lightbulb },
   { href: '/avance-game', label: 'AvanceGame', icon: Gamepad2 },
+  { href: '/security-alert-triage', label: 'Security Triage', icon: ShieldAlert },
   { href: '/kb-learning-machine', label: 'KB Machine', icon: BookOpen },
   { href: '/msp-scenarios', label: 'Scenarios', icon: ClipboardList },
   { href: '/msp-quiz', label: 'Quiz', icon: Brain },
