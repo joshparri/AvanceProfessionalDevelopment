@@ -57,12 +57,14 @@ export default function ShiftsPage() {
 
   const getShiftDisplayText = (shift: Shift) => {
     const shiftDate = new Date(shift.date);
+    const timeRange = `${shift.startTime} - ${shift.endTime}`;
+
     if (isToday(shiftDate)) {
-      return 'Today';
+      return `Today · ${timeRange}`;
     } else if (isTomorrow(shiftDate)) {
-      return 'Tomorrow';
+      return `Tomorrow · ${timeRange}`;
     } else {
-      return format(shiftDate, 'EEEE, MMM d');
+      return `${format(shiftDate, 'EEEE, MMM d')} · ${timeRange}`;
     }
   };
 

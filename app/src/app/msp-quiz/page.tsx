@@ -70,6 +70,9 @@ export default function MspQuizPage() {
   }, [selectedDomain, selectedDifficulty]);
 
   const selectedQuestionCount = Math.min(questionCount, filteredQuestions.length);
+  const selectedQuestionLabel = selectedQuestionCount === filteredQuestions.length
+    ? `${selectedQuestionCount} questions`
+    : `${selectedQuestionCount} of ${filteredQuestions.length} questions available`;
 
   const currentQuizQuestion = shuffledQuestions[currentQuestionIndex];
   const isLastQuestion = currentQuestionIndex === shuffledQuestions.length - 1;
@@ -460,7 +463,7 @@ export default function MspQuizPage() {
                   className="w-full"
                   size="lg"
                 >
-                  Start Quiz ({filteredQuestions.length} questions)
+                  Start Quiz ({selectedQuestionLabel})
                 </Button>
               </CardContent>
             </Card>

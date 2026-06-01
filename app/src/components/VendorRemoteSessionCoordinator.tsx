@@ -56,9 +56,23 @@ function toDateTimeInputValue(timestamp: number) {
   return offsetDate.toISOString().slice(0, 16);
 }
 
+function parseDateTimeLocal(value: string): number | null {
+  const [datePart, timePart] = value.split('T');
+  if (!datePart || !timePart) return null;
+
+  const [year, month, day] = datePart.split('-').map(Number);
+  const [hours, minutes] = timePart.split(':').map(Number);
+
+  if ([year, month, day, hours, minutes].some((value) => Number.isNaN(value))) {
+    return null;
+  }
+
+  const parsed = new Date(year, month - 1, day, hours, minutes);
+  return Number.isNaN(parsed.getTime()) ? null : parsed.getTime();
+}
+
 function fromDateTimeInputValue(value: string) {
-  const parsed = new Date(value);
-  return Number.isNaN(parsed.getTime()) ? defaultNextAttempt() : parsed.getTime();
+  return parseDateTimeLocal(value) ?? null;
 }
 
 function readStoredSessions(): VendorSession[] {
@@ -140,6 +154,12 @@ export function VendorRemoteSessionCoordinator() {
       return;
     }
 
+    const nextAttemptAtTimestamp = fromDateTimeInputValue(nextAttemptAt);
+    if (nextAttemptAtTimestamp === null) {
+      setError('Next attempt date/time is invalid');
+      return;
+    }
+
     setSessions((current) => [
       ...current,
       {
@@ -148,7 +168,7 @@ export function VendorRemoteSessionCoordinator() {
         vendorCategory,
         accessType,
         requiredAttendee,
-        nextAttemptAt: fromDateTimeInputValue(nextAttemptAt),
+        nextAttemptAt: nextAttemptAtTimestamp,
         status: 'planning',
         attemptLog: [],
         createdAt: Date.now(),

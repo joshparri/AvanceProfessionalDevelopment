@@ -46,7 +46,7 @@ export const toolPrimers: ToolPrimer[] = [
           'If certificate trust is correct but the error persists, escalate for server-side RDP certificate binding, private key permission, and RDS security permission checks.',
         ],
         screenshots: [
-          'Screenshot placeholder: Control Panel > RemoteApp and Desktop Connections showing the subscribed workplace feed and update action.',
+          'Screenshot: Control Panel > RemoteApp and Desktop Connections showing the subscribed workplace feed and refresh/update action.',
         ],
         warning:
           'Do not attempt server-side changes, including altering RDP encryption or security layer settings, unless a senior technician directs you to do so.',
