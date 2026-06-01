@@ -98,7 +98,8 @@ These items should be tackled first.
 
 ## Immediate next actions
 - [x] Fix app metadata and browser title branding
-- [ ] Add persistent follow-up tracking to the dashboard
+- [x] Add persistent follow-up tracking to the dashboard
+- [ ] Extend universal search to tasks and work logs
 - [ ] Add Evidence Pack copy-summary button
 - [ ] Fix MSP scenario dropdown styling and persistence
 - [x] Create initial Work Log and Task skeleton with local persistence

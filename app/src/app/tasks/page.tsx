@@ -61,6 +61,18 @@ export default function TasksPage() {
   };
 
   useEffect(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    const params = new URLSearchParams(window.location.search);
+    const query = params.get('q')?.trim() ?? '';
+    if (query) {
+      setSearchTerm(query);
+    }
+  }, []);
+
+  useEffect(() => {
     const initialise = async () => {
       try {
         await initDatabase();
