@@ -1,4 +1,5 @@
 import Dexie, { Table } from 'dexie';
+import { addDays, isBefore, isSameDay, startOfDay, startOfWeek } from 'date-fns';
 import {
   Shift,
   WorkLog,
@@ -211,10 +212,69 @@ const defaultAppSettings: AppSettings = {
   updatedAt: new Date(),
 };
 
+export const getUpcomingMondayAndWednesday = (now = new Date()) => {
+  const today = startOfDay(now);
+  const mondayThisWeek = startOfWeek(today, { weekStartsOn: 1 });
+  const wednesdayThisWeek = addDays(mondayThisWeek, 2);
+  const nextMonday = addDays(mondayThisWeek, 7);
+  const nextWednesday = addDays(wednesdayThisWeek, 7);
+
+  const candidates = [mondayThisWeek, wednesdayThisWeek, nextMonday, nextWednesday];
+  const upcoming = candidates.filter((date) => !isBefore(date, today));
+
+  return [upcoming[0], upcoming[1]] as [Date, Date];
+};
+
+const isSeededDefaultShift = (shift: Shift) => {
+  return (
+    shift.location === 'Dubbo Office'
+    && shift.startTime === '08:30'
+    && shift.endTime === '17:00'
+    && shift.duration === 510
+    && (shift.notes === 'Regular Monday shift' || shift.notes === 'Regular Wednesday shift')
+  );
+};
+
+export const migrateStaleSeededShiftDates = async (now = new Date()) => {
+  const [mondayDate, wednesdayDate] = getUpcomingMondayAndWednesday(now);
+  const seededShifts = await db.shifts.filter(isSeededDefaultShift).toArray();
+
+  if (seededShifts.length === 0) {
+    return;
+  }
+
+  const updates = new Map<string, Date>();
+
+  for (const shift of seededShifts) {
+    const targetDate = shift.notes === 'Regular Monday shift' ? mondayDate : wednesdayDate;
+    if (!isSameDay(new Date(shift.date), targetDate)) {
+      updates.set(shift.id, targetDate);
+    }
+  }
+
+  if (updates.size === 0) {
+    return;
+  }
+
+  await db.transaction('rw', [db.shifts, db.workLogs], async () => {
+    for (const [id, date] of updates) {
+      await db.shifts.update(id, { date });
+    }
+
+    await db.workLogs.where('shiftId').anyOf(Array.from(updates.keys())).modify((log) => {
+      const targetDate = updates.get(log.shiftId);
+      if (targetDate) {
+        log.date = targetDate;
+      }
+    });
+  });
+};
+
 // Initialize the database
 export const initDatabase = async () => {
   try {
     await db.open();
+    await migrateStaleSeededShiftDates();
     console.log('Database initialized successfully');
   } catch (error) {
     console.error('Failed to initialize database:', error);

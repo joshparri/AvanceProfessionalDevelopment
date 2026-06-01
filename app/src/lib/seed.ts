@@ -1,4 +1,4 @@
-import { clearAllData, db } from './db';
+import { clearAllData, db, getUpcomingMondayAndWednesday } from './db';
 import {
   Shift,
   WorkLog,
@@ -73,12 +73,9 @@ export const seedDatabase = async () => {
 
     await db.clients.bulkAdd(clients);
 
-    // Seed shifts (next Monday and Wednesday)
+    // Seed shifts for the current relevant Monday and Wednesday.
     const now = new Date();
-    const monday = new Date(now);
-    monday.setDate(now.getDate() + (1 - now.getDay() + 7) % 7);
-    const wednesday = new Date(monday);
-    wednesday.setDate(monday.getDate() + 2);
+    const [monday, wednesday] = getUpcomingMondayAndWednesday(now);
 
     const shifts: Shift[] = [
       {
