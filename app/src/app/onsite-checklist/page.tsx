@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 import { Layout } from '@/components/Layout';
 import { HeroPanel, PageShell, SectionHeader } from '@/components/academy';
@@ -200,6 +201,25 @@ export default function OnsiteChecklistPage() {
           subtitle="Use this local-only checklist to capture the key remote access and handover checks without storing sensitive client data."
           illustration={<CalendarDays className="h-16 w-16 text-cyan-400" />}
         />
+
+        <Card className="overflow-hidden">
+          <CardHeader>
+            <CardTitle>Use the note template generator</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <p className="text-sm text-muted-foreground">
+              When the checklist is complete, use the ticket notes trainer to turn this summary into a structured note with issue, checks, action, result, and next step.
+            </p>
+            <div className="flex flex-wrap gap-3">
+              <Button size="sm" asChild>
+                <Link href="/ticket-notes">Open Note Template Generator</Link>
+              </Button>
+              <Button size="sm" variant="outline">
+                Set 3CX to Away before leaving (manual reminder)
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
 
         <div className="grid gap-6 xl:grid-cols-[1.2fr_0.8fr]">
           <div className="space-y-6">
