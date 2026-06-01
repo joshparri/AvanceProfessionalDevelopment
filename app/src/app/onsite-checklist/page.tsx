@@ -117,15 +117,15 @@ function saveChecklistState(state: { checkedIds: string[]; summaryNotes: string 
 }
 
 export default function OnsiteChecklistPage() {
-  const [checkedIds, setCheckedIds] = useState<string[]>([]);
-  const [summaryNotes, setSummaryNotes] = useState('');
+  const [checkedIds, setCheckedIds] = useState<string[]>(() => {
+    const state = loadChecklistState();
+    return state.checkedIds;
+  });
+  const [summaryNotes, setSummaryNotes] = useState(() => {
+    const state = loadChecklistState();
+    return state.summaryNotes;
+  });
   const [copyMessage, setCopyMessage] = useState('');
-
-  useEffect(() => {
-    const { checkedIds: storedCheckedIds, summaryNotes: storedSummaryNotes } = loadChecklistState();
-    setCheckedIds(storedCheckedIds);
-    setSummaryNotes(storedSummaryNotes);
-  }, []);
 
   useEffect(() => {
     saveChecklistState({ checkedIds, summaryNotes });

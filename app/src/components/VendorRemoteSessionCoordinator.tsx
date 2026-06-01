@@ -104,19 +104,15 @@ function buildVendorNote(session: VendorSession) {
 }
 
 export function VendorRemoteSessionCoordinator() {
-  const [sessions, setSessions] = useState<VendorSession[]>([]);
-  const [hasLoadedStorage, setHasLoadedStorage] = useState(false);
+  const [sessions, setSessions] = useState<VendorSession[]>(() => readStoredSessions());
+  const [hasLoadedStorage, setHasLoadedStorage] = useState(true);
   const [ticketId, setTicketId] = useState('');
   const [vendorCategory, setVendorCategory] = useState(vendorCategories[0]);
   const [accessType, setAccessType] = useState(accessTypes[0]);
   const [requiredAttendee, setRequiredAttendee] = useState(attendeeTypes[0]);
   const [nextAttemptAt, setNextAttemptAt] = useState(toDateTimeInputValue(defaultNextAttempt()));
   const [attemptTextById, setAttemptTextById] = useState<Record<string, string>>({});
-
-  useEffect(() => {
-    setSessions(readStoredSessions());
-    setHasLoadedStorage(true);
-  }, []);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     if (hasLoadedStorage) {
@@ -136,8 +132,13 @@ export function VendorRemoteSessionCoordinator() {
 
   const addSession = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setError('');
+
     const cleanTicketId = ticketId.trim();
-    if (!cleanTicketId) return;
+    if (!cleanTicketId) {
+      setError('Ticket ID is required');
+      return;
+    }
 
     setSessions((current) => [
       ...current,
@@ -156,6 +157,7 @@ export function VendorRemoteSessionCoordinator() {
 
     setTicketId('');
     setNextAttemptAt(toDateTimeInputValue(defaultNextAttempt()));
+    setError('');
   };
 
   const updateSession = (id: string, changes: Partial<VendorSession>) => {
@@ -241,6 +243,9 @@ export function VendorRemoteSessionCoordinator() {
                 </Button>
               </div>
             </div>
+            {error && (
+              <p className="col-span-full text-sm font-medium text-red-400">{error}</p>
+            )}
           </form>
         </CardContent>
       </Card>

@@ -31,10 +31,16 @@ export function QuickTaskDialog({ onCreated, trigger }: QuickTaskDialogProps) {
   const [category, setCategory] = useState<TaskCategory>(TaskCategory.TECHNICAL);
   const [dueDate, setDueDate] = useState('');
   const [saving, setSaving] = useState(false);
+  const [error, setError] = useState('');
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
-    if (!title.trim()) return;
+    setError('');
+
+    if (!title.trim()) {
+      setError('Task title is required');
+      return;
+    }
 
     setSaving(true);
     try {
@@ -54,8 +60,12 @@ export function QuickTaskDialog({ onCreated, trigger }: QuickTaskDialogProps) {
       setTitle('');
       setDescription('');
       setDueDate('');
+      setError('');
       setOpen(false);
       onCreated?.();
+    } catch (err) {
+      setError('Failed to create task. Please try again.');
+      console.error(err);
     } finally {
       setSaving(false);
     }
@@ -133,6 +143,9 @@ export function QuickTaskDialog({ onCreated, trigger }: QuickTaskDialogProps) {
             <Label htmlFor="task-due">Due date (optional)</Label>
             <Input id="task-due" type="date" value={dueDate} onChange={(e) => setDueDate(e.target.value)} />
           </div>
+          {error && (
+            <p className="text-sm font-medium text-red-500">{error}</p>
+          )}
           <DialogFooter>
             <Button type="button" variant="outline" onClick={() => setOpen(false)}>
               Cancel

@@ -96,6 +96,7 @@ export function PendingActionTracker() {
   const [ticketId, setTicketId] = useState('');
   const [actionRequiredText, setActionRequiredText] = useState('');
   const [followUpDue, setFollowUpDue] = useState(() => toDateTimeInputValue(defaultFollowUpDue()));
+  const [error, setError] = useState('');
 
   useEffect(() => {
     const timeoutId = window.setTimeout(() => {
@@ -136,15 +137,23 @@ export function PendingActionTracker() {
     setTicketId('');
     setActionRequiredText('');
     setFollowUpDue(toDateTimeInputValue(defaultFollowUpDue()));
+    setError('');
   };
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setError('');
 
     const cleanTicketId = ticketId.trim();
     const cleanActionRequiredText = actionRequiredText.trim();
 
-    if (!cleanTicketId || !cleanActionRequiredText) {
+    if (!cleanTicketId) {
+      setError('Ticket ID is required');
+      return;
+    }
+
+    if (!cleanActionRequiredText) {
+      setError('Action description is required');
       return;
     }
 
@@ -261,6 +270,9 @@ export function PendingActionTracker() {
                   </p>
                 </div>
               </div>
+              {error && (
+                <p className="text-sm font-medium text-red-500">{error}</p>
+              )}
               <DialogFooter>
                 <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)}>
                   Cancel
