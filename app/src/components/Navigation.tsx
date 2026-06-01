@@ -29,6 +29,7 @@ const navigation = [
   { name: 'Dashboard', href: '/', icon: Home },
   { name: 'Shifts', href: '/shifts', icon: Calendar },
   { name: 'Work Logs', href: '/work-logs', icon: NotebookText },
+  { name: 'Onsite Checklist', href: '/onsite-checklist', icon: ClipboardCheck },
   { name: 'MSP Skills', href: '/msp-skills', icon: Target },
   { name: 'MSP Scenarios', href: '/msp-scenarios', icon: ClipboardList },
   { name: 'MSP Quiz', href: '/msp-quiz', icon: Brain },
