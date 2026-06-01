@@ -1,0 +1,881 @@
+Date,Sender,Email Summary,App Change Needed,Priority,Suggested Codex Prompt,Subject,Thread ID,Conted Created by Gemeni,Link to Doc
+,,,,,,YES,,,
+"May 25, 2026 at 11:14 AM AEST",noreply-workspace-studio@google.com,"The Email to Codex flow was turned on by your account in Workspace Studio A flow named Email to Codex was turned on in Workspace Studio for your account. This flow can take the following actions on your behalf: Ask Gemini Ask Gemini Add a row You can review this flow in Workspace Studio and turn it off if you don't recognize it. Thanks, Google Workspace team. You received this mandatory email service announcement to update you about important changes to your Google product or account. © 2026 Google LLC, 1600 Amphitheatre Parkway, Mountain View, CA 94043, USA","Date received: May 25, 2026 at 11:14 AM AEST
+Sender: mailto:noreply-workspace-studio@google.com
+Subject: Your ""Email to Codex"" flow was turned on in Workspace Studio
+Short summary: This is a mandatory notification email confirming that a flow named ""Email to Codex"" was successfully turned on in Google Workspace Studio. The notification lists the actions the flow can take on behalf of the user.
+Problem revealed: The email is a standard service announcement and does not reveal a problem, friction, or missing feature within the app.
+Suggested app change: The email does not clearly suggest an app improvement, as it is a mandatory notification about a user action (turning on a flow).
+Type: unclear
+Priority: low
+Suggested Codex prompt: This email is a notification and does not contain enough information to suggest a useful, small, and safe app improvement.
+Approved: NO",,"​​Claude Code/Codex Prompt: Add RDP Troubleshooting Primer
+Create a new section within the ""Tool Primers & How-Tos"" module of the Avance Work Companion web application to address recurring RDP and certificate errors encountered by the IT team. This new primer must provide actionable, step-by-step guidance for troubleshooting remote desktop connection failures, incorporating knowledge gathered from recent support issues.
+
+1. Goal
+Integrate a ""Windows Remote Desktop (RDP) & RemoteApps"" primer into the existing ToolPrimers.jsx component. This guide should help a technician quickly diagnose and fix common connection failures, specifically those related to security certificates.
+
+2. Implementation Details
+- App Stack: React (Functional Components) + Tailwind CSS + Preloaded Data/Local Storage.
+- Target Section: TOOL PRIMERS & HOW-TOS (Accordion style).
+- Preloaded Data: Add the required content structure (Title, Description, Steps) to the appropriate preloaded data file (e.g., data/toolPrimers.js as outlined in CLAUDE_CODE_PROMPT.md).
+
+3. Content for the New Primer
+Primer Title: Windows Remote Desktop & RemoteApps
+
+What it is: The primary method for clients to securely connect to on-premise servers or virtual desktop infrastructure. Often managed via Remote Desktop Gateway (RDG) or similar tools like Pritunl/Work Resource.
+
+Key Troubleshooting Scenarios:
+1. ""An internal error has occurred"" (Certificate/TLS Issue)
+ - Context: This generic error often occurs when the Remote Desktop Services (RDS) certificate has expired or permissions are incorrect. A common server event log error is 0x8009030D (TLS server credential private key error).
+ - First Check: Attempt to reproduce the error on an internal VM. If replicated, the issue is server-side.
+ - Common Fix (Client-Side): Advise the user to update their RemoteApp connection via Control Panel.
+ - Deep Fix (Server/Client): Remotely install the latest .cer file (e.g., hinesrdpnew.cer) on the client's machine (in both Current User and Local Machine stores) and verify RDP security permissions on the server.
+2. Troubleshooting Tree (General Connectivity)
+ - Step 1: Check if the user is connected to VPN (e.g., Pritunl) or Remote Desktop Gateway (RDG) client.
+ - Step 2: Ensure the user is trying to connect via the correct RDP icon/file (if multiple exist).
+ - Step 3: If the user is remote, check the server status via Datto RMM.
+Required Elements:
+- A placeholder for a screenshot of the ""RemoteApp and Desktop Connections"" Control Panel area.
+- An explicit warning: Technicians should not attempt server-side changes (like altering RDP encryption settings) unless directed by a senior tech.
+This primer addresses a clear point of friction (RDP cert failures) using precise error codes and fixes sourced from team communications.","Your ""Email to Codex"" flow was turned on in Workspace Studio",​​19e5cb2945507823,​​​​noreply-workspace-studio@google.com,
+"May 25, 2026 at 11:19 AM AEST",support@avance.technology,"This is an automatic Technician Notification for ticket: 0011852 and Dr John Gavilan. Latest Note: Ticket Number: 0011852 End-user's E-mail Address: reception@drjg.com.au Ticket Summary: Issue Sending from Medical Objects Ticket Details: Please see the following email to Jackson, as per below:- I have taken a snippet of the error message for medical objects – this only occurs when I try and send a letter (which is normally done via medical objects). As mentioned, we can’t send any letters to doctors until this issue gets rectified, so if this can be looked into asap, I would be most appreciated. Thanks again Brad. If you have any questions, you can call me on 0408 506 775. Hi Jackson, Hope you had a great long weekend and didn’t work too hard… Just wanted to let you know that I went to send a letter today (in word format). This is normally done via medical objects and I got the following message:- I think this could be a scam as I haven’t encountered this message. I think I saw this the first time we used medical objects but not since. Can you look into this please as I can’t send any letters to GP’s until this message gets rectified. Thanks Rochelle _________________________ Rochelle Starr Practice Manager Ticket Logged Date: 6/5/2026 12:03 Target Respond By Date: 25/5/2026 13:18 Target Resolution Date: 11/5/2026 11:13 Ticket Currently Assigned To: Josh Parris Current Ticket Category: Business Applications Related Asset: Priority ID and Description: 3 Service Level Agreement: Incident SLA From: reception@drjg.com.au Sent: 25/5/2026 10:18:22 AM To: ""Avance Business Technology Support"" Subject: RE: Issue Sending from Medical Objects - Ticket Update [ID:0011852] Hi Dean, I will contact medical objects when I get a spare 5 minutes. I will try and organise this week – I do have the phone number for medical objects. Thanks Rochelle _________________________ Rochelle Starr Practice Manager For Dr John Gavilan Arraez Consultant Psychiatrist From: helpdesk@medicalobjects.com Sent: 25/5/2026 8:59:20 AM To: ""Avance Business Technology Support"" Cc: reception@drjg.com.au, johngavilanarraez@gmail.com Subject: Re: (Case 1044442) Issue Sending from Medical Objects - Ticket Update [ID:0011852] Good Morning, We will require remote access to the Workstation and the Server to investigate the issue. Kindly call us on the below details so we can assist. If you require our assistance or any further information, feel free to give us a call on (07) 5456 6000 and quote case number 1044442. Kind Regards Dean Ardern ---------- Medical-Objects Pty Ltd https://www.medicalobjects.com/ Wiki: https://kb.medical-objects.com.au/ Aus Phone: +61 7 5456 6000 Aus Fax: +61 7 3221 0220 NZ Phone: +64 9 964 6000 NZ Fax: +64 9 964 6006 ""Medical-Objects, proudly built on Australian Standards"" Please read our Privacy Policy on how we manage the personal information that we collect, use and disclose and how to contact us if you have any questions about the management of your personal information. http://www.medicalobjects.com/privacy/ -----Original Message----- From: Avance Business Technology Support Sent: 25/5/2026 8:52:11 AM To: reception@drjg.com.au Subject: Re: Issue Sending from Medical Objects - Ticket Update [ID:0011852] Good morning DRJG Reception, See the below email from Medical Objects IT Support. When can we schedule a time for a remote session please? Good Morning, Thank you for your email. We will require remote access to the Workstation and the Server to investigate the issue. Kindly call us on the below details so we can assist. If you require our assistance or any further information, feel free to give us a call on (07) 5456 6000 and quote case number 1044442. Kind Regards Dean Ardern ---------- Medical-Objects Pty Ltd https://www.medicalobjects.com/ Wiki: https://kb.medical-objects.com.au/ Aus Phone: +61 7 5456 6000 If you no longer require support please let us know and I can close the ticket, Kind regards, From: helpdesk@medicalobjects.com Sent: 20/5/2026 10:54:21 AM To: ""Avance Business Technology Support"" Cc: reception@drjg.com.au, johngavilanarraez@gmail.com Subject: Re: (Case 1044442) Issue Sending from Medical Objects - Ticket Update [ID:0011852] Good Morning, Thank you for your email. We will require remote access to the Workstation and the Server to investigate the issue. Kindly call us on the below details so we can assist. If you require our assistance or any further information, feel free to give us a call on (07) 5456 6000 and quote case number 1044442. Kind Regards Dean Ardern ---------- Medical-Objects Pty Ltd https://www.medicalobjects.com/ Wiki: https://kb.medical-objects.com.au/ Aus Phone: +61 7 5456 6000 Aus Fax: +61 7 3221 0220 NZ Phone: +64 9 964 6000 NZ Fax: +64 9 964 6006 ""Medical-Objects, proudly built on Australian Standards"" Please read our Privacy Policy on how we manage the personal information that we collect, use and disclose and how to contact us if you have any questions about the management of your personal information. http://www.medicalobjects.com/privacy/ -----Original Message----- From: helpdesk@medicalobjects.com Sent: 20/5/2026 8:29:20 AM To: support@avance.technology Subject: (Case 1044442) Re: Issue Sending from Medical Objects - Ticket Update [ID:0011852] Hello, Just an email to let you know we have received your inquiry. We will follow up as soon as is possible. If you require our assistance or any further information, feel free to give us a call on (07) 5456 6000 and quote case number 1044442. Kind Regards Medical Objects Helpdesk ---------- Medical-Objects Pty Ltd https://www.medicalobjects.com/ Wiki: https://kb.medical-objects.com.au/ Aus Phone: +61 7 5456 6000 Aus Fax: +61 7 3221 0220 NZ Phone: +64 9 964 6000 NZ Fax: +64 9 964 6006 ""Medical-Objects, proudly built on Australian Standards"" Please read our Privacy Policy on how we manage the personal information that we collect, use and disclose and how to contact us if you have any questions about the management of your personal information. http://www.medicalobjects.com/privacy/ From: Avance Business Technology Support Sent: 20/5/2026 8:25:30 AM To: helpdesk@medical-objects.com.au Subject: Re: Issue Sending from Medical Objects - Ticket Update [ID:0011852] Hi Medical-Objects Helpdesk, We are contacting you on behalf of Dr John Gavilan Arraez. Practice ID: 100827 Contact: Rochelle Starr, Practice Manager Phone: 0408 506 775 Email: reception@drjg.com.au Rochelle has advised that she is now able to send letters via Medical Director / Medical-Objects after speaking with Medical-Objects. The remaining issue is that when she opens the Document Delivery icon from the bottom-right system tray, it shows as “unauthorised.” She normally uses this icon to check whether letters have been successfully sent, so we need the authorisation/configuration checked and corrected. Could you please assist with this and advise whether you need to remote into the workstation? Kind regards, Josh Parris Avance Technology support@avance.technology From: reception@drjg.com.au Sent: 18/5/2026 10:57:24 AM To: ""Avance Business Technology Support"" Subject: RE: Your ticket is on hold as we are awaiting a response from you. [ID:0011852] Hello Avance Technology, I rang medical objects and they sorted the situation and I am now able to send letters (via medical director). The only issue now is that when I go to open up the document delivery icon (at the bottom right icon on my screen) it reads as being unauthorised. Usually, I am able to check if a letter has been sent. Are you able to ring medical objects to get this sorted? Thanks Rochelle _________________________ Rochelle Starr Practice Manager For Dr John Gavilan Arraez Consultant Psychiatrist","Date received: May 25, 2026 at 11:19 AM AEST
+Sender: Avance Support
+Subject: No status change for 1 hour (Agent) - 11852/Rochelle/Dr John Gavilan - [ID:0011852]
+Short summary: This email is an internal notification regarding a ticket that has seen no status change, providing the full thread of correspondence for Ticket ID 0011852. The thread shows that the technician needs to follow up with the customer, Rochelle Starr, who planned to contact Medical Objects but has not yet confirmed a remote access time.
+Problem revealed: The current ticket management workflow requires a manual follow-up from the technician when a ticket has stalled waiting on the client or a third party, indicated by the 1-hour status change notification. This particular ticket is waiting on the client to coordinate with a third-party vendor (Medical Objects) to schedule remote access for troubleshooting, a step that has been repeatedly requested by the vendor.
+Suggested app change: Implement a system in the application to detect when a ticket is pending client/third-party action and automatically send a periodic reminder or follow-up email after a configurable delay (e.g., 24 hours), referencing the last specific required action (e.g., ""Schedule remote access with Medical Objects"").
+Type: workflow
+Priority: medium
+Suggested Codex prompt: Create a new automated email template for follow-up notifications when a ticket status remains ""Pending Client Action"" for 24 hours, ensuring the email references the last note asking for action.
+Approved: NO",IMPORTANT,"​​You are building a new feature for the Avance Work Companion app. The app is a workflow copilot for Josh Parris, a Level 1/2 MSP technician, adhering to a local-first, privacy-by-default architecture (React/Tailwind CSS). The primary goal is to improve the workflow for managing stalled tickets and reduce forgotten follow-up steps.
+
+Build a React component called PendingActionTracker that integrates with the existing Follow-Up Area on the Home Dashboard. This component must help the technician actively track tickets that are waiting for action from a client or third party (e.g., Ticket ID 0011852, stalled because the client, Rochelle Starr, needs to coordinate remote access with Medical Objects).
+
+Prompt for Cursor:
+
+Build a React component, PendingActionTracker, for the Avance Work Companion app (React/Tailwind, dark navy/electric cyan theme). This component must allow the technician to manually log tickets that are stalled waiting for action, providing proactive reminders.
+1. Data Persistence: Store data locally using a simple persistence layer (e.g., local browser storage or simulated JSON structure). The local data model must contain: id (unique), ticketId (manually input ticket ID, safe to store), actionRequiredText (manual input describing the specific required action, e.g., ""Client needs to call Medical Objects to schedule remote access""), and followUpDue (timestamp, set by the user, defaulting to 24 hours from creation).
+2. Logging Interface: Create a small, floating ""Add Follow-Up"" button or modal accessible from the main dashboard. This interface should require the technician to manually input the ticketId and the actionRequiredText.
+3. Reminder Display: Within the existing Follow-Up Area module, prominently display items where followUpDue is in the past. Display the ticketId and the actionRequiredText in an easy-to-read list format.
+4. Privacy Guardrail: This component MUST NOT incorporate any direct integration with HaloPSA or automatically retrieve client-sensitive data, names, or email addresses. It must only store the manually entered ticketId and generic workflow guidance/reminders.
+5. Completion: Each displayed reminder item must have a ""Mark Complete"" action to remove it from the active list.
+",No status change for 1 hour (Agent) - 11852/Rochelle/Dr John Gavilan - [ID:0011852],​​19e5cb6ec5afc4f6,​​​​Avance Support,
+"May 25, 2026 at 11:28 AM AEST",joshua.parris@cornerstone.edu.au,"
+---------- Forwarded message ---------
+
+
+[original message removed]","{
+  ""date_received"": ""May 25, 2026 at 11:28 AM AEST"",
+  ""sender"": ""joshua.parris@cornerstone.edu.au"",
+  ""subject"": ""Fwd: Crydee"",
+  ""summary"": ""A forwarded email thread discussing the structure, layout, and features of a fictional castle (Castle Crydee). The thread originated from the technician on May 4, 2026, and the forwarded message received includes the sender's contact information."",
+  ""problem_revealed"": ""None. The communication is personal and contains information related to fantasy literature, not a business application or workflow."",
+  ""suggested_app_change"": ""None."",
+  ""type"": ""unclear"",
+  ""priority"": ""low"",
+  ""codex_prompt"": ""No useful app change identified."",
+  ""approved"": ""NO""
+}
+",IMPORTANT,"​​Goal: Add a new, optional section to the Avance Work Companion web application's main knowledge interface designed to store and showcase interesting or complex AI-generated content, titled ""Creative AI Prompts & Research Notes."" This allows the team to document and share novel use cases of LLMs, such as descriptive world-building or complex system explanations.
+
+Implementation Details:
+- App Stack: React (Functional Components) + Tailwind CSS + Preloaded Data/Local Storage.
+- Target Section: TOOL PRIMERS & HOW-TOS (Implement as a new collapsed accordion item).
+- Preloaded Data: Add the following content structure (Title, Description, and Key Outputs) to the appropriate preloaded data file (e.g., data/toolPrimers.js).
+Content for the New Primer:
+Primer Title: LLM Creative Research: Castle Crydee (Fictional Architecture)
+
+What it is: An example of using generative AI for highly specific world-building and descriptive content, demonstrating the potential for detailed architectural analysis of fictional structures.
+
+Key Outputs:
+- Structure Description: The castle is described as having a ""late Norman, or early medieval northern European"" structure. Its physical composition includes a central keep fortified by high walls, with outbuildings built directly into the curtain walls.
+- Layout Details: The castle sits on a large hill, separated from the town to the west by meadows and woodlands.
+- Internal Features: Notable interior spaces include garrison quarters, a courtyard, and a large dining hall where Pug is mentored.
+Required Elements:
+- Ensure this section is designated as 'Low Priority' to avoid distracting from high-impact business application primers (e.g., RDP troubleshooting).
+- Add a field for the generative tool used (e.g., 'Gemini/LLM') and the original user who created the content ('Josh Parris').
+This primer integrates informal technical exploration (LLM generation) with a persistent, shareable knowledge base, fulfilling the ""vibe code"" goal of documenting useful personal projects alongside corporate knowledge.",,,​​​​Joshua Parris,
+,,,"{
+  ""date_received"": ""May 25, 2026 at 11:40 AM AEST"",
+  ""sender"": ""monitoring@avance.technology"",
+  ""subject"": ""[Augmentt] <low> Enable Account alert for the client"",
+  ""summary"": ""A low severity alert notification was received for the client, reporting that an account was enabled on 05/25/2026. The action was performed by a principal user account targeting another user account, originating from Sydney, New South Wales, Australia."",
+  ""problem_revealed"": ""The email is a standard security alert notification and does not suggest any issues or required improvements for the application."",
+  ""suggested_app_change"": ""None"",
+  ""type"": ""unclear"",
+  ""priority"": ""low"",
+  ""codex_prompt"": ""No useful app change identified."",
+  ""approved"": ""NO""
+}",,"You are building the Avance Work Companion — a workflow copilot web app for Josh Parris, a Level 1/2 IT technician at Avance Business Technology. The app must be locally stored, privacy-first, and designed for speed and practical workflow guidance.
+
+TECH STACK: React + Tailwind CSS. Single-page app. Use localStorage only. No client data stored (e.g., no client names, ticket notes, or internal URLs).
+
+GOAL: Build the complete, functional, three-phase Onsite Checklist module. This module needs to guide the technician through critical pre-visit, onsite execution, and closure steps, incorporating key checks identified from high-stakes physical installs and required follow-ups.
+
+MODULE SPECIFICATION (React Component):
+Component Name: OnsiteChecklist.jsx
+Style: Dark navy (#0A1628) theme with electric cyan (#00C2FF) accents. Use a clean, mobile-friendly design with tick-off capability for each step.
+Data: Checklist progress and local reflections must persist in localStorage.
+Integration Points: The module must reference the Note Template Generator and the 3CX reminder (even if those modules are placeholders for now).
+CHECKLIST PHASES AND REQUIRED STEPS:
+Phase 1: Before Leaving Office (Pre-Check)
+Confirm all required hardware components are present and correct (e.g., box, screen, 2x power cables, screen cable).
+If visiting a Myer store location, complete the mandatory 10-minute Myer Induction.
+Review relevant issue playbooks (e.g., Printer, Networking, Hardware) for potential issues.
+Check physical tools/cables (e.g., monitor setup tools, cable runs).
+Phase 2: Onsite Execution
+Log arrival status in HaloPSA.
+CRITICAL STEP: Call the vendor's support line for POS passwords and PINs before setting them up. (Reference general support number: 03 9095 7979).
+Complete device imaging, hardware installation, and cable runs.
+Note any work outside the defined replacement scope as an 'Exception' for invoicing (e.g., resolved the store's printer issue).
+Obtain user sign-off/confirmation of work completion.
+Phase 3: After Visit (Closure)
+Use the Note Template Generator to create structured notes for HaloPSA.
+CRITICAL REMINDER: Did you set 3CX to Away?
+Update ticket status to resolved or awaiting follow-up.
+DELIVER: The complete OnsiteChecklist component with all three phases and logic to persist tick-off status locally.",,,,
+,,,"{
+  ""date_received"": ""May 25, 2026 at 11:40 AM AEST"",
+  ""sender"": ""monitoring@avance.technology"",
+  ""subject"": ""[Augmentt] <high> Disable Strong Authentication alert for Credit One"",
+  ""summary"": ""A high severity alert was received, indicating that strong authentication was disabled for a target account at the client. The actor properties for the change are undefined."",
+  ""problem_revealed"": ""The email is a routine security notification from a monitoring system that flags when strong authentication is disabled for a user account."",
+  ""suggested_app_change"": ""None."",
+  ""type"": ""unclear"",
+  ""priority"": ""low"",
+  ""codex_prompt"": ""No useful app change identified."",
+  ""approved"": ""NO""
+}",,"You are building the Avance Work Companion app's Layer 3, the LLM Helper. The user frequently receives critical monitoring alerts from systems like Augmentt, SentinelOne, or Veeam (e.g., ""Disable Strong Authentication Alert for Credit One"" or backup failures). These alerts contain sensitive data (emails, IPs, device names) that cannot be sent to the LLM.
+
+Goal: Build a specialized LLM workflow for handling raw monitoring alert text, ensuring all client-specific data is sanitized before API submission.
+
+Component: Modify the LLM Helper module to include a specific mode for Monitoring Alerts.
+
+Tech Stack/Rules: React (Functional Components) + Tailwind CSS. Use the Groq API placeholder (GROQ_API_KEY). Adhere to the strict PII rule: NEVER send client names, emails, IP addresses, or device names to the LLM.
+
+Implementation Steps:
+Add a Workflow Step: Inside the LLM Helper tab, introduce a prompt type selector: ""General Issue"" (existing) and ""Monitoring Alert (Paste Raw Text)"" (new).
+Sanitization Function: Create a client-side function (e.g., sanitizeAlert(rawText)) that takes the raw alert body (which may contain Principal Name, Tenant, Logon IP, Device Name, etc.) and automatically replaces PII with generic placeholders (e.g., replacing craig.lawn@solacesleep.com.au with [User_Email_1], Solace Sleep with [Client_Tenant_A], and 49.182.201.93 with [IP_Address_X]).
+LLM System Prompt: When an alert is sanitized, use the following specialized system prompt to guide the AI's triage:
+System Prompt (For Monitoring Alerts): ""You are a Level 2 Security Triage Assistant for an MSP. You have received a sanitized system alert. Your job is to analyze the type and severity of the event, and provide the first three verifiable steps the technician should take using Avance systems (HaloPSA, SentinelOne, M365 Admin, Keeper, IRONSCALES). Do not ask for the PII; rely only on the tokenized description. Suggest immediate containment or verification steps.""
+Output Format: The AI response must suggest:
+Alert Type & Priority (e.g., MFA Disablement - High)
+System to Check First (e.g., M365 Admin)
+Immediate Action Steps (3) (e.g., Check Audit Logs for [User_Email_1], Reset password for [User_Email_1] in M365, Check SentinelOne for device isolation)
+Escalation Condition (e.g., If M365 Audit log shows a foreign IP, escalate to Andy Johnston).
+Build Focus: Deliver the React component for the ""Monitoring Alert"" input and the robust client-side PII stripping logic using regular expressions. Ensure the user sees the sanitized text before it leaves their machine.",,,,
+,,,"{
+""date_received"": ""May 25, 2026 at 11:40 AM AEST"",
+""sender"": ""monitoring@avance.technology"",
+""subject"": ""[Augmentt] <medium> Admin registered additional security info inside of safe country alert for Credit One"",
+""summary"": ""A medium-severity alert notification was received from the vendor monitoring system, indicating that an administrator registered additional security information for an account while within the safe operating country (Australia). The alert noted that the account already had secondary Multi-Factor Authentication (MFA) registered (excluding password)."",
+""problem_revealed"": ""The email is a standard security alert notification and does not reveal a problem with the app itself."",
+""suggested_app_change"": ""The email does not suggest an app change."",
+""type"": ""unclear"",
+""priority"": ""low"",
+""codex_prompt"": ""No useful app change identified."",
+""approved"": ""NO""
+}",,"Act as a senior full-stack product engineer and solution architect. You are vibe-coding an important feature for the Avance Work Companion web application (TECH STACK: React + Tailwind CSS, local-first). The goal is to dramatically improve the operator's speed and confidence when triaging the constant stream of security and multi-factor authentication (MFA) alerts.
+
+Create a new Security Alert Triage Module that integrates directly into the existing Triage Wizard/Escalation Map structure. This module must guide the Level 1/2 technician through classifying and acting upon monitoring system notifications without storing client-sensitive data.
+
+1. Goal: Security Alert Prioritizer
+Build a component that categorizes and provides immediate next steps for three recurring alert types, moving beyond the generic ""MFA issue"" starter playbook.
+
+2. Required Triage Paths (incorporating real-world examples):
+High Severity: Anomalous Foreign Access: Create a triage path for alerts like the Adlumin detection seen for Pear Tree Financial Planning. The guide should instruct the technician to immediately confirm if the user (e.g., awilliamson@peartreefinancial.com.au) was traveling or if escalation to a security team is required first.
+Medium/Informational: User Consent to Application: Create a path for Augmentt informational alerts (e.g., Osborne Legal consenting to ""Read AI"" or Barclay's Wealth Advice consenting to ""BLV Solutions filenote.ai""). The guidance should prompt the operator to check if the application is approved/vetted before proceeding.
+Medium/Low: Administrator Security Change: Create a path for alerts like the recent one for Credit One, which noted an Admin registered additional security info (secondary MFA) within the safe country (Australia) [variable1]. The guide should clearly differentiate this from a compromise event, suggesting a procedural check (e.g., verifying the change was intentional or documented) rather than an immediate security incident response.
+3. Implementation Details:
+The module must ensure that the output of the triage is a clean, structured note scaffold, following the established template: Issue reported -> What I checked -> What I found -> Action taken -> Outcome -> Next step / follow-up needed. The design should maintain the ""calm operator feel, not gamer feel"" UX principle.
+
+4. Privacy Constraint (Hard Rule):
+The app must not display or store client names, user emails, or internal URLs in the triage process. All steps must rely on generic categories, ticket IDs, and tool selection logic.",,,,
+"May 25, 2026 at 12:59 PM AEST",Josh Parris,"Summary of Findings
+
+The retrieved communications detail several technical tasks, client interactions, and administrative discussions between Josh Parris, Andrew Johnston, and other team members, covering the period from April to May 2026.
+
+Technical and Client Projects
+- Security Integration: Josh completed the Ironscales integration for IEC, which involved removing the client from the old SaaS defense system. He applied Ironscales protection to 13 IEC mailboxes and tagged CEO/director accounts for vip_impersonation. He was careful to exclude Australia from the restricted countries list, including China, Iran, and Russia in the blocks.
+- Laptop Setup:
+ - The Mac laptop for Rob Lister (BLD) was prepared with the Microsoft Office Suite, Outlook (for Gmail), and OneDrive. Andrew confirmed that BLD is not on a Managed Service Agreement (MSA) and should be charged for the setup job.
+ - A new laptop for Raylene, CEO of Nyngan Aboriginal Land Council, was set up with Datto, SentinelOne, and Office, and was picked up by Melissa.
+- Performance Troubleshooting (Allen Built): Chris Rayner's laptop was experiencing high CPU usage primarily from the SentinelAgent. It was noted that the laptop's ARM/Snapdragon processor might have compatibility issues with the full technology stack (Datto, SentinelOne). Andrew advised trying to remove SentinelOne to test performance before recommending a hardware upgrade.
+- Streamline Energy Group Migration: Technical difficulty was encountered adding Denis’s new email account to his laptop due to cached credentials from a previous tenancy. The workaround implemented was creating a new Windows profile. The critical PST export of Denis's old emails was deferred for James to handle.
+Administrative and Internal Matters
+- Work Status: Josh confirmed he would soon be free on Thursdays and Fridays as Dubbo Christian School (DCS) is not continuing his 6-month probation. Andrew is planning a discussion regarding full-time/permanent part-time employment options.
+- Invoicing and Billing: Josh set up Google Drive folders to organize paid and due Avance invoices. The agreed hourly rate for invoicing was established at $60 ex GST, totaling $66 inc GST.
+- Halo System: Josh solved an issue where he could not send emails for certain tickets (e.g., BAWD) because they originated from the 'enquiries' mailbox workflow, which required switching the mailbox to 'support' to enable replies. He successfully created and published a Knowledge Base article for Outlook calendar sharing.
+- Processes: Andrew instructed Josh to always practice change management and ask before making fundamental system changes, referencing the Ironscales integration attempt.
+- Office Incident: Josh assisted neighbors at Custom Computers when a standing desk collapsed on one of the employees (Josh).
+",josh@avance.technology,https://mail.google.com/chat/#chat/space/AAAAX5Pc9yM/01QKDua03HE/01QKDua03HE,"Summary of Findings
+
+The retrieved communications detail several technical tasks, client interactions, and administrative discussions between Josh Parris, Andrew Johnston, and other team members, covering the period from April to May 2026.
+
+Technical and Client Projects
+- Security Integration: Josh completed the Ironscales integration for IEC, which involved removing the client from the old SaaS defense system. He applied Ironscales protection to 13 IEC mailboxes and tagged CEO/director accounts for vip_impersonation. He was careful to exclude Australia from the restricted countries list, including China, Iran, and Russia in the blocks.
+- Laptop Setup:
+ - The Mac laptop for Rob Lister (BLD) was prepared with the Microsoft Office Suite, Outlook (for Gmail), and OneDrive. Andrew confirmed that BLD is not on a Managed Service Agreement (MSA) and should be charged for the setup job.
+ - A new laptop for Raylene, CEO of Nyngan Aboriginal Land Council, was set up with Datto, SentinelOne, and Office, and was picked up by Melissa.
+- Performance Troubleshooting (Allen Built): Chris Rayner's laptop was experiencing high CPU usage primarily from the SentinelAgent. It was noted that the laptop's ARM/Snapdragon processor might have compatibility issues with the full technology stack (Datto, SentinelOne). Andrew advised trying to remove SentinelOne to test performance before recommending a hardware upgrade.
+- Streamline Energy Group Migration: Technical difficulty was encountered adding Denis’s new email account to his laptop due to cached credentials from a previous tenancy. The workaround implemented was creating a new Windows profile. The critical PST export of Denis's old emails was deferred for James to handle.
+Administrative and Internal Matters
+- Work Status: Josh confirmed he would soon be free on Thursdays and Fridays as Dubbo Christian School (DCS) is not continuing his 6-month probation. Andrew is planning a discussion regarding full-time/permanent part-time employment options.
+- Invoicing and Billing: Josh set up Google Drive folders to organize paid and due Avance invoices. The agreed hourly rate for invoicing was established at $60 ex GST, totaling $66 inc GST.
+- Halo System: Josh solved an issue where he could not send emails for certain tickets (e.g., BAWD) because they originated from the 'enquiries' mailbox workflow, which required switching the mailbox to 'support' to enable replies. He successfully created and published a Knowledge Base article for Outlook calendar sharing.
+- Processes: Andrew instructed Josh to always practice change management and ask before making fundamental system changes, referencing the Ironscales integration attempt.
+- Office Incident: Josh assisted neighbors at Custom Computers when a standing desk collapsed on one of the employees (Josh).
+",Avance Group Chat,"May 25, 2026 at 12:59 PM AEST",,spaces/AAAAX5Pc9yM
+"May 25, 2026 at 1:39 PM AEST",Andrew Johnston,"Based on the retrieved chat conversations, here is a summary of the activities, tasks, and key information discussed, primarily between you (Josh Parris) and Andrew Johnston (Andy), covering May 2026.
+
+Current Status and Scheduling
+You informed the group that you are heading out for lunch. You also reported that Dubbo Christian School (DCS) is not continuing your six-month probation, meaning you will soon be available every Thursday and Friday. Andrew indicated a plan to discuss a full-time or permanent part-time role with you soon.
+
+Client Service and Onboarding
+IEC (Ironscales Setup)
+- You completed the integration steps for Ironscales at IEC, including setting up phising@iec for 911 reports.
+- Andrew noted that IEC was still incorrectly configured in the old, decommissioned SaaS defense system.
+- You confirmed a list of high-risk countries blocked for email filtering: Venezuela, Portugal, Panama, Iraq, Iran, Guatemala, Georgia, Ecuador, China, and Brazil, with Andrew suggesting adding North Korea and Russia.
+- Andrew emphasized the need to practice change management by asking before initiating major changes like Ironscales setup.
+- You confirmed 13 users at IEC require Ironscales protection (based on M365 licensing) and were advised to create a vip_impersonation tag for CEO/directors.
+Allen Built / Streamline Energy Group
+- Allen Built: You deployed the Report Phishing button and set up the phishing@allenbuilt.com.au shared mailbox, correcting an initial mistake of creating it as a licensed user.
+- Performance Issues: You identified that laptops for Chris Rayner and Shannon Allen were running slow, possibly due to the SentinelOne agent or OneDrive sync, or due to Chris's ARM/Snapdragon processor. Andrew advised starting troubleshooting by removing SentinelOne.
+- Streamline Web/DNS: The delay in Streamline's website going live is due to their web developer being unresponsive, as Avance has completed their side by pointing the domain [suspicious link removed].au to the new hosting site.
+- UseCure: Streamline Energy Group has been added to UseCure, and Edwin needs to configure the phishing campaigns.
+Hardware Setup Jobs
+- BLD Laptop: You set up a new Mac laptop for Rob Lister of BLD, installing Outlook (Gmail), OneDrive, and the Office Suite. Andrew confirmed BLD is not on an MSA, meaning they must be billed for your time, and the Microsoft license is likely direct-billed to them.
+- Nyngan Aboriginal Land Laptop: You prepared Raylene's laptop and enrolled it in Entra. The laptop was picked up by Melissa.
+Other Tickets
+- Brand Collective POS (Ticket 0011776): Andrew instructed you to keep this ticket open as it still needs to be invoiced.
+- Macquarie Health Collective Monitor: You successfully installed the second monitor. You logged that the client would follow up if they wished to proceed with investigating the non-working front USB ports.
+
+Internal Processes and Administration
+- Halo/KB Articles: You identified and fixed a setting that was hiding some tickets from your view in Halo. You updated six KB Policies in Halo, correcting the M365 Security Policies login URL to [suspicious link removed].
+- Halo Email Issues: You identified that you couldn't send emails from Halo on certain tickets (like the BAWD one) because they originated through the 'enquiries' email channel, which requires Ned's permission, and you need to switch the mailbox to 'support' to reply.
+- Invoicing/GST: You and Andrew agreed to set your charge rate at $60 ex GST, which is $66 inc GST. Andrew confirmed payment of your Invoice 0003.
+
+Office Incidents and News
+- Custom Computers Incident: You helped Josh and Brendan from Custom Computers (next door) prevent a standing desk from falling on Josh.
+- Kia Sportage: The company Kia Sportage is booked for a service and to have a recalled electronic parking brake part replaced on June 2nd.
+- Office Arrivals: A package for WPSN containing a ""ThinkCentre Neo 50q Gen 5"" arrived and was placed on James's chair.
+",andrew@avance.technology,https://mail.google.com/chat/#chat/space/AAAAX5Pc9yM/lykmc-79G8M/lykmc-79G8M,"Based on the retrieved chat conversations, here is a summary of the activities, tasks, and key information discussed, primarily between you (Josh Parris) and Andrew Johnston (Andy), covering May 2026.
+
+Current Status and Scheduling
+You informed the group that you are heading out for lunch. You also reported that Dubbo Christian School (DCS) is not continuing your six-month probation, meaning you will soon be available every Thursday and Friday. Andrew indicated a plan to discuss a full-time or permanent part-time role with you soon.
+
+Client Service and Onboarding
+IEC (Ironscales Setup)
+- You completed the integration steps for Ironscales at IEC, including setting up phising@iec for 911 reports.
+- Andrew noted that IEC was still incorrectly configured in the old, decommissioned SaaS defense system.
+- You confirmed a list of high-risk countries blocked for email filtering: Venezuela, Portugal, Panama, Iraq, Iran, Guatemala, Georgia, Ecuador, China, and Brazil, with Andrew suggesting adding North Korea and Russia.
+- Andrew emphasized the need to practice change management by asking before initiating major changes like Ironscales setup.
+- You confirmed 13 users at IEC require Ironscales protection (based on M365 licensing) and were advised to create a vip_impersonation tag for CEO/directors.
+Allen Built / Streamline Energy Group
+- Allen Built: You deployed the Report Phishing button and set up the phishing@allenbuilt.com.au shared mailbox, correcting an initial mistake of creating it as a licensed user.
+- Performance Issues: You identified that laptops for Chris Rayner and Shannon Allen were running slow, possibly due to the SentinelOne agent or OneDrive sync, or due to Chris's ARM/Snapdragon processor. Andrew advised starting troubleshooting by removing SentinelOne.
+- Streamline Web/DNS: The delay in Streamline's website going live is due to their web developer being unresponsive, as Avance has completed their side by pointing the domain [suspicious link removed].au to the new hosting site.
+- UseCure: Streamline Energy Group has been added to UseCure, and Edwin needs to configure the phishing campaigns.
+Hardware Setup Jobs
+- BLD Laptop: You set up a new Mac laptop for Rob Lister of BLD, installing Outlook (Gmail), OneDrive, and the Office Suite. Andrew confirmed BLD is not on an MSA, meaning they must be billed for your time, and the Microsoft license is likely direct-billed to them.
+- Nyngan Aboriginal Land Laptop: You prepared Raylene's laptop and enrolled it in Entra. The laptop was picked up by Melissa.
+Other Tickets
+- Brand Collective POS (Ticket 0011776): Andrew instructed you to keep this ticket open as it still needs to be invoiced.
+- Macquarie Health Collective Monitor: You successfully installed the second monitor. You logged that the client would follow up if they wished to proceed with investigating the non-working front USB ports.
+
+Internal Processes and Administration
+- Halo/KB Articles: You identified and fixed a setting that was hiding some tickets from your view in Halo. You updated six KB Policies in Halo, correcting the M365 Security Policies login URL to [suspicious link removed].
+- Halo Email Issues: You identified that you couldn't send emails from Halo on certain tickets (like the BAWD one) because they originated through the 'enquiries' email channel, which requires Ned's permission, and you need to switch the mailbox to 'support' to reply.
+- Invoicing/GST: You and Andrew agreed to set your charge rate at $60 ex GST, which is $66 inc GST. Andrew confirmed payment of your Invoice 0003.
+
+Office Incidents and News
+- Custom Computers Incident: You helped Josh and Brendan from Custom Computers (next door) prevent a standing desk from falling on Josh.
+- Kia Sportage: The company Kia Sportage is booked for a service and to have a recalled electronic parking brake part replaced on June 2nd.
+- Office Arrivals: A package for WPSN containing a ""ThinkCentre Neo 50q Gen 5"" arrived and was placed on James's chair.
+",Avance Group Chat,"May 25, 2026 at 1:39 PM AEST",,spaces/AAAAX5Pc9yM
+"May 25, 2026 at 5:02 PM AEST",Josh Parris,"The chat logs primarily document Josh Parris's technical tasks, client service interactions, and internal process discussions with Andrew Johnston and James Newby, covering topics from May 2026.
+
+Key Findings Summary
+1. Security and Client Onboarding
+- Ironscales Configuration: Josh completed the Ironscales setup and advanced integration for IEC. For country blocking, he implemented Venezuela, Portugal, Panama, Iraq, Iran, Guatemala, Georgia, Ecuador, China, and Brazil, and was advised by Andrew to add North Korea and Russia. Andrew warned against following outdated Ironscales documentation that incorrectly suggested blocking Australia.
+- Mailbox Management: Josh confirmed setting up the phising@iec shared mailbox for 911 phishing. For Ironscales billing control, users should only enable protection for mailboxes with assigned 365 or Google licenses (e.g., 13 users for IEC).
+- SentinelOne/Performance: Troubleshooting high CPU usage on Chris Rayner's (Allen Built) laptop suggested SentinelAgent was a top consuming process. Andrew recommended removing SentinelOne to check for performance improvements. Josh noted that the laptop's Snapdragon ARM processor may struggle with the full MSP stack (Datto/SentinelOne) and that a 32GB RAM x64 machine is generally recommended for business use.
+2. Client Service and Device Setup
+- BLD Mac Setup: Josh received a laptop from BLD for Rob Lister and, after calling Rowena (Admin lady) for details, confirmed the job involved setting up OneDrive, Outlook (linked to Gmail), and the full Office suite. Andrew confirmed BLD is not on a Managed Service Agreement (MSA), so the job must be charged for by tracking time and marking the ticket (ID: 0012034) as 'awaiting invoice' once complete.
+- Nyngan Aboriginal Land Council: The new laptop was set up for CEO Raylene, installed with Datto RMM and SentinelOne. Raylene confirmed her password and 2FA settings for login.
+- Outlook/Account Issues: For Denis from Streamline Energy Group, troubleshooting his personal laptop (Dalari) that retained old tenancy ID's was resolved by either creating a new Windows profile or using https://www.google.com/url?q=https://outlook.office.com&sa=E&source=workflows in a browser, as clearing all cached credentials was not an option due to the number of accounts.
+3. Internal Process and Halo Management
+- Ticketing Issues: Josh experienced issues with Halo, including finding that many tickets were hidden due to a setting James later resolved. He also found he couldn't reply to emails from tickets initiated through the 'enquiries' workflow (e.g., BAWD ticket 11746) because that channel is reserved for Ned; the workaround is switching the mailbox to 'support'.
+- Knowledge Base (KB): Josh updated six KB policies in Halo related to configuring M365 Security Policies, switching the path from [suspicious link removed] to the current Microsoft Security URL. He also created a KB article (ID: 238) regarding Outlook calendar sharing instructions.
+- Change Management: Andrew reminded Josh to follow ""change management"" protocols and ask before diving into major changes, explaining that a previous quick action on Ironscales was problematic because the client was still in the old SaaS defense system.
+4. Scheduling and Career
+- Josh confirmed he would be back on Wednesday for a POS replacement job (Ticket 11745) at Review Myer and Black Pepper, noting he had completed the necessary Myer induction.
+- Josh informed Andrew that his current DCS contract was ending due to their decision not to continue his 6-month probation, leaving him free on Thursdays and Fridays soon. Andrew stated they would discuss full-time or permanent part-time options shortly.
+",josh@avance.technology,https://mail.google.com/chat/#chat/space/AAAAX5Pc9yM/C5FOyfZvNRc/C5FOyfZvNRc,See you wednesday,Avance Group Chat,"May 25, 2026 at 5:02 PM AEST","The chat logs primarily document Josh Parris's technical tasks, client service interactions, and internal process discussions with Andrew Johnston and James Newby, covering topics from May 2026.
+
+Key Findings Summary
+1. Security and Client Onboarding
+- Ironscales Configuration: Josh completed the Ironscales setup and advanced integration for IEC. For country blocking, he implemented Venezuela, Portugal, Panama, Iraq, Iran, Guatemala, Georgia, Ecuador, China, and Brazil, and was advised by Andrew to add North Korea and Russia. Andrew warned against following outdated Ironscales documentation that incorrectly suggested blocking Australia.
+- Mailbox Management: Josh confirmed setting up the phising@iec shared mailbox for 911 phishing. For Ironscales billing control, users should only enable protection for mailboxes with assigned 365 or Google licenses (e.g., 13 users for IEC).
+- SentinelOne/Performance: Troubleshooting high CPU usage on Chris Rayner's (Allen Built) laptop suggested SentinelAgent was a top consuming process. Andrew recommended removing SentinelOne to check for performance improvements. Josh noted that the laptop's Snapdragon ARM processor may struggle with the full MSP stack (Datto/SentinelOne) and that a 32GB RAM x64 machine is generally recommended for business use.
+2. Client Service and Device Setup
+- BLD Mac Setup: Josh received a laptop from BLD for Rob Lister and, after calling Rowena (Admin lady) for details, confirmed the job involved setting up OneDrive, Outlook (linked to Gmail), and the full Office suite. Andrew confirmed BLD is not on a Managed Service Agreement (MSA), so the job must be charged for by tracking time and marking the ticket (ID: 0012034) as 'awaiting invoice' once complete.
+- Nyngan Aboriginal Land Council: The new laptop was set up for CEO Raylene, installed with Datto RMM and SentinelOne. Raylene confirmed her password and 2FA settings for login.
+- Outlook/Account Issues: For Denis from Streamline Energy Group, troubleshooting his personal laptop (Dalari) that retained old tenancy ID's was resolved by either creating a new Windows profile or using https://www.google.com/url?q=https://outlook.office.com&sa=E&source=workflows in a browser, as clearing all cached credentials was not an option due to the number of accounts.
+3. Internal Process and Halo Management
+- Ticketing Issues: Josh experienced issues with Halo, including finding that many tickets were hidden due to a setting James later resolved. He also found he couldn't reply to emails from tickets initiated through the 'enquiries' workflow (e.g., BAWD ticket 11746) because that channel is reserved for Ned; the workaround is switching the mailbox to 'support'.
+- Knowledge Base (KB): Josh updated six KB policies in Halo related to configuring M365 Security Policies, switching the path from [suspicious link removed] to the current Microsoft Security URL. He also created a KB article (ID: 238) regarding Outlook calendar sharing instructions.
+- Change Management: Andrew reminded Josh to follow ""change management"" protocols and ask before diving into major changes, explaining that a previous quick action on Ironscales was problematic because the client was still in the old SaaS defense system.
+4. Scheduling and Career
+- Josh confirmed he would be back on Wednesday for a POS replacement job (Ticket 11745) at Review Myer and Black Pepper, noting he had completed the necessary Myer induction.
+- Josh informed Andrew that his current DCS contract was ending due to their decision not to continue his 6-month probation, leaving him free on Thursdays and Fridays soon. Andrew stated they would discuss full-time or permanent part-time options shortly.
+",spaces/AAAAX5Pc9yM
+"May 25, 2026 at 5:03 PM AEST",Andrew Johnston,"The chat logs cover several months of team operations, technical support, and logistical discussions for Avance Group.
+
+Key Customer Support and Projects
+- Allen Built & Streamline Onboarding: The team continued onboarding services, including Keeper demos and setting up cyber security measures. The Report Phishing button and 911 mailbox setup were completed for Allen Built after initial configuration issues (Josh eventually removed a temporary Exchange Online license and converted it to a shared mailbox).
+- Hardware Deployments: A new ""ThinkCentre Neo 50q Gen 5"" PC for WPSN was delivered and set up by James, including DisplayPort and HDMI cables. James also finished setting up a computer for an AAron, ensuring it included DP and HDMI cables.
+- Impax Group Hard Drive: Bernadette O'Shaughnessy from Impax Group called about her playing-up hard drive, which was noted to be months overdue for drop-off. James reopened the relevant ticket.
+- Troubleshooting: Troubleshooting included fixing Excel corruption issues for Kevin Peacocke, requiring the local administrator password found in Google Docs, and resolving signatures for Allen Built Outlook profiles.
+- 2FA Issues: Multiple customers experienced two-factor authentication loops or sign-in difficulties, including Bede from Conseth Solutions and Jess from NCS. Brit from Conseth also had 2FA issues after a password reset.
+
+Client and Staffing Changes
+- Client Transitions: PRP is moving to a Melbourne-based IT provider, requiring Avance to hand off data like the Unifi file and schedule an uninstall command for SentinelOne. Andrew also noted BCCS might be leaving due to low charges and a new internal IT contact.
+- New Management: Country Leisure has new owners and a new manager, Eddie, who plans to drop in.
+- Staffing: Menuka Pradhan, an L1/L2 tech who started in January, finished her tenure on April 14, 2026. Greg Cook joined the team in April. Andrew arranged for new RID tags to be coded for Luke and Josh Parris.
+
+Internal Operations and Logistics
+- Monitoring TV: Andrew emphasized the need to keep the monitoring TV switched on and check all sites daily after a customer website/domain outage went unnoticed.
+- Updates and Security: The team discussed running system updates to protect against a major exploit. Josh noted the UNMS site was down, which Andrew planned to shut down as it was old and running for a friend.
+- Office Environment: Josh assembled a standing desk. The office air conditioning died, prompting staff to work from home. Solar batteries for the office were confirmed to fit in the storeroom next to the water heater.
+- Personal Notes: Josh reported a water leak in his rental house that stopped dripping, leaving a small hole. Andrew experienced a police incident involving an arrest near his driveway. The Kia Sportage is booked for a service and recall part replacement on June 2.
+",andrew@avance.technology,https://mail.google.com/chat/#chat/space/AAAAX5Pc9yM/IYRDfXVuC_c/IYRDfXVuC_c,Bye!,Avance Group Chat,"May 25, 2026 at 5:03 PM AEST","The chat logs cover several months of team operations, technical support, and logistical discussions for Avance Group.
+
+Key Customer Support and Projects
+- Allen Built & Streamline Onboarding: The team continued onboarding services, including Keeper demos and setting up cyber security measures. The Report Phishing button and 911 mailbox setup were completed for Allen Built after initial configuration issues (Josh eventually removed a temporary Exchange Online license and converted it to a shared mailbox).
+- Hardware Deployments: A new ""ThinkCentre Neo 50q Gen 5"" PC for WPSN was delivered and set up by James, including DisplayPort and HDMI cables. James also finished setting up a computer for an AAron, ensuring it included DP and HDMI cables.
+- Impax Group Hard Drive: Bernadette O'Shaughnessy from Impax Group called about her playing-up hard drive, which was noted to be months overdue for drop-off. James reopened the relevant ticket.
+- Troubleshooting: Troubleshooting included fixing Excel corruption issues for Kevin Peacocke, requiring the local administrator password found in Google Docs, and resolving signatures for Allen Built Outlook profiles.
+- 2FA Issues: Multiple customers experienced two-factor authentication loops or sign-in difficulties, including Bede from Conseth Solutions and Jess from NCS. Brit from Conseth also had 2FA issues after a password reset.
+
+Client and Staffing Changes
+- Client Transitions: PRP is moving to a Melbourne-based IT provider, requiring Avance to hand off data like the Unifi file and schedule an uninstall command for SentinelOne. Andrew also noted BCCS might be leaving due to low charges and a new internal IT contact.
+- New Management: Country Leisure has new owners and a new manager, Eddie, who plans to drop in.
+- Staffing: Menuka Pradhan, an L1/L2 tech who started in January, finished her tenure on April 14, 2026. Greg Cook joined the team in April. Andrew arranged for new RID tags to be coded for Luke and Josh Parris.
+
+Internal Operations and Logistics
+- Monitoring TV: Andrew emphasized the need to keep the monitoring TV switched on and check all sites daily after a customer website/domain outage went unnoticed.
+- Updates and Security: The team discussed running system updates to protect against a major exploit. Josh noted the UNMS site was down, which Andrew planned to shut down as it was old and running for a friend.
+- Office Environment: Josh assembled a standing desk. The office air conditioning died, prompting staff to work from home. Solar batteries for the office were confirmed to fit in the storeroom next to the water heater.
+- Personal Notes: Josh reported a water leak in his rental house that stopped dripping, leaving a small hole. Andrew experienced a police incident involving an arrest near his driveway. The Kia Sportage is booked for a service and recall part replacement on June 2.
+",spaces/AAAAX5Pc9yM
+"May 27, 2026 at 8:18 AM AEST",Josh Parris,"On the morning of May 27, 2026, at 8:18 AM AEST, Josh Parris (mailto:josh@avance.technology) continues to coordinate with the team through the https://www.google.com/url?q=https://mail.google.com/chat/%23chat/space/AAAAX5Pc9yM/--IeFSQiqK8/--IeFSQiqK8&sa=E&source=workflows to manage ongoing technical support and operational projects.
+
+Team members maintain high engagement in resolving IT tickets, such as addressing authentication loops, printer connectivity challenges, and account access issues. Recent hardware provisioning includes the setup of a ThinkCentre Neo 50q Gen 5 for WPSN and the deployment of necessary cabling for client workstations.
+
+Operational and facility maintenance remains a priority. Recent activities have included scheduling maintenance for the Kia Sportage, with a recalled electronic parking brake replacement set for June 2, 2026. Other efforts have focused on office improvements, such as the installation of solar batteries in the store room and ongoing organization of the workshop area.
+
+Client service management involves staying proactive regarding service updates and account changes. The team handles client shifts, such as new management at Country Leisure, and manages the offboarding of clients moving to other providers. Additionally, onboarding of new employees and training—such as implementing usecure phishing campaigns—helps ensure consistent security standards across managed accounts.
+
+Communication remains centralized through the https://www.google.com/url?q=https://mail.google.com/chat/%23chat/space/AAAAX5Pc9yM/--IeFSQiqK8/--IeFSQiqK8&sa=E&source=workflows, enabling seamless transitions between onsite visits, daily ticket resolution, and collaborative team planning.",josh@avance.technology,https://mail.google.com/chat/#chat/space/AAAAX5Pc9yM/--IeFSQiqK8/--IeFSQiqK8,Morning!,Avance Group Chat,"May 27, 2026 at 8:18 AM AEST","On the morning of May 27, 2026, at 8:18 AM AEST, Josh Parris (mailto:josh@avance.technology) continues to coordinate with the team through the https://www.google.com/url?q=https://mail.google.com/chat/%23chat/space/AAAAX5Pc9yM/--IeFSQiqK8/--IeFSQiqK8&sa=E&source=workflows to manage ongoing technical support and operational projects.
+
+Team members maintain high engagement in resolving IT tickets, such as addressing authentication loops, printer connectivity challenges, and account access issues. Recent hardware provisioning includes the setup of a ThinkCentre Neo 50q Gen 5 for WPSN and the deployment of necessary cabling for client workstations.
+
+Operational and facility maintenance remains a priority. Recent activities have included scheduling maintenance for the Kia Sportage, with a recalled electronic parking brake replacement set for June 2, 2026. Other efforts have focused on office improvements, such as the installation of solar batteries in the store room and ongoing organization of the workshop area.
+
+Client service management involves staying proactive regarding service updates and account changes. The team handles client shifts, such as new management at Country Leisure, and manages the offboarding of clients moving to other providers. Additionally, onboarding of new employees and training—such as implementing usecure phishing campaigns—helps ensure consistent security standards across managed accounts.
+
+Communication remains centralized through the https://www.google.com/url?q=https://mail.google.com/chat/%23chat/space/AAAAX5Pc9yM/--IeFSQiqK8/--IeFSQiqK8&sa=E&source=workflows, enabling seamless transitions between onsite visits, daily ticket resolution, and collaborative team planning.",spaces/AAAAX5Pc9yM
+"May 27, 2026 at 8:33 AM AEST",Andrew Johnston,"As of May 27, 2026, at 8:33 AM AEST, the https://www.google.com/url?q=https://mail.google.com/chat/%23chat/space/AAAAX5Pc9yM/sNGP79IZr6A/sNGP79IZr6A&sa=E&source=workflows serves as the central coordination hub for the team at Avance, managed largely by Andrew Johnston. The team, which includes members such as James Newby, Edwin Schmidt, Josh Parris, Menuka Pradhan, Xavier, and Greg Cook, uses this space to manage daily IT operations, hardware provisioning, ongoing projects, and general team logistics.
+
+IT Support and Operations
+A significant volume of chat activity revolves around resolving client technical issues. These include:
+- Access and Security: Addressing 2FA loops, authenticator app issues, and password resets.
+- Hardware Connectivity: Troubleshooting printer setups, docking station connections, and network drops.
+- Account/Software Management: Assisting with M365 configurations, outlook profile setups, email account issues, and software installations.
+
+Project and Asset Management
+The team manages hardware and infrastructure projects:
+- Hardware Deliveries and Deployment: Tracking the shipment, configuration, and delivery of new laptops, phones, iPads, and PCs for various clients.
+- Infrastructure Projects: Coordinating solar and battery installations in the office, vehicle maintenance and recall assessments for company cars, and managing website domain issues for multiple organizations.
+
+Team Coordination and Logistics
+Daily group communication facilitates smooth operational flow:
+- Schedule Management: Coordinating site visits (e.g., Cardiac Clinic, Halls, Impax, NCS), team meetings, and notifying the team of personal appointments, school/childcare pickups, and holidays.
+- Personnel Updates: Welcoming new team members, providing support during onboarding, and acknowledging team members moving on.
+- Business Context: Keeping the team updated on client ownership changes, new managers, or new IT service providers associated with client accounts.
+- Workplace Well-being: Sharing anecdotes about office maintenance, local weather events, and personal experiences, which contributes to the team dynamic.
+",andrew@avance.technology,https://mail.google.com/chat/#chat/space/AAAAX5Pc9yM/sNGP79IZr6A/sNGP79IZr6A,good morning,Avance Group Chat,"May 27, 2026 at 8:33 AM AEST","As of May 27, 2026, at 8:33 AM AEST, the https://www.google.com/url?q=https://mail.google.com/chat/%23chat/space/AAAAX5Pc9yM/sNGP79IZr6A/sNGP79IZr6A&sa=E&source=workflows serves as the central coordination hub for the team at Avance, managed largely by Andrew Johnston. The team, which includes members such as James Newby, Edwin Schmidt, Josh Parris, Menuka Pradhan, Xavier, and Greg Cook, uses this space to manage daily IT operations, hardware provisioning, ongoing projects, and general team logistics.
+
+IT Support and Operations
+A significant volume of chat activity revolves around resolving client technical issues. These include:
+- Access and Security: Addressing 2FA loops, authenticator app issues, and password resets.
+- Hardware Connectivity: Troubleshooting printer setups, docking station connections, and network drops.
+- Account/Software Management: Assisting with M365 configurations, outlook profile setups, email account issues, and software installations.
+
+Project and Asset Management
+The team manages hardware and infrastructure projects:
+- Hardware Deliveries and Deployment: Tracking the shipment, configuration, and delivery of new laptops, phones, iPads, and PCs for various clients.
+- Infrastructure Projects: Coordinating solar and battery installations in the office, vehicle maintenance and recall assessments for company cars, and managing website domain issues for multiple organizations.
+
+Team Coordination and Logistics
+Daily group communication facilitates smooth operational flow:
+- Schedule Management: Coordinating site visits (e.g., Cardiac Clinic, Halls, Impax, NCS), team meetings, and notifying the team of personal appointments, school/childcare pickups, and holidays.
+- Personnel Updates: Welcoming new team members, providing support during onboarding, and acknowledging team members moving on.
+- Business Context: Keeping the team updated on client ownership changes, new managers, or new IT service providers associated with client accounts.
+- Workplace Well-being: Sharing anecdotes about office maintenance, local weather events, and personal experiences, which contributes to the team dynamic.
+",spaces/AAAAX5Pc9yM
+"May 27, 2026 at 8:55 AM AEST",Andrew Johnston,"Ticket 0011957, regarding Healthlink document delivery issues at Macquarie Valley Family Practice, has been assigned to you for urgent action. You are requested to progress this ticket and aim to coordinate a remote session with Healthlink today; James is available to assist with server and access requirements.
+
+Separately, an unmitigated active threat involving powershell.exe has been detected on machine MHC017.
+
+These updates were shared by Andrew Johnston (mailto:andrew@avance.technology) in the Avance Group Chat on May 27, 2026, at 8:55 AM AEST. The conversation can be accessed through https://www.google.com/url?q=https://mail.google.com/chat/%23chat/space/AAAAX5Pc9yM/dQLoy9-runo/dQLoy9-runo&sa=E&source=workflows.",andrew@avance.technology,https://mail.google.com/chat/#chat/space/AAAAX5Pc9yM/dQLoy9-runo/dQLoy9-runo,"Josh, I've assigned you a ticket for Macquarie Health Collective.  It kind of fell through the cracks, so if you can action that and see if we can get a remote session with Healthlink today that would be ideal.  James can help you with any specifics of which servers/how to let them on etc",Avance Group Chat,"May 27, 2026 at 8:55 AM AEST","Ticket 0011957, regarding Healthlink document delivery issues at Macquarie Valley Family Practice, has been assigned to you for urgent action. You are requested to progress this ticket and aim to coordinate a remote session with Healthlink today; James is available to assist with server and access requirements.
+
+Separately, an unmitigated active threat involving powershell.exe has been detected on machine MHC017.
+
+These updates were shared by Andrew Johnston (mailto:andrew@avance.technology) in the Avance Group Chat on May 27, 2026, at 8:55 AM AEST. The conversation can be accessed through https://www.google.com/url?q=https://mail.google.com/chat/%23chat/space/AAAAX5Pc9yM/dQLoy9-runo/dQLoy9-runo&sa=E&source=workflows.",spaces/AAAAX5Pc9yM
+"May 27, 2026 at 8:55 AM AEST",Josh Parris,"Josh Parris (mailto:josh@avance.technology) is currently active in the https://www.google.com/url?q=https://mail.google.com/chat/%23chat/space/AAAAX5Pc9yM/PNyJ49TQBtA/PNyJ49TQBtA&sa=E&source=workflows, which has the internal identifier spaces/AAAAX5Pc9yM. As of May 27, 2026, at 8:55 AM AEST, he indicated that he is coordinating with Best Practise support regarding a separate ticket and intends to attempt to contact them again.",josh@avance.technology,https://mail.google.com/chat/#chat/space/AAAAX5Pc9yM/PNyJ49TQBtA/PNyJ49TQBtA,"Sure, I am working with Best Practise support on a different ticket so I can see if we can reach them again",Avance Group Chat,"May 27, 2026 at 8:55 AM AEST","Josh Parris (mailto:josh@avance.technology) is currently active in the https://www.google.com/url?q=https://mail.google.com/chat/%23chat/space/AAAAX5Pc9yM/PNyJ49TQBtA/PNyJ49TQBtA&sa=E&source=workflows, which has the internal identifier spaces/AAAAX5Pc9yM. As of May 27, 2026, at 8:55 AM AEST, he indicated that he is coordinating with Best Practise support regarding a separate ticket and intends to attempt to contact them again.",spaces/AAAAX5Pc9yM
+"May 27, 2026 at 8:56 AM AEST",Andrew Johnston,"
+- As of May 27, 2026, at 8:56 AM AEST, [link removed] and the technical team are actively coordinating operations within the https://www.google.com/url?q=https://mail.google.com/chat/%23chat/space/AAAAX5Pc9yM/wXThnZyzHgQ/wXThnZyzHgQ&sa=E&source=workflows.
+ - Active ticket management remains a high priority:
+  - A remote session with Healthlink is needed to resolve a ticket for the Macquarie Health Collective.
+  - Ongoing support for BAWD Property involves website domain configuration and service-to-incident ticket reassignment.
+  - Administrative tasks, such as password resets and 2FA assistance for Glow Paediatrics, are being addressed.
+  - Routine technical support inquiries, covering printer connectivity and general account access issues, are logged and processed daily.
+ - Hardware and infrastructure provisioning:
+  - New equipment deliveries, including a ThinkCentre Neo 50q Gen 5, have been received and logged.
+  - The team is actively provisioning new PCs, ensuring they are joined to the domain and supplied with necessary peripheral connectivity, such as HDMI and DP cables.
+  - Communication equipment, such as desk phones for NCS, is continuously updated and provisioned for client use.
+ - Operational and logistics management:
+  - Vehicle maintenance, specifically a recalled part replacement and service for the Kia Sportage, is confirmed for June 2.
+  - Internal operational directives emphasize the active use and monitoring of the office's status TV.
+  - General coordination efforts, including managing team site visits, school pickups, and internal hardware handling, are consistently documented to ensure team efficiency.
+",andrew@avance.technology,https://mail.google.com/chat/#chat/space/AAAAX5Pc9yM/wXThnZyzHgQ/wXThnZyzHgQ,hold on,Avance Group Chat,"May 27, 2026 at 8:56 AM AEST","
+- As of May 27, 2026, at 8:56 AM AEST, [link removed] and the technical team are actively coordinating operations within the https://www.google.com/url?q=https://mail.google.com/chat/%23chat/space/AAAAX5Pc9yM/wXThnZyzHgQ/wXThnZyzHgQ&sa=E&source=workflows.
+ - Active ticket management remains a high priority:
+  - A remote session with Healthlink is needed to resolve a ticket for the Macquarie Health Collective.
+  - Ongoing support for BAWD Property involves website domain configuration and service-to-incident ticket reassignment.
+  - Administrative tasks, such as password resets and 2FA assistance for Glow Paediatrics, are being addressed.
+  - Routine technical support inquiries, covering printer connectivity and general account access issues, are logged and processed daily.
+ - Hardware and infrastructure provisioning:
+  - New equipment deliveries, including a ThinkCentre Neo 50q Gen 5, have been received and logged.
+  - The team is actively provisioning new PCs, ensuring they are joined to the domain and supplied with necessary peripheral connectivity, such as HDMI and DP cables.
+  - Communication equipment, such as desk phones for NCS, is continuously updated and provisioned for client use.
+ - Operational and logistics management:
+  - Vehicle maintenance, specifically a recalled part replacement and service for the Kia Sportage, is confirmed for June 2.
+  - Internal operational directives emphasize the active use and monitoring of the office's status TV.
+  - General coordination efforts, including managing team site visits, school pickups, and internal hardware handling, are consistently documented to ensure team efficiency.
+",spaces/AAAAX5Pc9yM
+"May 27, 2026 at 8:56 AM AEST",Andrew Johnston,"The ticket for Macquarie Health Collective, assigned by Andrew Johnston (andrew@avance.technology), has been partially actioned. The current priority is to arrange a remote session with Healthlink, as previous efforts have indicated that they need to be contacted directly.
+
+This status update aligns with discussions within the https://www.google.com/url?q=https://mail.google.com/chat/%23chat/space/AAAAX5Pc9yM/0WURQtL_o2o/0WURQtL_o2o&sa=E&source=workflows, which was active as of May 27, 2026, at 8:56 AM AEST.",andrew@avance.technology,https://mail.google.com/chat/#chat/space/AAAAX5Pc9yM/0WURQtL_o2o/0WURQtL_o2o,"I already did that part, they are saying to contact HealthLink",Avance Group Chat,"May 27, 2026 at 8:56 AM AEST","The ticket for Macquarie Health Collective, assigned by Andrew Johnston (andrew@avance.technology), has been partially actioned. The current priority is to arrange a remote session with Healthlink, as previous efforts have indicated that they need to be contacted directly.
+
+This status update aligns with discussions within the https://www.google.com/url?q=https://mail.google.com/chat/%23chat/space/AAAAX5Pc9yM/0WURQtL_o2o/0WURQtL_o2o&sa=E&source=workflows, which was active as of May 27, 2026, at 8:56 AM AEST.",spaces/AAAAX5Pc9yM
+"May 27, 2026 at 8:56 AM AEST",Andrew Johnston,"On May 27, 2026, at 8:56 AM AEST, Andrew Johnston (mailto:andrew@avance.technology) discussed a support task within the Avance Group Chat (located within space spaces/AAAAX5Pc9yM). Andrew assigned Josh Parris a ticket regarding the Macquarie Health Collective, noting that the priority was to arrange a remote session with Healthlink. When Josh suggested contacting Best Practice support, Andrew Johnston corrected the direction, specifying that ""it's not best practice you need to reach"". This conversation thread can be accessed further at this https://www.google.com/url?q=https://mail.google.com/chat/%23chat/space/AAAAX5Pc9yM/sh2t41y21Xc/sh2t41y21Xc&sa=E&source=workflows.",andrew@avance.technology,https://mail.google.com/chat/#chat/space/AAAAX5Pc9yM/sh2t41y21Xc/sh2t41y21Xc,it's not best practice you need to reach,Avance Group Chat,"May 27, 2026 at 8:56 AM AEST","On May 27, 2026, at 8:56 AM AEST, Andrew Johnston (mailto:andrew@avance.technology) discussed a support task within the Avance Group Chat (located within space spaces/AAAAX5Pc9yM). Andrew assigned Josh Parris a ticket regarding the Macquarie Health Collective, noting that the priority was to arrange a remote session with Healthlink. When Josh suggested contacting Best Practice support, Andrew Johnston corrected the direction, specifying that ""it's not best practice you need to reach"". This conversation thread can be accessed further at this https://www.google.com/url?q=https://mail.google.com/chat/%23chat/space/AAAAX5Pc9yM/sh2t41y21Xc/sh2t41y21Xc&sa=E&source=workflows.",spaces/AAAAX5Pc9yM
+"May 27, 2026 at 8:57 AM AEST",Josh Parris,"Josh Parris (mailto:josh@avance.technology) is active within the Avance Technology team, coordinating service delivery and IT support as of May 27, 2026. Key work activities and updates identified through the https://www.google.com/url?q=https://mail.google.com/chat/%23chat/space/AAAAX5Pc9yM/RAk3FI2uRsQ/RAk3FI2uRsQ&sa=E&source=workflows and associated resources are summarized below.
+
+Client Service Onboarding and Management
+- Team efforts are focused on onboarding services for Allen Built and Streamline Energy Group, which have been confirmed as distinct business entities.
+- Tasked with adding a user subscription to the Mid West Concrete Microsoft 365 environment.
+- Successfully completed the induction process for the Myer point-of-sale (POS) system.
+- Noted new management changes at the Country Leisure Motor Inn.
+
+Technical Support and Troubleshooting
+- Email and Profile Management: Addressed profile credential issues and outlook profile limitations on the Dalari laptop.
+- Security and Integration:
+ - Configured ""Report Phishing"" buttons and 911 phishing mailbox services for Allen Built.
+ - Applied security updates across company devices to mitigate identified vulnerabilities.
+ - Integrated Ironscales with Microsoft 365.
+- Hardware and Connectivity:
+ - Resolved trackpad/touchpad issues on Dell laptops.
+ - Collaborated on VPN and network firmware troubleshooting, including EdgeRouter firmware updates.
+ - Provided recommendations on hardware specifications (Intel/AMD x64 over ARM/Snapdragon) to ensure compatibility with Managed Service Provider (MSP) security stacks like SentinelOne and Datto.
+
+Administrative and Personal Coordination
+- Documentation: Updated several Knowledge Base (KB) policies for the ""Configure M365 Security Policies"" workflow to improve accuracy.
+- Invoicing: Managing ticket categorization and CRM billing adjustments.
+- Team/Personal Events:
+ - Coordinated a flu shot appointment for May 27, 2026.
+ - Assembled a standing desk for personal use.
+ - Responded to unexpected property maintenance issues, such as a roof leak.
+ - Anticipating a change in status regarding probation periods at the Dubbo Christian School (DCS).
+",josh@avance.technology,https://mail.google.com/chat/#chat/space/AAAAX5Pc9yM/RAk3FI2uRsQ/RAk3FI2uRsQ,Oh they are two different companies? Ok,Avance Group Chat,"May 27, 2026 at 8:57 AM AEST","Josh Parris (mailto:josh@avance.technology) is active within the Avance Technology team, coordinating service delivery and IT support as of May 27, 2026. Key work activities and updates identified through the https://www.google.com/url?q=https://mail.google.com/chat/%23chat/space/AAAAX5Pc9yM/RAk3FI2uRsQ/RAk3FI2uRsQ&sa=E&source=workflows and associated resources are summarized below.
+
+Client Service Onboarding and Management
+- Team efforts are focused on onboarding services for Allen Built and Streamline Energy Group, which have been confirmed as distinct business entities.
+- Tasked with adding a user subscription to the Mid West Concrete Microsoft 365 environment.
+- Successfully completed the induction process for the Myer point-of-sale (POS) system.
+- Noted new management changes at the Country Leisure Motor Inn.
+
+Technical Support and Troubleshooting
+- Email and Profile Management: Addressed profile credential issues and outlook profile limitations on the Dalari laptop.
+- Security and Integration:
+ - Configured ""Report Phishing"" buttons and 911 phishing mailbox services for Allen Built.
+ - Applied security updates across company devices to mitigate identified vulnerabilities.
+ - Integrated Ironscales with Microsoft 365.
+- Hardware and Connectivity:
+ - Resolved trackpad/touchpad issues on Dell laptops.
+ - Collaborated on VPN and network firmware troubleshooting, including EdgeRouter firmware updates.
+ - Provided recommendations on hardware specifications (Intel/AMD x64 over ARM/Snapdragon) to ensure compatibility with Managed Service Provider (MSP) security stacks like SentinelOne and Datto.
+
+Administrative and Personal Coordination
+- Documentation: Updated several Knowledge Base (KB) policies for the ""Configure M365 Security Policies"" workflow to improve accuracy.
+- Invoicing: Managing ticket categorization and CRM billing adjustments.
+- Team/Personal Events:
+ - Coordinated a flu shot appointment for May 27, 2026.
+ - Assembled a standing desk for personal use.
+ - Responded to unexpected property maintenance issues, such as a roof leak.
+ - Anticipating a change in status regarding probation periods at the Dubbo Christian School (DCS).
+",spaces/AAAAX5Pc9yM
+"May 27, 2026 at 8:57 AM AEST",Josh Parris,"The provided documentation includes an email thread outlining a structured 10-prompt implementation plan to enhance the https://www.google.com/url?q=https://github.com/joshparri/AvanceProfessionalDevelopment&sa=E&source=workflows app.
+
+Avance Professional Development Enhancement
+The objective is to integrate a ""Health & Outdoors"" module into the [link removed] application, specifically designed to support the physical and mental wellbeing of someone working ICT/MSP shifts on Mondays and Wednesdays.
+
+Key aspects of the implementation strategy include:
+- Phased Development: The plan recommends a 10-step approach:
+ - Phase 1 (Prompts 1–4): Repository audit, implementation planning, routing, data layering, and local storage setup.
+ - Phase 2 (Prompts 5–7): Building the reminder engine, notification integration, and in-app reminder banners.
+ - Phase 3 (Prompts 8–10): Adding wellness features, such as the 2-minute reset flow, weekly health reviews, and a final QA/deployment checklist.
+- Design Principles: The module emphasizes a calm, sustainable, and non-shaming user experience. Key themes include nature exposure, hydration, microbreaks, eye breaks, posture, daylight exposure, nervous-system downshifts, and structured end-of-day shutdown rituals.
+- Technical Constraints:
+ - The application must be https://www.google.com/url?q=https://github.com/joshparri/AvanceProfessionalDevelopment&sa=E&source=workflows.
+ - No sensitive health, medical, or client-specific data (e.g., passwords, hostnames, ticket details) should be stored.
+ - Optional email reminders or calendar integrations are restricted to manual export or copy/paste functions, avoiding the need for backend infrastructure, API keys, or stored credentials.
+
+Clarification on Requested Information
+There is no record of an email thread regarding ""BP support"" or organizing server access in the provided resources.",josh@avance.technology,https://mail.google.com/chat/#chat/space/AAAAX5Pc9yM/s6G6OA0U88g/s6G6OA0U88g,"Do you have the email chain from this note ""Sent an email to BP support to try and organise to hop onto the server and investigate further""",Avance Group Chat,"May 27, 2026 at 8:57 AM AEST","The provided documentation includes an email thread outlining a structured 10-prompt implementation plan to enhance the https://www.google.com/url?q=https://github.com/joshparri/AvanceProfessionalDevelopment&sa=E&source=workflows app.
+
+Avance Professional Development Enhancement
+The objective is to integrate a ""Health & Outdoors"" module into the [link removed] application, specifically designed to support the physical and mental wellbeing of someone working ICT/MSP shifts on Mondays and Wednesdays.
+
+Key aspects of the implementation strategy include:
+- Phased Development: The plan recommends a 10-step approach:
+ - Phase 1 (Prompts 1–4): Repository audit, implementation planning, routing, data layering, and local storage setup.
+ - Phase 2 (Prompts 5–7): Building the reminder engine, notification integration, and in-app reminder banners.
+ - Phase 3 (Prompts 8–10): Adding wellness features, such as the 2-minute reset flow, weekly health reviews, and a final QA/deployment checklist.
+- Design Principles: The module emphasizes a calm, sustainable, and non-shaming user experience. Key themes include nature exposure, hydration, microbreaks, eye breaks, posture, daylight exposure, nervous-system downshifts, and structured end-of-day shutdown rituals.
+- Technical Constraints:
+ - The application must be https://www.google.com/url?q=https://github.com/joshparri/AvanceProfessionalDevelopment&sa=E&source=workflows.
+ - No sensitive health, medical, or client-specific data (e.g., passwords, hostnames, ticket details) should be stored.
+ - Optional email reminders or calendar integrations are restricted to manual export or copy/paste functions, avoiding the need for backend infrastructure, API keys, or stored credentials.
+
+Clarification on Requested Information
+There is no record of an email thread regarding ""BP support"" or organizing server access in the provided resources.",spaces/AAAAX5Pc9yM
+"May 27, 2026 at 8:58 AM AEST",Andrew Johnston,"Medical centers rely on a vast array of interconnected services that link to their practice management software, ensuring secure correspondence, interactions with government bodies, and efficient access to health services. Managing these critical environments involves a continuous, collaborative effort, with the Avance team coordinating support, security, and administrative tasks through their group chat platform.
+
+Key areas of team activity include:
+- Proactive Security and Incident Response: The team prioritizes robust security, utilizing Conditional Access policies, Adlumin, and Augmentt to monitor for dark web credential exposure, spoofed emails, and unauthorized login attempts. They actively resolve security-related service interruptions, such as those caused by inadvertent third-party VPN usage on employee devices.
+- Software and Infrastructure Maintenance: Routine work centers on troubleshooting specialized medical software, including Best Practice and Medical Director, alongside managing underlying infrastructure. Operational upkeep requires constant vigilance over network gateways, server room conditions, UPS units, and hardware reliability.
+- Client Onboarding and Lifecycle Management: Onboarding new clients, such as Glow Paediatrics, involves comprehensive setup processes covering endpoint protection, cloud-based backup solutions, and identity management. Simultaneously, the team handles license management, billing adjustments, and decommissioning outdated hardware.
+- Team Collaboration and Coordination: The team effectively manages operational tasks, including ticket escalations, client support requests, internal hardware procurement, and knowledge sharing regarding technical workarounds.
+Ensuring long-term operational success requires balancing proactive monitoring with responsiveness to client needs, all while navigating evolving industry requirements, such as upcoming Microsoft 365 billing changes and Windows upgrade cycles.",andrew@avance.technology,https://mail.google.com/chat/#chat/space/AAAAX5Pc9yM/lmnxU3VmiiI/lmnxU3VmiiI,"Medical centres often use a myriad of different services that connect into their practice software, things to send and receive correspondence securely, communicate with medicare/government and so on and so forth",Avance Group Chat,"May 27, 2026 at 8:58 AM AEST","Medical centers rely on a vast array of interconnected services that link to their practice management software, ensuring secure correspondence, interactions with government bodies, and efficient access to health services. Managing these critical environments involves a continuous, collaborative effort, with the Avance team coordinating support, security, and administrative tasks through their group chat platform.
+
+Key areas of team activity include:
+- Proactive Security and Incident Response: The team prioritizes robust security, utilizing Conditional Access policies, Adlumin, and Augmentt to monitor for dark web credential exposure, spoofed emails, and unauthorized login attempts. They actively resolve security-related service interruptions, such as those caused by inadvertent third-party VPN usage on employee devices.
+- Software and Infrastructure Maintenance: Routine work centers on troubleshooting specialized medical software, including Best Practice and Medical Director, alongside managing underlying infrastructure. Operational upkeep requires constant vigilance over network gateways, server room conditions, UPS units, and hardware reliability.
+- Client Onboarding and Lifecycle Management: Onboarding new clients, such as Glow Paediatrics, involves comprehensive setup processes covering endpoint protection, cloud-based backup solutions, and identity management. Simultaneously, the team handles license management, billing adjustments, and decommissioning outdated hardware.
+- Team Collaboration and Coordination: The team effectively manages operational tasks, including ticket escalations, client support requests, internal hardware procurement, and knowledge sharing regarding technical workarounds.
+Ensuring long-term operational success requires balancing proactive monitoring with responsiveness to client needs, all while navigating evolving industry requirements, such as upcoming Microsoft 365 billing changes and Windows upgrade cycles.",spaces/AAAAX5Pc9yM
+"May 27, 2026 at 9:12 AM AEST",Josh Parris,"Josh Parris (josh@avance.technology) reported on May 27, 2026, at 9:12 AM AEST, that the Healthlink support line is connecting directly to a message bank. Consequently, Josh plans to contact them via email instead. This update was noted within the https://www.google.com/url?q=https://mail.google.com/chat/%23chat/space/AAAAX5Pc9yM/ioa5BxQZ2nQ/ioa5BxQZ2nQ&sa=E&source=workflows.",josh@avance.technology,https://mail.google.com/chat/#chat/space/AAAAX5Pc9yM/ioa5BxQZ2nQ/ioa5BxQZ2nQ,"Healthlink support line goes straight to message bank, very helpful, not haha. Ill send them an email",Avance Group Chat,"May 27, 2026 at 9:12 AM AEST","Josh Parris (josh@avance.technology) reported on May 27, 2026, at 9:12 AM AEST, that the Healthlink support line is connecting directly to a message bank. Consequently, Josh plans to contact them via email instead. This update was noted within the https://www.google.com/url?q=https://mail.google.com/chat/%23chat/space/AAAAX5Pc9yM/ioa5BxQZ2nQ/ioa5BxQZ2nQ&sa=E&source=workflows.",spaces/AAAAX5Pc9yM
+"May 27, 2026 at 10 AM AEST",Andrew Johnston,"As of May 27, 2026, at 10 AM AEST, Andrew Johnston is headed into a video call. Recent activity in the https://www.google.com/url?q=https://mail.google.com/chat/%23chat/space/AAAAX5Pc9yM/tRKs9m3fVLg/tRKs9m3fVLg&sa=E&source=workflows involves an active support ticket for Macquarie Health Collective. You clarified that Best Practice support and Healthlink support are distinct companies and are working to engage Healthlink directly to resolve the outstanding issues.
+
+Operational highlights documented earlier in the year include:
+- Staffing and Licensing: Processes were established for managing departing employees, such as converting email accounts to shared mailboxes and adjusting software license counts.
+- Technical Support: Assistance was provided for various IT challenges, including resolving infinite authentication loops when signing into Microsoft services, disabling out-of-hours message banks for clients, and troubleshooting access to 3CX call reporting functions.
+- Access and Configuration: Tasks included setting up access for clients to generic business inboxes and configuring new workstations by bypassing setup wizards and utilizing domain admin credentials.
+- Field Coordination: Logistics were managed for on-site client visits, such as requests from Tresco surveyors to inspect communications infrastructure.
+",andrew@avance.technology,https://mail.google.com/chat/#chat/space/AAAAX5Pc9yM/tRKs9m3fVLg/tRKs9m3fVLg,I'm just headed in to a video call,Avance Group Chat,"May 27, 2026 at 10 AM AEST","As of May 27, 2026, at 10 AM AEST, Andrew Johnston is headed into a video call. Recent activity in the https://www.google.com/url?q=https://mail.google.com/chat/%23chat/space/AAAAX5Pc9yM/tRKs9m3fVLg/tRKs9m3fVLg&sa=E&source=workflows involves an active support ticket for Macquarie Health Collective. You clarified that Best Practice support and Healthlink support are distinct companies and are working to engage Healthlink directly to resolve the outstanding issues.
+
+Operational highlights documented earlier in the year include:
+- Staffing and Licensing: Processes were established for managing departing employees, such as converting email accounts to shared mailboxes and adjusting software license counts.
+- Technical Support: Assistance was provided for various IT challenges, including resolving infinite authentication loops when signing into Microsoft services, disabling out-of-hours message banks for clients, and troubleshooting access to 3CX call reporting functions.
+- Access and Configuration: Tasks included setting up access for clients to generic business inboxes and configuring new workstations by bypassing setup wizards and utilizing domain admin credentials.
+- Field Coordination: Logistics were managed for on-site client visits, such as requests from Tresco surveyors to inspect communications infrastructure.
+",spaces/AAAAX5Pc9yM
+"May 27, 2026 at 10:40 AM AEST",Josh Parris,"On May 27, 2026, at 10:40 AM AEST, Josh Parris (mailto:josh@avance.technology) updated the https://www.google.com/url?q=https://mail.google.com/chat/%23chat/space/AAAAX5Pc9yM/abQALe2pw4I/abQALe2pw4I&sa=E&source=workflows to confirm that he successfully contacted Health Link and spoke with Brooke from MHC, noting that the issue has been resolved.",josh@avance.technology,https://mail.google.com/chat/#chat/space/AAAAX5Pc9yM/abQALe2pw4I/abQALe2pw4I,"Got onto Health Link, and chatted to Brooke from MHC, all sorted 🙂",Avance Group Chat,"May 27, 2026 at 10:40 AM AEST","On May 27, 2026, at 10:40 AM AEST, Josh Parris (mailto:josh@avance.technology) updated the https://www.google.com/url?q=https://mail.google.com/chat/%23chat/space/AAAAX5Pc9yM/abQALe2pw4I/abQALe2pw4I&sa=E&source=workflows to confirm that he successfully contacted Health Link and spoke with Brooke from MHC, noting that the issue has been resolved.",spaces/AAAAX5Pc9yM
+"May 27, 2026 at 10:41 AM AEST",Andrew Johnston,"Recent collaboration and project management activities within the https://www.google.com/url?q=https://chat.google.com/room/AAAAX5Pc9yM/--IeFSQiqK8/--IeFSQiqK8&sa=E&source=workflows have centered on resolving client technical issues and maintaining internal infrastructure.
+- Project Resolutions and Client Support:
+ - Josh Parris successfully actioned a ticket for Macquarie Health Collective by coordinating with HealthLink.
+ - Onboarding support continues for clients like Allen Built and Streamline, including configuring security tools such as phishing reporting and password management solutions.
+ - Hardware deployments have included setting up a ThinkCentre Neo 50q Gen 5 for WPSN.
+ - Technicians have handled various urgent requests, ranging from authentication errors (2FA) and printer configuration issues to resolving server and network connectivity problems.
+- Team and Administrative Updates:
+ - Menuka Pradhan concluded their employment with the team in April 2026.
+ - Greg Cook joined the team in mid-April 2026.
+ - Routine maintenance includes scheduling the Kia Sportage for an electronic parking brake recall repair on June 2, 2026.
+ - The team regularly coordinates on-site visits and updates to internal systems, such as monitoring software and firmware updates.
+- Ongoing Operational Focus:
+ - Team members emphasize continuous communication regarding support ticket statuses, site visits, and hardware provisioning.
+ - Collaboration is maintained across multiple threads to track outstanding jobs and handle client queries effectively.
+",andrew@avance.technology,https://mail.google.com/chat/#chat/space/AAAAX5Pc9yM/DKb1iBug2ao/DKb1iBug2ao,"oh wow..that was quick, nice work",Avance Group Chat,"May 27, 2026 at 10:41 AM AEST","Recent collaboration and project management activities within the https://www.google.com/url?q=https://chat.google.com/room/AAAAX5Pc9yM/--IeFSQiqK8/--IeFSQiqK8&sa=E&source=workflows have centered on resolving client technical issues and maintaining internal infrastructure.
+- Project Resolutions and Client Support:
+ - Josh Parris successfully actioned a ticket for Macquarie Health Collective by coordinating with HealthLink.
+ - Onboarding support continues for clients like Allen Built and Streamline, including configuring security tools such as phishing reporting and password management solutions.
+ - Hardware deployments have included setting up a ThinkCentre Neo 50q Gen 5 for WPSN.
+ - Technicians have handled various urgent requests, ranging from authentication errors (2FA) and printer configuration issues to resolving server and network connectivity problems.
+- Team and Administrative Updates:
+ - Menuka Pradhan concluded their employment with the team in April 2026.
+ - Greg Cook joined the team in mid-April 2026.
+ - Routine maintenance includes scheduling the Kia Sportage for an electronic parking brake recall repair on June 2, 2026.
+ - The team regularly coordinates on-site visits and updates to internal systems, such as monitoring software and firmware updates.
+- Ongoing Operational Focus:
+ - Team members emphasize continuous communication regarding support ticket statuses, site visits, and hardware provisioning.
+ - Collaboration is maintained across multiple threads to track outstanding jobs and handle client queries effectively.
+",spaces/AAAAX5Pc9yM
+"May 27, 2026 at 10:42 AM AEST",Josh Parris,"A task has been updated to ""awaiting invoice"" and assigned to Josh Parris (mailto:josh@avance.technology) in Hao. This status change was communicated on May 27, 2026, at 10:42 AM AEST within the https://www.google.com/url?q=https://mail.google.com/chat/%23chat/space/AAAAX5Pc9yM/fGcO9sI3rww/fGcO9sI3rww&sa=E&source=workflows.",josh@avance.technology,https://mail.google.com/chat/#chat/space/AAAAX5Pc9yM/fGcO9sI3rww/fGcO9sI3rww,"I put as awaiting invoice for you, and assigned to you in Halo",Avance Group Chat,"May 27, 2026 at 10:42 AM AEST","A task has been updated to ""awaiting invoice"" and assigned to Josh Parris (mailto:josh@avance.technology) in Hao. This status change was communicated on May 27, 2026, at 10:42 AM AEST within the https://www.google.com/url?q=https://mail.google.com/chat/%23chat/space/AAAAX5Pc9yM/fGcO9sI3rww/fGcO9sI3rww&sa=E&source=workflows.",spaces/AAAAX5Pc9yM
+"May 27, 2026 at 10:42 AM AEST",Andrew Johnston,"Support requests—such as the recurring need to call back Paula at BAWD Property Trust—are common and require consistent triaging. Her requests frequently involve printing assistance, account access for new employees, and cybersecurity training modules. These inquiries are typically directed to the Avance team—which includes mailto:andrew@avance.technology—and are routed through established PSA ticketing channels, such as Service Delivery or Level 1 support, to ensure structured tracking and resolution.
+
+Operational coordination occurs within the https://www.google.com/url?q=https://mail.google.com/chat/%23chat/space/AAAAX5Pc9yM/ml8rIQ0ismo/ml8rIQ0ismo&sa=E&source=workflows as of May 27, 2026. Team members handle a broad range of responsibilities including hardware installs, managing network outages, and addressing ongoing client requirements. To maintain efficiency, the team prioritizes directing client inquiries to designated support addresses, such as support@avance.technology, minimizing reliance on direct messages for managing critical support jobs.",andrew@avance.technology,https://mail.google.com/chat/#chat/space/AAAAX5Pc9yM/ml8rIQ0ismo/ml8rIQ0ismo,Could someone call back Paula at BAWD?,Avance Group Chat,"May 27, 2026 at 10:42 AM AEST","Support requests—such as the recurring need to call back Paula at BAWD Property Trust—are common and require consistent triaging. Her requests frequently involve printing assistance, account access for new employees, and cybersecurity training modules. These inquiries are typically directed to the Avance team—which includes mailto:andrew@avance.technology—and are routed through established PSA ticketing channels, such as Service Delivery or Level 1 support, to ensure structured tracking and resolution.
+
+Operational coordination occurs within the https://www.google.com/url?q=https://mail.google.com/chat/%23chat/space/AAAAX5Pc9yM/ml8rIQ0ismo/ml8rIQ0ismo&sa=E&source=workflows as of May 27, 2026. Team members handle a broad range of responsibilities including hardware installs, managing network outages, and addressing ongoing client requirements. To maintain efficiency, the team prioritizes directing client inquiries to designated support addresses, such as support@avance.technology, minimizing reliance on direct messages for managing critical support jobs.",spaces/AAAAX5Pc9yM
+"May 27, 2026 at 10:42 AM AEST",Josh Parris,"
+- As of May 27, 2026 at 10:42 AM AEST, Josh Parris (mailto:josh@avance.technology) reviewed activity within the https://www.google.com/url?q=https://mail.google.com/chat/%23chat/space/AAAAX5Pc9yM/E-ttpOtHD88/E-ttpOtHD88&sa=E&source=workflows, highlighting several key developments.
+Client Support and Ticket Management
+- Macquarie Health Collective’s ticket was successfully actioned. A remote session with Healthlink was completed.
+- Wright Partners staff departure (Brianna) was managed, and her email was converted into a shared mailbox.
+- Shane from TRRA experienced login difficulties in the meeting room, which were handled using the https://www.google.com/url?q=https://teams.googleplex.com/admin&sa=E&source=workflows account.
+- Technical issues at NCS, including printer connectivity and authenticator problems, were addressed.
+- The Credit One server infrastructure faced disruptions due to firewall upgrades.
+- Support was provided to DCFP regarding nurse PC replacement and new user access requests.
+- The team investigated a website expiry issue for Abbey Funeral Homes, confirming the domain was managed by Delamere.
+- Paula at BAWD received assistance for setting up new NextGen Civil user accounts.
+Staffing and Team Updates
+- Menuka Pradhan joined as an L1/L2 technician on January 30, 2026. She completed her final day on April 14, 2026.
+- Greg Cook officially joined the team on April 16, 2026.
+Internal Operations and Maintenance
+- Solar battery installations were conducted at the workshop.
+- The team implemented a procedure to use the monitoring TV daily to ensure site accessibility.
+- Vehicle maintenance, including repairs for the Kia Sportage and Picanto, was scheduled and managed.
+- Automation steps for hardware workflows were updated to reflect when items are ""In Workshop"".
+",josh@avance.technology,https://mail.google.com/chat/#chat/space/AAAAX5Pc9yM/E-ttpOtHD88/E-ttpOtHD88,Sure,Avance Group Chat,"May 27, 2026 at 10:42 AM AEST","
+- As of May 27, 2026 at 10:42 AM AEST, Josh Parris (mailto:josh@avance.technology) reviewed activity within the https://www.google.com/url?q=https://mail.google.com/chat/%23chat/space/AAAAX5Pc9yM/E-ttpOtHD88/E-ttpOtHD88&sa=E&source=workflows, highlighting several key developments.
+Client Support and Ticket Management
+- Macquarie Health Collective’s ticket was successfully actioned. A remote session with Healthlink was completed.
+- Wright Partners staff departure (Brianna) was managed, and her email was converted into a shared mailbox.
+- Shane from TRRA experienced login difficulties in the meeting room, which were handled using the https://www.google.com/url?q=https://teams.googleplex.com/admin&sa=E&source=workflows account.
+- Technical issues at NCS, including printer connectivity and authenticator problems, were addressed.
+- The Credit One server infrastructure faced disruptions due to firewall upgrades.
+- Support was provided to DCFP regarding nurse PC replacement and new user access requests.
+- The team investigated a website expiry issue for Abbey Funeral Homes, confirming the domain was managed by Delamere.
+- Paula at BAWD received assistance for setting up new NextGen Civil user accounts.
+Staffing and Team Updates
+- Menuka Pradhan joined as an L1/L2 technician on January 30, 2026. She completed her final day on April 14, 2026.
+- Greg Cook officially joined the team on April 16, 2026.
+Internal Operations and Maintenance
+- Solar battery installations were conducted at the workshop.
+- The team implemented a procedure to use the monitoring TV daily to ensure site accessibility.
+- Vehicle maintenance, including repairs for the Kia Sportage and Picanto, was scheduled and managed.
+- Automation steps for hardware workflows were updated to reflect when items are ""In Workshop"".
+",spaces/AAAAX5Pc9yM
+"May 27, 2026 at 10:42 AM AEST",James Newby,"In the https://www.google.com/url?q=https://mail.google.com/chat/%23chat/space/AAAAX5Pc9yM/h_Qppaa5-5M/h_Qppaa5-5M&sa=E&source=workflows, James Newby (mailto:james@avance.technology) confirmed on May 27, 2026, at 10:42 AM AEST that he is currently handling a requested callback to Paula at BAWD.
+
+Earlier in the day, Josh Parris successfully resolved the Macquarie Health Collective ticket after coordinating with Healthlink and speaking with Brooke from MHC. Following this, Josh updated the ticket's status in Halo to ""awaiting invoice"" and assigned it to Andrew Johnston.",james@avance.technology,https://mail.google.com/chat/#chat/space/AAAAX5Pc9yM/h_Qppaa5-5M/h_Qppaa5-5M,I'm doing that now,Avance Group Chat,"May 27, 2026 at 10:42 AM AEST","In the https://www.google.com/url?q=https://mail.google.com/chat/%23chat/space/AAAAX5Pc9yM/h_Qppaa5-5M/h_Qppaa5-5M&sa=E&source=workflows, James Newby (mailto:james@avance.technology) confirmed on May 27, 2026, at 10:42 AM AEST that he is currently handling a requested callback to Paula at BAWD.
+
+Earlier in the day, Josh Parris successfully resolved the Macquarie Health Collective ticket after coordinating with Healthlink and speaking with Brooke from MHC. Following this, Josh updated the ticket's status in Halo to ""awaiting invoice"" and assigned it to Andrew Johnston.",spaces/AAAAX5Pc9yM
+"May 27, 2026 at 10:43 AM AEST",Josh Parris,"As of May 27, 2026, mailto:josh@avance.technology has been coordinating various support tasks within the https://www.google.com/url?q=https://mail.google.com/chat/%23chat/space/AAAAX5Pc9yM/uzHQz4DgLM0/uzHQz4DgLM0&sa=E&source=workflows.
+
+Employment Discussions
+Andrew Johnston noted that they will soon discuss permanent full-time or part-time arrangements for Josh.
+
+Ticket Updates
+- Ticket 0011776 (Brand Collective POS replacement): Andrew requested that it remain open until he completes invoicing.
+- Ticket 0011995 (Allen Built): Regarding an inquiry about an additional laptop, Andrew confirmed it was previously decided one was not needed. Josh is advised to defer such sales-related inquiries to Andrew.
+- Ticket 0011840: Andrew wants to ensure issues are resolved before closing for invoicing. Josh has been assigned this ticket to add private notes and intends to contact the customer.
+Everything is looking ""Epic"".",josh@avance.technology,https://mail.google.com/chat/#chat/space/AAAAX5Pc9yM/uzHQz4DgLM0/uzHQz4DgLM0,Epic,Avance Group Chat,"May 27, 2026 at 10:43 AM AEST","As of May 27, 2026, mailto:josh@avance.technology has been coordinating various support tasks within the https://www.google.com/url?q=https://mail.google.com/chat/%23chat/space/AAAAX5Pc9yM/uzHQz4DgLM0/uzHQz4DgLM0&sa=E&source=workflows.
+
+Employment Discussions
+Andrew Johnston noted that they will soon discuss permanent full-time or part-time arrangements for Josh.
+
+Ticket Updates
+- Ticket 0011776 (Brand Collective POS replacement): Andrew requested that it remain open until he completes invoicing.
+- Ticket 0011995 (Allen Built): Regarding an inquiry about an additional laptop, Andrew confirmed it was previously decided one was not needed. Josh is advised to defer such sales-related inquiries to Andrew.
+- Ticket 0011840: Andrew wants to ensure issues are resolved before closing for invoicing. Josh has been assigned this ticket to add private notes and intends to contact the customer.
+Everything is looking ""Epic"".",spaces/AAAAX5Pc9yM
+"May 27, 2026 at 12:31 PM AEST",Josh Parris,"The https://www.google.com/url?q=https://mail.google.com/chat/%23chat/space/AAAAX5Pc9yM/SzPvCz_yRNU/SzPvCz_yRNU&sa=E&source=workflows records several active work tasks and team communications.
+
+Work Tasks and Onboarding
+- Josh Parris and James Newby are tasked with continuing service onboarding for Allen Built and Streamline when there are no immediate tickets to process.
+- The team needs to schedule a demo of ""Keeper"" with Shannon to determine if he will manage it for his staff.
+- The team is also required to verify that ""usecure"" is connected and then coordinate the handover to Edwin for campaign launches.
+Technical Configuration
+- The ""Report Phishing"" button was successfully deployed for Allen Built following initial issues with its visibility.
+- The 911 phishing mailbox (mailto:phishing@allenbuilt.com.au) for Allen Built was set up after resolving issues with licensing and account creation order.
+Team and Client Updates
+- Country Leisure has new owners and a new manager, Eddie, who plans to introduce himself and discuss potential ideas.
+- Team members shared personal updates, including an incident outside Andrew Johnston's home involving police and a reported water leak at Josh Parris's residence.
+",josh@avance.technology,https://mail.google.com/chat/#chat/space/AAAAX5Pc9yM/SzPvCz_yRNU/SzPvCz_yRNU,grabbing some lunch back in 20-30 mins,Avance Group Chat,"May 27, 2026 at 12:31 PM AEST","The https://www.google.com/url?q=https://mail.google.com/chat/%23chat/space/AAAAX5Pc9yM/SzPvCz_yRNU/SzPvCz_yRNU&sa=E&source=workflows records several active work tasks and team communications.
+
+Work Tasks and Onboarding
+- Josh Parris and James Newby are tasked with continuing service onboarding for Allen Built and Streamline when there are no immediate tickets to process.
+- The team needs to schedule a demo of ""Keeper"" with Shannon to determine if he will manage it for his staff.
+- The team is also required to verify that ""usecure"" is connected and then coordinate the handover to Edwin for campaign launches.
+Technical Configuration
+- The ""Report Phishing"" button was successfully deployed for Allen Built following initial issues with its visibility.
+- The 911 phishing mailbox (mailto:phishing@allenbuilt.com.au) for Allen Built was set up after resolving issues with licensing and account creation order.
+Team and Client Updates
+- Country Leisure has new owners and a new manager, Eddie, who plans to introduce himself and discuss potential ideas.
+- Team members shared personal updates, including an incident outside Andrew Johnston's home involving police and a reported water leak at Josh Parris's residence.
+",spaces/AAAAX5Pc9yM
+"May 27, 2026 at 12:59 PM AEST",Andrew Johnston,"Andrew Johnston (mailto:andrew@avance.technology) has noted that he will be out of contact for a bit during the current meeting. As of May 27, 2026, at 12:59 PM AEST, activity in the https://www.google.com/url?q=https://mail.google.com/chat/%23chat/space/AAAAX5Pc9yM/5gqEco0T2pM/5gqEco0T2pM&sa=E&source=workflows continues to focus on client support, infrastructure maintenance, and security monitoring.
+- Cybersecurity and Infrastructure: The team has been actively addressing security incidents, including identifying phishing attempts involving a malicious link disguised as an Adobe download. There have also been discussions regarding Sentinel One's impact on application performance and the need for improved alert visibility. On the networking front, the team is exploring SD-WAN capabilities using new UXG models.
+- Client Support: Operational support includes resolving NBN ordering issues for Palms Motel via a service churn process, providing IT support for RMS Accountants, and managing email migrations and 2FA token setup for NCS.
+- Operational Updates: Andrew Johnston has communicated regarding his planned leave, and the team continues to coordinate daily tasks, site visits to locations like WRPH, and hardware setup requirements for various clients.
+",andrew@avance.technology,https://mail.google.com/chat/#chat/space/AAAAX5Pc9yM/5gqEco0T2pM/5gqEco0T2pM,I'll just be out of contact for a bit during this meeting,Avance Group Chat,"May 27, 2026 at 12:59 PM AEST","Andrew Johnston (mailto:andrew@avance.technology) has noted that he will be out of contact for a bit during the current meeting. As of May 27, 2026, at 12:59 PM AEST, activity in the https://www.google.com/url?q=https://mail.google.com/chat/%23chat/space/AAAAX5Pc9yM/5gqEco0T2pM/5gqEco0T2pM&sa=E&source=workflows continues to focus on client support, infrastructure maintenance, and security monitoring.
+- Cybersecurity and Infrastructure: The team has been actively addressing security incidents, including identifying phishing attempts involving a malicious link disguised as an Adobe download. There have also been discussions regarding Sentinel One's impact on application performance and the need for improved alert visibility. On the networking front, the team is exploring SD-WAN capabilities using new UXG models.
+- Client Support: Operational support includes resolving NBN ordering issues for Palms Motel via a service churn process, providing IT support for RMS Accountants, and managing email migrations and 2FA token setup for NCS.
+- Operational Updates: Andrew Johnston has communicated regarding his planned leave, and the team continues to coordinate daily tasks, site visits to locations like WRPH, and hardware setup requirements for various clients.
+",spaces/AAAAX5Pc9yM
+"May 27, 2026 at 1 PM AEST",James Newby,"No worries, that's all good. As of May 27, 2026 at 1 PM AEST, here is a summary of recent findings regarding James Newby (mailto:james@avance.technology) within the https://www.google.com/url?q=https://mail.google.com/chat/%23chat/space/AAAAX5Pc9yM/fHizC-HEfyI/fHizC-HEfyI&sa=E&source=workflows:
+- James Newby acts as a key collaborator for the service delivery team, frequently working with Josh Parris on client onboarding and the implementation of managed services for clients like Allen Built and Streamline Energy Group.
+- He supports the team by providing technical guidance, such as sharing documentation for Keeper identity provider setups and assisting with the configuration of phishing mailboxes.
+- Operational tasks managed by James include assisting with CRM updates, troubleshooting ticket issues, and providing hardware support when onsite staff are unavailable.
+- James is active in performing field work, with recent site visits to clients including Treasco and Impax to resolve technical issues and maintain infrastructure.
+- The group utilizes the chat space to coordinate daily workflows, share project status updates, and manage team schedules while working across various locations.
+",james@avance.technology,https://mail.google.com/chat/#chat/space/AAAAX5Pc9yM/fHizC-HEfyI/fHizC-HEfyI,"No worries, that's all good",Avance Group Chat,"May 27, 2026 at 1 PM AEST","No worries, that's all good. As of May 27, 2026 at 1 PM AEST, here is a summary of recent findings regarding James Newby (mailto:james@avance.technology) within the https://www.google.com/url?q=https://mail.google.com/chat/%23chat/space/AAAAX5Pc9yM/fHizC-HEfyI/fHizC-HEfyI&sa=E&source=workflows:
+- James Newby acts as a key collaborator for the service delivery team, frequently working with Josh Parris on client onboarding and the implementation of managed services for clients like Allen Built and Streamline Energy Group.
+- He supports the team by providing technical guidance, such as sharing documentation for Keeper identity provider setups and assisting with the configuration of phishing mailboxes.
+- Operational tasks managed by James include assisting with CRM updates, troubleshooting ticket issues, and providing hardware support when onsite staff are unavailable.
+- James is active in performing field work, with recent site visits to clients including Treasco and Impax to resolve technical issues and maintain infrastructure.
+- The group utilizes the chat space to coordinate daily workflows, share project status updates, and manage team schedules while working across various locations.
+",spaces/AAAAX5Pc9yM
+"May 27, 2026 at 4:31 PM AEST",Josh Parris,"Josh Parris (mailto:josh@avance.technology) sent a message in the Avance Group Chat on May 27, 2026, at 4:31 PM AEST stating, ""Im off, see you all monday 🙂"". You can view the discussion in the https://www.google.com/url?q=https://mail.google.com/chat/%23chat/space/AAAAX5Pc9yM/WScqI2UIVq0/WScqI2UIVq0&sa=E&source=workflows.",josh@avance.technology,https://mail.google.com/chat/#chat/space/AAAAX5Pc9yM/WScqI2UIVq0/WScqI2UIVq0,"Im off, see you all monday 🙂",Avance Group Chat,"May 27, 2026 at 4:31 PM AEST","Josh Parris (mailto:josh@avance.technology) sent a message in the Avance Group Chat on May 27, 2026, at 4:31 PM AEST stating, ""Im off, see you all monday 🙂"". You can view the discussion in the https://www.google.com/url?q=https://mail.google.com/chat/%23chat/space/AAAAX5Pc9yM/WScqI2UIVq0/WScqI2UIVq0&sa=E&source=workflows.",spaces/AAAAX5Pc9yM
+"May 28, 2026 at 9:58 AM AEST",Andrew Johnston,No information regarding the ticket linked at https://www.google.com/url?q=https://psa.avance.technology/tickets?area%3D1%26mainview%3Dagent%26viewid%3D13%26selid%3D1%26sellevel%3D1%26selparentid%3Dall%2Bagents%26id%3D12121&sa=E&source=workflows could be found within the provided Avance Group Chat resources.,andrew@avance.technology,https://mail.google.com/chat/#chat/space/AAAAX5Pc9yM/jMvDWDW9gbc/jMvDWDW9gbc,"re this ticket:
+
+https://psa.avance.technology/tickets?area=1&mainview=agent&viewid=13&selid=1&sellevel=1&selparentid=all%20agents&id=12121",Avance Group Chat,"May 28, 2026 at 9:58 AM AEST",No information regarding the ticket linked at https://www.google.com/url?q=https://psa.avance.technology/tickets?area%3D1%26mainview%3Dagent%26viewid%3D13%26selid%3D1%26sellevel%3D1%26selparentid%3Dall%2Bagents%26id%3D12121&sa=E&source=workflows could be found within the provided Avance Group Chat resources.,spaces/AAAAX5Pc9yM
+"May 28, 2026 at 9:58 AM AEST",Andrew Johnston,"Andrew Johnston (mailto:andrew@avance.technology) posted a query in the https://www.google.com/url?q=https://mail.google.com/chat/%23chat/space/AAAAX5Pc9yM/eus-cT-piDo/eus-cT-piDo&sa=E&source=workflows on May 28, 2026, at 9:58 AM AEST, asking if it is possible to remove users from JumpCloud and join them to Entra.",andrew@avance.technology,https://mail.google.com/chat/#chat/space/AAAAX5Pc9yM/eus-cT-piDo/eus-cT-piDo,can we just take them off jumpcloud and join them to Entra?,Avance Group Chat,"May 28, 2026 at 9:58 AM AEST","Andrew Johnston (mailto:andrew@avance.technology) posted a query in the https://www.google.com/url?q=https://mail.google.com/chat/%23chat/space/AAAAX5Pc9yM/eus-cT-piDo/eus-cT-piDo&sa=E&source=workflows on May 28, 2026, at 9:58 AM AEST, asking if it is possible to remove users from JumpCloud and join them to Entra.",spaces/AAAAX5Pc9yM
+"May 28, 2026 at 9:59 AM AEST",Andrew Johnston,"The team has determined that for many clients, they don't need JumpCloud surely, as moving away from the platform resolves the ongoing challenges of staying under the 10-user limit. This strategic pivot is a direct response to JumpCloud’s recent pricing structure changes, which include the elimination of the free legacy tier and a move toward individualized MSP pricing, making the platform less viable for the small business segment.
+
+Operational discussions recorded in the https://www.google.com/url?q=https://mail.google.com/chat/%23chat/space/AAAAX5Pc9yM/OzwhwNfxQUY/OzwhwNfxQUY&sa=E&source=workflows highlight that exceeding these limits at sites like Bawd, Peacocke Accountants, and RDA Orana has necessitated frequent manual account deletions and administrative work to manage costs. Consequently, Andrew Johnston and the team are actively transitioning these clients to alternative, more sustainable solutions. For Windows workstations, the team is implementing Google’s Credential Provider for Windows (GCPW), which allows users to sign in using their Google Workspace credentials without requiring additional third-party SSO licenses. For clients utilizing Microsoft infrastructure, the team is migrating them to Entra to maintain device management capabilities without incurring the rising costs of JumpCloud.",andrew@avance.technology,https://mail.google.com/chat/#chat/space/AAAAX5Pc9yM/OzwhwNfxQUY/OzwhwNfxQUY,they don't need jumpcloud surely...and it takes away that whole issue of going above 10 users,Avance Group Chat,"May 28, 2026 at 9:59 AM AEST","The team has determined that for many clients, they don't need JumpCloud surely, as moving away from the platform resolves the ongoing challenges of staying under the 10-user limit. This strategic pivot is a direct response to JumpCloud’s recent pricing structure changes, which include the elimination of the free legacy tier and a move toward individualized MSP pricing, making the platform less viable for the small business segment.
+
+Operational discussions recorded in the https://www.google.com/url?q=https://mail.google.com/chat/%23chat/space/AAAAX5Pc9yM/OzwhwNfxQUY/OzwhwNfxQUY&sa=E&source=workflows highlight that exceeding these limits at sites like Bawd, Peacocke Accountants, and RDA Orana has necessitated frequent manual account deletions and administrative work to manage costs. Consequently, Andrew Johnston and the team are actively transitioning these clients to alternative, more sustainable solutions. For Windows workstations, the team is implementing Google’s Credential Provider for Windows (GCPW), which allows users to sign in using their Google Workspace credentials without requiring additional third-party SSO licenses. For clients utilizing Microsoft infrastructure, the team is migrating them to Entra to maintain device management capabilities without incurring the rising costs of JumpCloud.",spaces/AAAAX5Pc9yM
+"May 28, 2026 at 10:03 AM AEST",James Newby,"The Avance team is re-evaluating the use of Jumpcloud due to significant changes in its pricing model, specifically the removal of the free tier and a nearly 4x increase in per-user costs. These changes have led to concerns that Jumpcloud is moving away from the small business market, making it less viable for clients who do not require every feature.
+
+Regarding specific client plans, Andrew Johnston has suggested that for clients like BAWD, there is no clear reason to continue using Jumpcloud. Instead, the recommendation is to transition these devices to Entra (Microsoft Entra ID), which would resolve issues regarding user count limits and eliminate unnecessary costs. This transition aligns with broader team discussions about moving clients to alternative solutions, such as Google’s free SSO for Windows or direct enrollment into Entra.
+
+The team has identified that M365 Business Standard licensing includes rights to upgrade Windows from Home to Pro, which simplifies the process of joining devices to Entra without needing additional Intune licenses. The proposed migration involves removing the Jumpcloud agent, using the ForensiT migration tool to switch local profiles to Microsoft accounts, and then applying the M365 licensing.
+
+For further discussions and updates, you can refer to the https://www.google.com/url?q=https://mail.google.com/chat/%23chat/space/AAAAX5Pc9yM/VWDSm83X0b0/VWDSm83X0b0&sa=E&source=workflows.",james@avance.technology,https://mail.google.com/chat/#chat/space/AAAAX5Pc9yM/VWDSm83X0b0/VWDSm83X0b0,I don't see why they need Jumpcloud,Avance Group Chat,"May 28, 2026 at 10:03 AM AEST","The Avance team is re-evaluating the use of Jumpcloud due to significant changes in its pricing model, specifically the removal of the free tier and a nearly 4x increase in per-user costs. These changes have led to concerns that Jumpcloud is moving away from the small business market, making it less viable for clients who do not require every feature.
+
+Regarding specific client plans, Andrew Johnston has suggested that for clients like BAWD, there is no clear reason to continue using Jumpcloud. Instead, the recommendation is to transition these devices to Entra (Microsoft Entra ID), which would resolve issues regarding user count limits and eliminate unnecessary costs. This transition aligns with broader team discussions about moving clients to alternative solutions, such as Google’s free SSO for Windows or direct enrollment into Entra.
+
+The team has identified that M365 Business Standard licensing includes rights to upgrade Windows from Home to Pro, which simplifies the process of joining devices to Entra without needing additional Intune licenses. The proposed migration involves removing the Jumpcloud agent, using the ForensiT migration tool to switch local profiles to Microsoft accounts, and then applying the M365 licensing.
+
+For further discussions and updates, you can refer to the https://www.google.com/url?q=https://mail.google.com/chat/%23chat/space/AAAAX5Pc9yM/VWDSm83X0b0/VWDSm83X0b0&sa=E&source=workflows.",spaces/AAAAX5Pc9yM
+"May 28, 2026 at 10:03 AM AEST",James Newby,"The Avance team is currently focusing on strategies to transition clients from JumpCloud to Microsoft Entra, as noted in recent discussions within the https://www.google.com/url?q=https://chat.google.com/room/AAAAX5Pc9yM/--IeFSQiqK8/--IeFSQiqK8&sa=E&source=workflows. James Newby has observed that while moving away from JumpCloud is the desired path, it will be a bit of work to migrate all their computers over to Entra.
+
+This migration strategy is primarily driven by concerns that JumpCloud’s current pricing model is less viable for small business segments. The technical approach involves:
+- Entra/Microsoft Integration: Utilizing Microsoft 365 Business licenses to upgrade Windows Home editions to Pro, allowing for seamless Entra enrollment.
+- Migration Methodology: Implementing tools such as the Forensit Migration Wizard to switch local profiles to Microsoft accounts while ensuring user data and settings remain intact.
+- Ongoing Operations: As of May 28, 2026, the team continues to manage various support tickets, including coordinating remote sessions with Healthlink for the Macquarie Health Collective, addressing printer connectivity issues, and processing new email account requests.
+Technical troubleshooting remains a key part of the workflow, with recent discussions covering registry key adjustments for large Outlook data files and resolving hardware diagnostics for client machines.",james@avance.technology,https://mail.google.com/chat/#chat/space/AAAAX5Pc9yM/wBW8Zj2NafE/wBW8Zj2NafE,But it will be a bit of work to migrate all their computers over to Entra,Avance Group Chat,"May 28, 2026 at 10:03 AM AEST","The Avance team is currently focusing on strategies to transition clients from JumpCloud to Microsoft Entra, as noted in recent discussions within the https://www.google.com/url?q=https://chat.google.com/room/AAAAX5Pc9yM/--IeFSQiqK8/--IeFSQiqK8&sa=E&source=workflows. James Newby has observed that while moving away from JumpCloud is the desired path, it will be a bit of work to migrate all their computers over to Entra.
+
+This migration strategy is primarily driven by concerns that JumpCloud’s current pricing model is less viable for small business segments. The technical approach involves:
+- Entra/Microsoft Integration: Utilizing Microsoft 365 Business licenses to upgrade Windows Home editions to Pro, allowing for seamless Entra enrollment.
+- Migration Methodology: Implementing tools such as the Forensit Migration Wizard to switch local profiles to Microsoft accounts while ensuring user data and settings remain intact.
+- Ongoing Operations: As of May 28, 2026, the team continues to manage various support tickets, including coordinating remote sessions with Healthlink for the Macquarie Health Collective, addressing printer connectivity issues, and processing new email account requests.
+Technical troubleshooting remains a key part of the workflow, with recent discussions covering registry key adjustments for large Outlook data files and resolving hardware diagnostics for client machines.",spaces/AAAAX5Pc9yM
+"May 28, 2026 at 10:12 AM AEST",Andrew Johnston,"The https://www.google.com/url?q=https://mail.google.com/chat/%23chat/space/AAAAX5Pc9yM/XD72bng49Mw/XD72bng49Mw&sa=E&source=workflows documentation reveals a focus on efficient IT operations, particularly regarding profile migrations and client device management.
+- Migration and Profile Management: The team frequently employs the Forensit migration wizard for profile transfers, noting that the method is exceptionally fast as long as the devices are running Windows Pro. They are actively transitioning clients away from Jumpcloud toward the Google Credential Provider for Windows (GCPW). Setting up GCPW requires careful attention to detail, including specific, case-sensitive configurations within the Google Admin console.
+- Licensing and Infrastructure: To streamline device management, the team leverages available nonprofit licensing paths to upgrade eligible Windows Home devices to Windows Pro. The team also maintains network infrastructure—such as monitoring Ubiquiti gateway hardware—and manages critical on-site hardware, including UPS battery replacements and printer configurations.
+- Operational Support: Daily operations involve troubleshooting printer connectivity, configuring customer portals in HaloPSA, and resolving billing or entity-related questions for clients.
+",andrew@avance.technology,https://mail.google.com/chat/#chat/space/AAAAX5Pc9yM/XD72bng49Mw/XD72bng49Mw,as long as they are window pro of course...but honestly that forensit method is super quick,Avance Group Chat,"May 28, 2026 at 10:12 AM AEST","The https://www.google.com/url?q=https://mail.google.com/chat/%23chat/space/AAAAX5Pc9yM/XD72bng49Mw/XD72bng49Mw&sa=E&source=workflows documentation reveals a focus on efficient IT operations, particularly regarding profile migrations and client device management.
+- Migration and Profile Management: The team frequently employs the Forensit migration wizard for profile transfers, noting that the method is exceptionally fast as long as the devices are running Windows Pro. They are actively transitioning clients away from Jumpcloud toward the Google Credential Provider for Windows (GCPW). Setting up GCPW requires careful attention to detail, including specific, case-sensitive configurations within the Google Admin console.
+- Licensing and Infrastructure: To streamline device management, the team leverages available nonprofit licensing paths to upgrade eligible Windows Home devices to Windows Pro. The team also maintains network infrastructure—such as monitoring Ubiquiti gateway hardware—and manages critical on-site hardware, including UPS battery replacements and printer configurations.
+- Operational Support: Daily operations involve troubleshooting printer connectivity, configuring customer portals in HaloPSA, and resolving billing or entity-related questions for clients.
+",spaces/AAAAX5Pc9yM
+"May 28, 2026 at 1:36 PM AEST",James Newby,"James Newby is currently heading to BCCS to pick up a Fusion box. The team has been managing ongoing connectivity challenges at this site, which have previously involved DNSFilter issues and failures of the fibre optic link. To stabilize the network, the team has implemented Fusion Broadband to bond NBN and Starlink connections into a single, static IP, which helps ensure that services like DNSFilter remain functional. Operational updates and coordination for these site visits are managed through the https://www.google.com/url?q=https://mail.google.com/chat/%23chat/space/AAAAX5Pc9yM/EiBnoA6jqn0/EiBnoA6jqn0&sa=E&source=workflows.",james@avance.technology,https://mail.google.com/chat/#chat/space/AAAAX5Pc9yM/EiBnoA6jqn0/EiBnoA6jqn0,just heading out to BCCS to pickup this Fusion box,Avance Group Chat,"May 28, 2026 at 1:36 PM AEST","James Newby is currently heading to BCCS to pick up a Fusion box. The team has been managing ongoing connectivity challenges at this site, which have previously involved DNSFilter issues and failures of the fibre optic link. To stabilize the network, the team has implemented Fusion Broadband to bond NBN and Starlink connections into a single, static IP, which helps ensure that services like DNSFilter remain functional. Operational updates and coordination for these site visits are managed through the https://www.google.com/url?q=https://mail.google.com/chat/%23chat/space/AAAAX5Pc9yM/EiBnoA6jqn0/EiBnoA6jqn0&sa=E&source=workflows.",spaces/AAAAX5Pc9yM
+"June 1, 2026 at 8:34 AM AEST",Josh Parris,"The findings from the https://www.google.com/url?q=https://chat.google.com/room/AAAAX5Pc9yM/--IeFSQiqK8/--IeFSQiqK8&sa=E&source=workflows history are summarized as follows:
+
+**Recent Operational and Support Activities**
+- Josh Parris resolved a ticket for Macquarie Health Collective regarding HealthLink connectivity and assigned it to Andrew Johnston as ""awaiting invoice"".
+- The team discussed transitioning a client from JumpCloud to Entra to resolve user count constraints and improve management, noting the efficiency of the Forensit migration method.
+- James Newby retrieved a Fusion box.
+Previous Office Infrastructure and Troubleshooting
+- The office underwent a solar panel installation, including follow-up work on battery systems.
+- James performed onsite support at Dubbo Dental for printer and network connectivity issues, identifying potential Spanning Tree Protocol (STP) port blocking.
+- Support efforts addressed modern authentication setup failures and LEAP-encrypted documents requiring passwords.
+Security and Client Advice
+- The team discussed security advisories regarding compromised super fund accounts and the necessity of robust password controls.
+- Assistance was provided to clients regarding Multi-Factor Authentication (MFA) setup issues.
+- The Kyocera Australia website experienced downtime due to a cybersecurity incident, necessitating the use of global download sources for printer drivers.
+- Guidance was provided on hardware upgrades, including advice on Lenovo laptop specifications for a client's Sydney office.
+",josh@avance.technology,https://mail.google.com/chat/#chat/space/AAAAX5Pc9yM/thNJbIOQ3Fo/thNJbIOQ3Fo,Morning,Avance Group Chat,"June 1, 2026 at 8:34 AM AEST","The findings from the https://www.google.com/url?q=https://chat.google.com/room/AAAAX5Pc9yM/--IeFSQiqK8/--IeFSQiqK8&sa=E&source=workflows history are summarized as follows:
+
+**Recent Operational and Support Activities**
+- Josh Parris resolved a ticket for Macquarie Health Collective regarding HealthLink connectivity and assigned it to Andrew Johnston as ""awaiting invoice"".
+- The team discussed transitioning a client from JumpCloud to Entra to resolve user count constraints and improve management, noting the efficiency of the Forensit migration method.
+- James Newby retrieved a Fusion box.
+Previous Office Infrastructure and Troubleshooting
+- The office underwent a solar panel installation, including follow-up work on battery systems.
+- James performed onsite support at Dubbo Dental for printer and network connectivity issues, identifying potential Spanning Tree Protocol (STP) port blocking.
+- Support efforts addressed modern authentication setup failures and LEAP-encrypted documents requiring passwords.
+Security and Client Advice
+- The team discussed security advisories regarding compromised super fund accounts and the necessity of robust password controls.
+- Assistance was provided to clients regarding Multi-Factor Authentication (MFA) setup issues.
+- The Kyocera Australia website experienced downtime due to a cybersecurity incident, necessitating the use of global download sources for printer drivers.
+- Guidance was provided on hardware upgrades, including advice on Lenovo laptop specifications for a client's Sydney office.
+",spaces/AAAAX5Pc9yM
+"June 1, 2026 at 8:38 AM AEST",Andrew Johnston,"Andrew Johnston (mailto:andrew@avance.technology) posted an update in the https://www.google.com/url?q=https://mail.google.com/chat/%23chat/space/AAAAX5Pc9yM/dg67hkod03o/dg67hkod03o&sa=E&source=workflows on June 1, 2026, at 8:38 AM AEST, informing the team that he is on his way to Allen Built.
+
+The https://www.google.com/url?q=https://mail.google.com/chat/%23chat/space/AAAAX5Pc9yM/dg67hkod03o/dg67hkod03o&sa=E&source=workflows serves as a central hub for the team to manage client services, troubleshoot technical issues, and coordinate operational tasks. Recent discussions in this space include:
+- Client Onboarding and Support: The team is currently focused on onboarding services for Allen Built and Streamline. This includes setting up 'Report Phishing' buttons and configuring 911 phishing mailboxes, which involved specific troubleshooting with Microsoft 365 licenses and exchange accounts.
+- Technical Troubleshooting: Team members frequently collaborate to resolve complex support issues, such as OneDrive thumbnail display errors for clients like Hines, Teams meeting and transcription failures at IEC, and email quarantine disruptions caused by SaaS Defense.
+- Security and System Maintenance: The team maintains vigilance regarding security platforms like Augmentt, addressing alerts, and configuring integrations for multiple CSP environments. They also monitor broader industry impacts, such as the Ingram Micro outage, and refine internal processes like the Halo ticketing system to prevent notification loops.
+- Operational and Team Coordination: Beyond technical work, the chat is used to coordinate daily logistics, such as lunch breaks, office maintenance requests, and sharing updates regarding client personnel changes. Team members also occasionally share personal updates, such as local community incidents, to keep each other informed.
+",andrew@avance.technology,https://mail.google.com/chat/#chat/space/AAAAX5Pc9yM/dg67hkod03o/dg67hkod03o,Hi guys I'm on the way to Allen Built this morning just so you know,Avance Group Chat,"June 1, 2026 at 8:38 AM AEST","Andrew Johnston (mailto:andrew@avance.technology) posted an update in the https://www.google.com/url?q=https://mail.google.com/chat/%23chat/space/AAAAX5Pc9yM/dg67hkod03o/dg67hkod03o&sa=E&source=workflows on June 1, 2026, at 8:38 AM AEST, informing the team that he is on his way to Allen Built.
+
+The https://www.google.com/url?q=https://mail.google.com/chat/%23chat/space/AAAAX5Pc9yM/dg67hkod03o/dg67hkod03o&sa=E&source=workflows serves as a central hub for the team to manage client services, troubleshoot technical issues, and coordinate operational tasks. Recent discussions in this space include:
+- Client Onboarding and Support: The team is currently focused on onboarding services for Allen Built and Streamline. This includes setting up 'Report Phishing' buttons and configuring 911 phishing mailboxes, which involved specific troubleshooting with Microsoft 365 licenses and exchange accounts.
+- Technical Troubleshooting: Team members frequently collaborate to resolve complex support issues, such as OneDrive thumbnail display errors for clients like Hines, Teams meeting and transcription failures at IEC, and email quarantine disruptions caused by SaaS Defense.
+- Security and System Maintenance: The team maintains vigilance regarding security platforms like Augmentt, addressing alerts, and configuring integrations for multiple CSP environments. They also monitor broader industry impacts, such as the Ingram Micro outage, and refine internal processes like the Halo ticketing system to prevent notification loops.
+- Operational and Team Coordination: Beyond technical work, the chat is used to coordinate daily logistics, such as lunch breaks, office maintenance requests, and sharing updates regarding client personnel changes. Team members also occasionally share personal updates, such as local community incidents, to keep each other informed.
+",spaces/AAAAX5Pc9yM
+"June 1, 2026 at 8:39 AM AEST",Josh Parris,"Allen Built is a client business managed by director Shannon Allen. The Avance team has been actively onboarding their services, which has involved tasks such as deploying the 'Report Phishing' button, establishing 911 phishing mailboxes, and configuring Ironscales. Technical support for this client has also included investigating device performance issues, analyzing CPU usage related to Sentinel One and OneDrive, and configuring Outlook signatures.
+
+Administrative and operational discussions involve managing PSA tickets, such as ticket 0011776, and coordinating the billing and invoicing process. There have also been internal discussions regarding employment arrangements, specifically the constraints of Josh Parris's contract with DCS and the potential for transition to full-time or permanent part-time status at Avance. Bank details for invoicing have also been reviewed to ensure alignment with account names.
+
+The team, including Andrew Johnston, James Newby, Edwin Schmidt, and Menuka Pradhan, collaborates within the https://www.google.com/url?q=https://mail.google.com/chat/%23chat/space/AAAAX5Pc9yM/5yZ7wbCYW1Y/5yZ7wbCYW1Y&sa=E&source=workflows to manage ongoing project work, troubleshoot hardware setups, and share updates on client interactions. Other notable activities include handling new laptop deployments, resolving software bugs, and responding to urgent service requests.",josh@avance.technology,https://mail.google.com/chat/#chat/space/AAAAX5Pc9yM/5yZ7wbCYW1Y/5yZ7wbCYW1Y,"You will have to find out what it was exactly that Allen, built 😂",Avance Group Chat,"June 1, 2026 at 8:39 AM AEST","Allen Built is a client business managed by director Shannon Allen. The Avance team has been actively onboarding their services, which has involved tasks such as deploying the 'Report Phishing' button, establishing 911 phishing mailboxes, and configuring Ironscales. Technical support for this client has also included investigating device performance issues, analyzing CPU usage related to Sentinel One and OneDrive, and configuring Outlook signatures.
+
+Administrative and operational discussions involve managing PSA tickets, such as ticket 0011776, and coordinating the billing and invoicing process. There have also been internal discussions regarding employment arrangements, specifically the constraints of Josh Parris's contract with DCS and the potential for transition to full-time or permanent part-time status at Avance. Bank details for invoicing have also been reviewed to ensure alignment with account names.
+
+The team, including Andrew Johnston, James Newby, Edwin Schmidt, and Menuka Pradhan, collaborates within the https://www.google.com/url?q=https://mail.google.com/chat/%23chat/space/AAAAX5Pc9yM/5yZ7wbCYW1Y/5yZ7wbCYW1Y&sa=E&source=workflows to manage ongoing project work, troubleshoot hardware setups, and share updates on client interactions. Other notable activities include handling new laptop deployments, resolving software bugs, and responding to urgent service requests.",spaces/AAAAX5Pc9yM
+"June 1, 2026 at 8:39 AM AEST",Andrew Johnston,"The https://www.google.com/url?q=https://mail.google.com/chat/%23chat/space/AAAAX5Pc9yM/V-v4TEdlDRA/V-v4TEdlDRA&sa=E&source=workflows covers several operational topics and technical issues:
+-  **The Farmers Accountant Acquisition**: James noted that Martel Accounting is purchasing The Farmers Accountant. The team agreed to wait for confirmation from Steve before taking any action or responding to related tickets.
+
+- Dubbo Strata Migration: There is a plan to meet to discuss the merge and migration of Dubbo Strata and 4sstrata.
+- Plesk Subscription: Andrew encountered difficulties cancelling a Plesk backup subscription due to account and license management issues. He eventually resolved the issue by linking licenses from the correct associated account.
+- Security Camera Access: Georgie at The Exchange requires assistance accessing security cameras, which likely necessitates the use of the Pritunl VPN.
+- SharePoint Migration for Conseth: Andrew prepared a draft email for Sandy outlining the pros and cons of migrating to SharePoint versus OneDrive. Key considerations include:
+ - Costs: Estimated between $1k and $2k depending on the complexity of site setup and data volume.
+ - Limitations: SharePoint has a 1TB storage limit and can present challenges when editing non-Microsoft files like PDFs compared to web-based workflows.
+ - Technical Setup: The team noted the client currently has approximately 400GB of data, requiring careful planning around permissions and potential archive strategies.
+",andrew@avance.technology,https://mail.google.com/chat/#chat/space/AAAAX5Pc9yM/V-v4TEdlDRA/V-v4TEdlDRA,He has built many things,Avance Group Chat,"June 1, 2026 at 8:39 AM AEST","The https://www.google.com/url?q=https://mail.google.com/chat/%23chat/space/AAAAX5Pc9yM/V-v4TEdlDRA/V-v4TEdlDRA&sa=E&source=workflows covers several operational topics and technical issues:
+-  **The Farmers Accountant Acquisition**: James noted that Martel Accounting is purchasing The Farmers Accountant. The team agreed to wait for confirmation from Steve before taking any action or responding to related tickets.
+
+- Dubbo Strata Migration: There is a plan to meet to discuss the merge and migration of Dubbo Strata and 4sstrata.
+- Plesk Subscription: Andrew encountered difficulties cancelling a Plesk backup subscription due to account and license management issues. He eventually resolved the issue by linking licenses from the correct associated account.
+- Security Camera Access: Georgie at The Exchange requires assistance accessing security cameras, which likely necessitates the use of the Pritunl VPN.
+- SharePoint Migration for Conseth: Andrew prepared a draft email for Sandy outlining the pros and cons of migrating to SharePoint versus OneDrive. Key considerations include:
+ - Costs: Estimated between $1k and $2k depending on the complexity of site setup and data volume.
+ - Limitations: SharePoint has a 1TB storage limit and can present challenges when editing non-Microsoft files like PDFs compared to web-based workflows.
+ - Technical Setup: The team noted the client currently has approximately 400GB of data, requiring careful planning around permissions and potential archive strategies.
+",spaces/AAAAX5Pc9yM
+"June 1, 2026 at 9:24 AM AEST",Josh Parris,"As of June 1, 2026 at 9:24 AM AEST, the https://www.google.com/url?q=https://mail.google.com/chat/%23chat/space/AAAAX5Pc9yM/-qC-yQpNIDM/-qC-yQpNIDM&sa=E&source=workflows reflects a highly active and collaborative team—including Josh Parris (mailto:josh@avance.technology)—dedicated to managing IT support and infrastructure tasks.
+
+The team, which consists of Andrew Johnston, James Newby, Edwin Schmidt, and recently hired L1/L2 technician Menuka Pradhan, maintains a casual and cooperative communication style, often utilizing emojis to keep the atmosphere light.
+
+The group's recent activities focus on:
+- IT Support and Maintenance: The team is actively managing hardware and software troubleshooting for various clients, including resolving printer connectivity issues, addressing Microsoft Authenticator app sign-in errors, and replacing faulty hardware like fans and screens.
+- Logistical Coordination: Members frequently coordinate logistics such as battery installations, car assessments for insurance claims, and office infrastructure updates.
+- Team Development: Josh Parris is scheduled to join the team starting April 20th, 2026, marking an expansion of the current support capabilities.
+The team remains flexible in managing these tasks, often balancing urgent client support requests with ongoing office and field-based operations.",josh@avance.technology,https://mail.google.com/chat/#chat/space/AAAAX5Pc9yM/-qC-yQpNIDM/-qC-yQpNIDM,😂,Avance Group Chat,"June 1, 2026 at 9:24 AM AEST","As of June 1, 2026 at 9:24 AM AEST, the https://www.google.com/url?q=https://mail.google.com/chat/%23chat/space/AAAAX5Pc9yM/-qC-yQpNIDM/-qC-yQpNIDM&sa=E&source=workflows reflects a highly active and collaborative team—including Josh Parris (mailto:josh@avance.technology)—dedicated to managing IT support and infrastructure tasks.
+
+The team, which consists of Andrew Johnston, James Newby, Edwin Schmidt, and recently hired L1/L2 technician Menuka Pradhan, maintains a casual and cooperative communication style, often utilizing emojis to keep the atmosphere light.
+
+The group's recent activities focus on:
+- IT Support and Maintenance: The team is actively managing hardware and software troubleshooting for various clients, including resolving printer connectivity issues, addressing Microsoft Authenticator app sign-in errors, and replacing faulty hardware like fans and screens.
+- Logistical Coordination: Members frequently coordinate logistics such as battery installations, car assessments for insurance claims, and office infrastructure updates.
+- Team Development: Josh Parris is scheduled to join the team starting April 20th, 2026, marking an expansion of the current support capabilities.
+The team remains flexible in managing these tasks, often balancing urgent client support requests with ongoing office and field-based operations.",spaces/AAAAX5Pc9yM
