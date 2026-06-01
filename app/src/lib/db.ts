@@ -13,6 +13,8 @@ import {
   LearningItem,
   Invoice,
   WorkCategory,
+  Account,
+  SyncMetadata,
 } from '@/types';
 
 const touchUpdatedAt = (modifications: object) => {
@@ -33,6 +35,8 @@ export class AvanceDatabase extends Dexie {
   playbooks!: Table<Playbook>;
   learningItems!: Table<LearningItem>;
   invoices!: Table<Invoice>;
+  accounts!: Table<Account>;
+  syncMetadata!: Table<SyncMetadata>;
 
   constructor() {
     super('AvanceWorkCompanion');
@@ -55,6 +59,11 @@ export class AvanceDatabase extends Dexie {
     // Version 2: Add prep checklist to shifts
     this.version(2).stores({
       shifts: 'id, date, startTime, endTime, duration, location, createdAt, updatedAt, prepChecklist',
+    });
+
+    this.version(3).stores({
+      accounts: 'id, email, updatedAt',
+      syncMetadata: 'id, status, updatedAt',
     });
 
     // Add hooks for automatic timestamp updates
@@ -164,6 +173,23 @@ export class AvanceDatabase extends Dexie {
     this.invoices.hook('updating', (modifications) => {
       touchUpdatedAt(modifications);
     });
+
+    this.accounts.hook('creating', (primKey, obj, trans) => {
+      obj.createdAt = new Date();
+      obj.updatedAt = new Date();
+    });
+
+    this.accounts.hook('updating', (modifications) => {
+      touchUpdatedAt(modifications);
+    });
+
+    this.syncMetadata.hook('creating', (primKey, obj, trans) => {
+      obj.updatedAt = new Date();
+    });
+
+    this.syncMetadata.hook('updating', (modifications) => {
+      touchUpdatedAt(modifications);
+    });
   }
 }
 
@@ -229,11 +255,12 @@ export const getDataCounts = async () => ({
   playbooks: await db.playbooks.count(),
   learningItems: await db.learningItems.count(),
   invoices: await db.invoices.count(),
+  accounts: await db.accounts.count(),
 });
 
 // Utility functions for database operations
 export const clearAllData = async () => {
-  await db.transaction('rw', [db.shifts, db.workLogs, db.tasks, db.pdAchievements, db.pdGoals, db.clients, db.projects, db.appSettings, db.knowledgeEntries, db.playbooks, db.learningItems, db.invoices], async () => {
+  await db.transaction('rw', [db.shifts, db.workLogs, db.tasks, db.pdAchievements, db.pdGoals, db.clients, db.projects, db.appSettings, db.knowledgeEntries, db.playbooks, db.learningItems, db.invoices, db.accounts, db.syncMetadata], async () => {
     await db.shifts.clear();
     await db.workLogs.clear();
     await db.tasks.clear();
@@ -246,7 +273,12 @@ export const clearAllData = async () => {
     await db.playbooks.clear();
     await db.learningItems.clear();
     await db.invoices.clear();
+    await db.accounts.clear();
+    await db.syncMetadata.clear();
   });
+  if (typeof window !== 'undefined') {
+    window.localStorage.removeItem('avancepd.currentUserId');
+  }
 };
 
 export const exportData = async () => {
@@ -263,12 +295,14 @@ export const exportData = async () => {
     playbooks: await db.playbooks.toArray(),
     learningItems: await db.learningItems.toArray(),
     invoices: await db.invoices.toArray(),
+    accounts: await db.accounts.toArray(),
+    syncMetadata: await db.syncMetadata.toArray(),
   };
   return data;
 };
 
 export const importData = async (data: Awaited<ReturnType<typeof exportData>>) => {
-  await db.transaction('rw', [db.shifts, db.workLogs, db.tasks, db.pdAchievements, db.pdGoals, db.clients, db.projects, db.appSettings, db.knowledgeEntries, db.playbooks, db.learningItems, db.invoices], async () => {
+  await db.transaction('rw', [db.shifts, db.workLogs, db.tasks, db.pdAchievements, db.pdGoals, db.clients, db.projects, db.appSettings, db.knowledgeEntries, db.playbooks, db.learningItems, db.invoices, db.accounts, db.syncMetadata], async () => {
     await db.shifts.bulkAdd(data.shifts);
     await db.workLogs.bulkAdd(data.workLogs);
     await db.tasks.bulkAdd(data.tasks);
@@ -281,5 +315,7 @@ export const importData = async (data: Awaited<ReturnType<typeof exportData>>) =
     await db.playbooks.bulkAdd(data.playbooks);
     await db.learningItems.bulkAdd(data.learningItems);
     await db.invoices.bulkAdd(data.invoices);
+    await db.accounts.bulkAdd(data.accounts);
+    await db.syncMetadata.bulkAdd(data.syncMetadata);
   });
 };

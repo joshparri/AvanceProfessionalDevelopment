@@ -1,6 +1,8 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-A new `Settings` page has been added at `/settings` to support local backup/export/import and theme preference controls.
+A new `Settings` page has been added at `/settings` to support local backup/export/import, theme preference controls, and local cloud sync metadata.
+
+A lightweight local authentication flow is now available with `/login` and `/signup` routes, so the workspace can be secured on the device before accessing app features.
 
 ## Getting Started
 

@@ -7,10 +7,13 @@ import { cn } from '@/lib/utils';
 import { DarkModeToggle } from '@/components/DarkModeToggle';
 import { Search } from 'lucide-react';
 import { navigation } from '@/lib/navigation';
+import { useAuth } from '@/contexts/auth';
+import { Button } from '@/components/ui/button';
 
 export function Navigation() {
   const pathname = usePathname();
   const router = useRouter();
+  const { user, logout } = useAuth();
   const [searchQuery, setSearchQuery] = useState('');
   const navRef = useRef<HTMLDivElement | null>(null);
   const scrollKey = 'avance-nav-scroll-left';
@@ -96,6 +99,23 @@ export function Navigation() {
             </form>
           </div>
           <div className="ml-3 flex shrink-0 items-center border-l border-slate-200 pl-3 dark:border-slate-700">
+            {user ? (
+              <div className="flex items-center gap-3">
+                <span className="hidden text-sm text-slate-600 dark:text-slate-300 sm:inline">
+                  {user.email}
+                </span>
+                <Button variant="outline" size="sm" onClick={logout}>
+                  Sign out
+                </Button>
+              </div>
+            ) : (
+              <Link
+                href="/login"
+                className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800"
+              >
+                Login
+              </Link>
+            )}
             <DarkModeToggle showLabel />
           </div>
         </div>

@@ -310,3 +310,26 @@ export interface Invoice {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface Account {
+  id: string;
+  email: string;
+  passwordHash: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export enum SyncStatus {
+  IDLE = 'idle',
+  SYNCING = 'syncing',
+  SYNCED = 'synced',
+  FAILED = 'failed',
+}
+
+export interface SyncMetadata {
+  id: string;
+  status: SyncStatus;
+  lastSyncedAt?: Date;
+  pendingChanges: number;
+  updatedAt: Date;
+}

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { DarkModeProvider } from "@/contexts/dark-mode";
+import { AuthProvider } from "@/contexts/auth";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -30,7 +31,9 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col">
-        <DarkModeProvider>{children}</DarkModeProvider>
+        <DarkModeProvider>
+          <AuthProvider>{children}</AuthProvider>
+        </DarkModeProvider>
       </body>
     </html>
   );

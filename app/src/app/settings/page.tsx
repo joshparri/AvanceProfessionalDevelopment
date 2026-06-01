@@ -7,9 +7,10 @@ import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
 import { exportData, getAppSettings, getDataCounts, initDatabase, importData, saveAppSettings, clearAllData } from '@/lib/db';
+import { getSyncMetadata, performSync } from '@/lib/sync';
 import { useDarkMode } from '@/contexts/dark-mode';
-import { Download, Upload, Trash2, Sun, Moon, MonitorSpeaker } from 'lucide-react';
-import type { AppSettings } from '@/types';
+import { Download, Upload, Trash2, Sun, Moon, MonitorSpeaker, CloudLightning, RefreshCcw } from 'lucide-react';
+import type { AppSettings, SyncMetadata } from '@/types';
 
 const themeOptions: Array<{ value: AppSettings['theme']; label: string; description: string }> = [
   { value: 'light', label: 'Light', description: 'Always use light mode.' },
@@ -20,6 +21,7 @@ const themeOptions: Array<{ value: AppSettings['theme']; label: string; descript
 export default function SettingsPage() {
   const [settings, setSettings] = useState<AppSettings | null>(null);
   const [counts, setCounts] = useState<Record<string, number>>({});
+  const [syncMetadata, setSyncMetadata] = useState<SyncMetadata | null>(null);
   const [status, setStatus] = useState<string | null>(null);
   const [isWorking, setIsWorking] = useState(false);
   const [importError, setImportError] = useState<string | null>(null);
@@ -30,9 +32,14 @@ export default function SettingsPage() {
     setIsWorking(true);
     try {
       await initDatabase();
-      const [loadedSettings, loadedCounts] = await Promise.all([getAppSettings(), getDataCounts()]);
+      const [loadedSettings, loadedCounts, loadedSyncMetadata] = await Promise.all([
+        getAppSettings(),
+        getDataCounts(),
+        getSyncMetadata(),
+      ]);
       setSettings(loadedSettings);
       setCounts(loadedCounts);
+      setSyncMetadata(loadedSyncMetadata);
       setStatus('Settings loaded.');
     } catch (error) {
       console.error('Failed to load settings:', error);
@@ -112,6 +119,21 @@ export default function SettingsPage() {
 
   const handleImport = () => {
     fileInputRef.current?.click();
+  };
+
+  const handleSync = async () => {
+    setIsWorking(true);
+    setStatus('Sync in progress...');
+    try {
+      const result = await performSync();
+      setSyncMetadata(result);
+      setStatus('Cloud sync completed.');
+    } catch (error) {
+      console.error('Sync failed:', error);
+      setStatus('Unable to complete sync. Check network and try again.');
+    } finally {
+      setIsWorking(false);
+    }
   };
 
   const handleClear = async () => {
@@ -213,6 +235,37 @@ export default function SettingsPage() {
                       <Badge variant="secondary">{count}</Badge>
                     </div>
                   ))}
+                </div>
+                <div className="rounded-lg border border-slate-200 bg-white p-4 text-sm dark:border-slate-700 dark:bg-slate-900">
+                  <div className="flex items-center justify-between gap-4">
+                    <div className="flex items-center gap-2">
+                      <CloudLightning className="h-4 w-4 text-blue-600 dark:text-blue-300" />
+                      <p className="font-medium text-slate-900 dark:text-slate-100">Cloud sync status</p>
+                    </div>
+                    <p className="text-sm text-slate-600 dark:text-slate-400">
+                      {syncMetadata?.status === 'syncing'
+                        ? 'Syncing now...'
+                        : syncMetadata?.status === 'synced'
+                        ? `Last synced ${syncMetadata.lastSyncedAt?.toLocaleString() ?? 'just now'}`
+                        : syncMetadata?.status === 'failed'
+                        ? 'Sync failed. Please check your network.'
+                        : 'Ready to sync.'}
+                    </p>
+                  </div>
+                  <div className="mt-3 flex items-center justify-between gap-3">
+                    <div className="flex items-center gap-3">
+                      <Badge variant={syncMetadata?.status === 'synced' ? 'secondary' : 'outline'}>
+                        {syncMetadata?.status ?? 'idle'}
+                      </Badge>
+                      <span className="text-xs text-slate-500 dark:text-slate-400">
+                        Pending changes: {syncMetadata?.pendingChanges ?? 0}
+                      </span>
+                    </div>
+                    <Button variant="secondary" size="sm" onClick={handleSync} disabled={isWorking}>
+                      <RefreshCcw className="mr-2 h-4 w-4" />
+                      Sync Now
+                    </Button>
+                  </div>
                 </div>
                 <Separator />
                 <Button onClick={handleExport} disabled={isWorking} className="w-full">
