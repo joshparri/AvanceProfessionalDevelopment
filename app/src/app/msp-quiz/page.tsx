@@ -69,6 +69,8 @@ export default function MspQuizPage() {
     return questions;
   }, [selectedDomain, selectedDifficulty]);
 
+  const selectedQuestionCount = Math.min(questionCount, filteredQuestions.length);
+
   const currentQuizQuestion = shuffledQuestions[currentQuestionIndex];
   const isLastQuestion = currentQuestionIndex === shuffledQuestions.length - 1;
   const completedAnswers = answers;

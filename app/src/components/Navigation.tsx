@@ -33,6 +33,7 @@ const navigation = [
   { name: 'Onsite Checklist', href: '/onsite-checklist', icon: ClipboardCheck },
   { name: 'MSP Skills', href: '/msp-skills', icon: Target },
   { name: 'MSP Scenarios', href: '/msp-scenarios', icon: ClipboardList },
+  { name: 'Decision Tree', href: '/decision-tree', icon: Map },
   { name: 'MSP Quiz', href: '/msp-quiz', icon: Brain },
   { name: 'Learning Cockpit', href: '/learning-cockpit', icon: Lightbulb },
   { name: 'AvanceGame', href: '/avance-game', icon: Gamepad2 },

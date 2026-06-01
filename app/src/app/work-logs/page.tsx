@@ -24,11 +24,13 @@ const workCategoryLabels: Record<WorkCategory, string> = {
   [WorkCategory.OTHER]: 'Other',
 };
 
+const getTodayDate = () => format(new Date(), 'yyyy-MM-dd');
+
 const initialFormState = {
   description: '',
   category: WorkCategory.SUPPORT,
   duration: '15',
-  date: format(new Date(), 'yyyy-MM-dd'),
+  date: getTodayDate(),
   shiftId: '',
   tags: '',
   notes: '',
@@ -123,10 +125,13 @@ export default function WorkLogsPage() {
       };
 
       await db.workLogs.add(workLog);
-      setFormData({
+      setFormData((prev) => ({
         ...initialFormState,
-        date: format(new Date(), 'yyyy-MM-dd'),
-      });
+        category: prev.category,
+        duration: prev.duration,
+        shiftId: prev.shiftId,
+        date: getTodayDate(),
+      }));
       await loadWorkLogs();
     } catch (saveError) {
       console.error('Failed to save work log:', saveError);

@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useMemo, useState } from 'react';
 import { Layout } from '@/components/Layout';
 import { Badge } from '@/components/ui/badge';
@@ -49,6 +50,18 @@ const readinessPriority: Record<MspReadiness, number> = {
   practised: 2,
   'work-ready': 3,
   'evidence-proven': 4,
+};
+
+const toolRoutes: Record<string, string> = {
+  'Knowledge base': '/kb-learning-machine',
+  'Work log': '/work-logs',
+  'Ticket Notes': '/ticket-notes',
+  'Learning cockpit': '/learning-cockpit',
+  'MSP scenarios': '/msp-scenarios',
+  'KB article': '/kb-learning-machine',
+  'Problem record': '/work-logs',
+  'Incident ticket': '/ticket-notes',
+  'Playbook': '/tool-primers',
 };
 
 export default function MspSkillsPage() {
@@ -236,7 +249,24 @@ export default function MspSkillsPage() {
 
                       <div>
                         <h3 className="text-sm font-semibold text-gray-900 dark:text-white">Tools</h3>
-                        <p className="mt-1 text-sm text-muted-foreground">{skill.relatedTools.join(', ')}</p>
+                        <div className="mt-2 flex flex-wrap gap-2">
+                          {skill.relatedTools.map((tool) => {
+                            const route = toolRoutes[tool];
+                            return route ? (
+                              <Link
+                                key={tool}
+                                href={route}
+                                className="rounded-full border border-slate-200 px-2 py-1 text-xs text-slate-700 transition hover:bg-slate-100 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800"
+                              >
+                                {tool}
+                              </Link>
+                            ) : (
+                              <Badge key={tool} variant="outline">
+                                {tool}
+                              </Badge>
+                            );
+                          })}
+                        </div>
                       </div>
 
                       <ExternalLearningLinks

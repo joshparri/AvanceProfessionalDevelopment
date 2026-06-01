@@ -169,8 +169,7 @@ export default function MspScenariosPage() {
                           event.target.value as MspScenarioStatus
                         )
                       }
-                      className="mt-2 h-10 w-full rounded-md border border-slate-300 bg-white px-3 text-sm text-slate-900 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 md:w-64"
-                      style={{ colorScheme: 'light' }}
+                      className="mt-2 h-10 w-full rounded-md border border-slate-300 bg-white px-3 text-sm text-slate-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:focus:border-blue-400 dark:focus:ring-blue-400 md:w-64"
                     >
                       {mspScenarioStatusOptions.map((option) => (
                         <option key={option} value={option}>
