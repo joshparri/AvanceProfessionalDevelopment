@@ -3,13 +3,16 @@
 import Link from 'next/link';
 import {
   Archive,
+  AlertTriangle,
   BookOpen,
   Brain,
+  Briefcase,
   ClipboardList,
   Gamepad2,
   Lightbulb,
   Map,
   ShieldAlert,
+  ShieldCheck,
   Target,
 } from 'lucide-react';
 
@@ -21,6 +24,10 @@ const links = [
   { href: '/msp-scenarios', label: 'Scenarios', icon: ClipboardList },
   { href: '/msp-quiz', label: 'Quiz', icon: Brain },
   { href: '/msp-skills', label: 'Skills', icon: Target },
+  { href: '/security-alerts', label: 'Security Alerts', icon: ShieldCheck },
+  { href: '/alert-sanitizer', label: 'Alert Sanitizer', icon: AlertTriangle },
+  { href: '/vendor-remote-session', label: 'Vendor Sessions', icon: Briefcase },
+  { href: '/halo-workflow', label: 'Halo Workflow', icon: ClipboardList },
   { href: '/evidence-pack', label: 'Evidence', icon: Archive },
   { href: '/msp-roadmap', label: 'Roadmap', icon: Map },
 ] as const;
