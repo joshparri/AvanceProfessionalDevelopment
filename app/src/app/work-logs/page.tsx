@@ -53,6 +53,8 @@ export default function WorkLogsPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
+  const [editingLogId, setEditingLogId] = useState<string | null>(null);
+  const [copyMessage, setCopyMessage] = useState('');
 
   const loadWorkLogs = async () => {
     const [logs, allShifts] = await Promise.all([
@@ -119,8 +121,7 @@ export default function WorkLogsPage() {
         .map(tag => tag.trim())
         .filter(Boolean);
 
-      const workLog: WorkLog = {
-        id: crypto.randomUUID(),
+      const workLogPayload = {
         shiftId: formData.shiftId || undefined,
         date: new Date(`${formData.date}T12:00:00`),
         description: formData.description.trim(),
@@ -128,11 +129,21 @@ export default function WorkLogsPage() {
         duration,
         tags,
         notes: formData.notes.trim() || undefined,
-        createdAt: now,
         updatedAt: now,
       };
 
-      await db.workLogs.add(workLog);
+      if (editingLogId) {
+        await db.workLogs.update(editingLogId, workLogPayload);
+        setEditingLogId(null);
+      } else {
+        const workLog: WorkLog = {
+          id: crypto.randomUUID(),
+          ...workLogPayload,
+          createdAt: now,
+        };
+        await db.workLogs.add(workLog);
+      }
+
       setFormData((prev) => ({
         ...initialFormState,
         category: prev.category,
@@ -147,6 +158,48 @@ export default function WorkLogsPage() {
     } finally {
       setIsSubmitting(false);
     }
+  };
+
+  const handleEditLog = (log: WorkLog) => {
+    setEditingLogId(log.id);
+    setFormData({
+      description: log.description,
+      category: log.category,
+      duration: String(log.duration),
+      date: format(new Date(log.date), 'yyyy-MM-dd'),
+      shiftId: log.shiftId ?? '',
+      tags: log.tags.join(', '),
+      notes: log.notes ?? '',
+    });
+  };
+
+  const handleCancelEdit = () => {
+    setEditingLogId(null);
+    setFormData(initialFormState);
+    setError('');
+  };
+
+  const handleDeleteLog = async (logId: string) => {
+    await db.workLogs.delete(logId);
+    if (editingLogId === logId) {
+      handleCancelEdit();
+    }
+    await loadWorkLogs();
+  };
+
+  const handoverSummary = filteredLogs
+    .map((log) => {
+      const tagText = log.tags.length > 0 ? ` [${log.tags.join(', ')}]` : '';
+      const noteText = log.notes ? `\n  Notes: ${log.notes}` : '';
+      return `- ${format(new Date(log.date), 'MMM d')}: ${log.description} (${workCategoryLabels[log.category]}, ${log.duration} min)${tagText}${noteText}`;
+    })
+    .join('\n');
+
+  const handleCopyHandover = async () => {
+    if (!handoverSummary) return;
+    await navigator.clipboard.writeText(`Work log handover\n${handoverSummary}`);
+    setCopyMessage('Handover copied');
+    window.setTimeout(() => setCopyMessage(''), 1800);
   };
 
   return (
@@ -177,7 +230,7 @@ export default function WorkLogsPage() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Plus className="h-5 w-5" />
-                  Quick Capture
+                  {editingLogId ? 'Edit Work Log' : 'Quick Capture'}
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -270,8 +323,13 @@ export default function WorkLogsPage() {
                   {error && <p className="text-sm text-red-600">{error}</p>}
 
                   <Button type="submit" disabled={isSubmitting} className="w-full">
-                    {isSubmitting ? 'Saving...' : 'Save Work Log'}
+                    {isSubmitting ? 'Saving...' : editingLogId ? 'Update Work Log' : 'Save Work Log'}
                   </Button>
+                  {editingLogId && (
+                    <Button type="button" variant="outline" onClick={handleCancelEdit} className="w-full">
+                      Cancel edit
+                    </Button>
+                  )}
                 </form>
               </CardContent>
             </Card>
@@ -305,6 +363,12 @@ export default function WorkLogsPage() {
                         <option key={value} value={value}>{label}</option>
                       ))}
                     </select>
+                  </div>
+                  <div className="mt-3 flex flex-wrap items-center gap-2">
+                    <Button type="button" size="sm" variant="outline" onClick={handleCopyHandover} disabled={filteredLogs.length === 0}>
+                      Copy handover summary
+                    </Button>
+                    {copyMessage && <span className="text-sm text-green-600">{copyMessage}</span>}
                   </div>
                 </CardContent>
               </Card>
@@ -353,6 +417,14 @@ export default function WorkLogsPage() {
                               <Link href={`/shifts/${log.shiftId}`}>Open Shift</Link>
                             </Button>
                           )}
+                          <div className="flex flex-wrap gap-2">
+                            <Button size="sm" variant="outline" onClick={() => handleEditLog(log)}>
+                              Edit
+                            </Button>
+                            <Button size="sm" variant="destructive" onClick={() => handleDeleteLog(log.id)}>
+                              Delete
+                            </Button>
+                          </div>
                         </div>
                       </CardContent>
                     </Card>

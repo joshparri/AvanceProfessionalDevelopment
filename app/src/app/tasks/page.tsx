@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { format } from 'date-fns';
+import { format, isBefore, startOfDay } from 'date-fns';
 import { Layout } from '@/components/Layout';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -11,7 +11,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { db, initDatabase } from '@/lib/db';
 import { Task, TaskCategory, TaskPriority, TaskStatus } from '@/types';
-import { CheckSquare, Plus, Search, Trash2 } from 'lucide-react';
+import { CheckSquare, Copy, Plus, Search, Trash2 } from 'lucide-react';
 
 const priorityLabels: Record<TaskPriority, string> = {
   [TaskPriority.LOW]: 'Low',
@@ -60,6 +60,8 @@ export default function TasksPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
+  const [editingTaskId, setEditingTaskId] = useState<string | null>(null);
+  const [copyMessage, setCopyMessage] = useState('');
 
   const loadTasks = async () => {
     const allTasks = await db.tasks.orderBy('createdAt').reverse().toArray();
@@ -107,8 +109,8 @@ export default function TasksPage() {
 
     setIsSubmitting(true);
     try {
-      const task: Task = {
-        id: crypto.randomUUID(),
+      const now = new Date();
+      const taskPayload = {
         title: formData.title.trim(),
         description: formData.description.trim() || undefined,
         status: formData.status,
@@ -119,11 +121,21 @@ export default function TasksPage() {
           .split(',')
           .map((tag) => tag.trim())
           .filter(Boolean),
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        updatedAt: now,
       };
 
-      await db.tasks.add(task);
+      if (editingTaskId) {
+        await db.tasks.update(editingTaskId, taskPayload);
+        setEditingTaskId(null);
+      } else {
+        const task: Task = {
+          id: crypto.randomUUID(),
+          ...taskPayload,
+          createdAt: now,
+        };
+        await db.tasks.add(task);
+      }
+
       setFormData(initialFormState);
       await loadTasks();
     } catch (saveError) {
@@ -139,9 +151,54 @@ export default function TasksPage() {
     await loadTasks();
   };
 
+  const editTask = (task: Task) => {
+    setEditingTaskId(task.id);
+    setFormData({
+      title: task.title,
+      description: task.description ?? '',
+      status: task.status,
+      priority: task.priority,
+      dueDate: task.dueDate ? format(new Date(task.dueDate), 'yyyy-MM-dd') : '',
+      category: task.category,
+      tags: task.tags.join(', '),
+    });
+  };
+
+  const cancelEdit = () => {
+    setEditingTaskId(null);
+    setFormData(initialFormState);
+    setError('');
+  };
+
   const deleteTask = async (taskId: string) => {
     await db.tasks.delete(taskId);
+    if (editingTaskId === taskId) {
+      cancelEdit();
+    }
     await loadTasks();
+  };
+
+  const isTaskOverdue = (task: Task) =>
+    task.status !== TaskStatus.DONE &&
+    task.status !== TaskStatus.CANCELLED &&
+    Boolean(task.dueDate) &&
+    isBefore(startOfDay(new Date(task.dueDate as Date)), startOfDay(new Date()));
+
+  const taskBreakdown = filteredTasks
+    .filter((task) => task.status !== TaskStatus.DONE && task.status !== TaskStatus.CANCELLED)
+    .map((task) => {
+      const due = task.dueDate ? ` due ${format(new Date(task.dueDate), 'MMM d')}` : '';
+      const tags = task.tags.length > 0 ? ` [${task.tags.join(', ')}]` : '';
+      const nextStep = task.description ? `\n  Next step: ${task.description}` : '';
+      return `- ${task.title} (${priorityLabels[task.priority]}, ${statusLabels[task.status]}${due})${tags}${nextStep}`;
+    })
+    .join('\n');
+
+  const copyTaskBreakdown = async () => {
+    if (!taskBreakdown) return;
+    await navigator.clipboard.writeText(`Task carry-forward\n${taskBreakdown}`);
+    setCopyMessage('Task breakdown copied');
+    window.setTimeout(() => setCopyMessage(''), 1800);
   };
 
   return (
@@ -172,7 +229,7 @@ export default function TasksPage() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Plus className="h-5 w-5" />
-                  New Task
+                  {editingTaskId ? 'Edit Task' : 'New Task'}
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -265,8 +322,13 @@ export default function TasksPage() {
                   {error && <p className="text-sm text-red-600">{error}</p>}
 
                   <Button type="submit" disabled={isSubmitting} className="w-full">
-                    {isSubmitting ? 'Saving...' : 'Save Task'}
+                    {isSubmitting ? 'Saving...' : editingTaskId ? 'Update Task' : 'Save Task'}
                   </Button>
+                  {editingTaskId && (
+                    <Button type="button" variant="outline" onClick={cancelEdit} className="w-full">
+                      Cancel edit
+                    </Button>
+                  )}
                 </form>
               </CardContent>
             </Card>
@@ -301,6 +363,13 @@ export default function TasksPage() {
                         ))}
                       </select>
                     </div>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <Button type="button" size="sm" variant="outline" onClick={copyTaskBreakdown} disabled={!taskBreakdown}>
+                        <Copy className="mr-2 h-4 w-4" />
+                        Copy carry-forward
+                      </Button>
+                      {copyMessage && <span className="text-sm text-green-600">{copyMessage}</span>}
+                    </div>
                   </div>
                 </CardContent>
               </Card>
@@ -329,6 +398,7 @@ export default function TasksPage() {
                             <div className="flex flex-wrap items-center gap-2">
                               <Badge variant="outline">{priorityLabels[task.priority]}</Badge>
                               <Badge variant="secondary">{statusLabels[task.status]}</Badge>
+                              {isTaskOverdue(task) && <Badge className="bg-red-100 text-red-800">Overdue</Badge>}
                               <span className="text-sm text-muted-foreground">{categoryLabels[task.category]}</span>
                               {task.dueDate && (
                                 <span className="text-sm text-muted-foreground">Due {format(new Date(task.dueDate), 'MMM d')}</span>
@@ -345,6 +415,9 @@ export default function TasksPage() {
                             )}
                           </div>
                           <div className="flex flex-wrap gap-2">
+                            <Button size="sm" variant="outline" onClick={() => editTask(task)}>
+                              Edit
+                            </Button>
                             {task.status !== TaskStatus.DONE && (
                               <Button size="sm" variant="outline" onClick={() => updateTaskStatus(task.id, TaskStatus.DONE)}>
                                 Mark done
