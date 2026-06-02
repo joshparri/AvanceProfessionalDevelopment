@@ -24,7 +24,10 @@ This is a manual QA checklist to verify the Avance Professional Development app 
 - [ ] MSP Scenario Trainer: "Scenario progress" select dropdown shows black background when opened, hiding options (selection still works via keyboard)
 - [ ] Evidence Pack: Missing "Copy summary" button for Markdown textarea (users must manually select and copy)
 - [ ] Navigation: Ticket Notes Trainer not accessible via nav menu (only direct URL)
-- [ ] Navigation: Links to Work Logs, Tasks, Knowledge, Playbooks, Clients, Learning return 404 (should be hidden or marked "Coming soon")
+ - [x] MSP Scenario Trainer: "Scenario progress" select dropdown shows black background when opened, hiding options — fixed in the latest pass.
+ - [x] Evidence Pack: Copy-summary button added.
+ - [ ] Navigation: Ticket Notes Trainer not accessible via nav menu (only direct URL) — still needs a nav entry.
+ - [ ] Navigation: Review links to Work Logs, Tasks, Knowledge, Playbooks, Clients, Learning in deployed Vercel build; these routes exist in the repo and should be visible after a rebuild.
 
 ## Testing Instructions
 1. Run the app locally with `npm run dev` in the `/app` directory.

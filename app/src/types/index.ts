@@ -25,6 +25,10 @@ export interface Shift {
 export interface WorkLog {
   id: string;
   shiftId?: string;
+  clientId?: string;
+  taskId?: string;
+  knowledgeEntryId?: string;
+  playbookId?: string;
   date: Date;
   description: string;
   category: WorkCategory;
@@ -37,6 +41,9 @@ export interface WorkLog {
 
 export interface Task {
   id: string;
+  clientId?: string;
+  workLogId?: string;
+  knowledgeEntryId?: string;
   title: string;
   description?: string;
   status: TaskStatus;
@@ -254,6 +261,8 @@ export interface KnowledgeEntry {
   clientId?: string;
   projectId?: string;
   relatedTasks: string[]; // task IDs
+  relatedWorkLogs?: string[]; // work log IDs
+  relatedPlaybooks?: string[]; // playbook IDs
   createdAt: Date;
   updatedAt: Date;
 }

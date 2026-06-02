@@ -26,13 +26,13 @@ The Avance Professional Development app is a private web application designed to
 ## Current Implementation Status
 The app currently includes the MSP professional development features listed above and a growing set of workflow pages under `/app`. Many planned workflows and page refinements are tracked in `TODO.md`, but the app already includes core live routes for shifts, work logs, tasks, KB learning, scenario training, and more.
 
-## Known Issues
-- On the MSP Scenario Trainer page (`/msp-scenarios`), the "Scenario progress" select dropdown shows a black background when opened, making options invisible (though selection still works).
-- The KB Learning Machine currently uses localStorage only; there is no import from private Avance KB PDFs.
-- The KB Learning Machine has seeded field cards and local practice evidence, but not manual card create/edit/delete yet.
-- Learning Cockpit role-play currently uses a deterministic local coach; no GROQ/LLM API integration exists in this repo yet.
+## Known Issues / Notes
+- MSP Scenario Trainer: dropdown contrast issue has been fixed in the latest implementation pass; verify visually in a deployed build.
+- KB Learning Machine: still local-first (localStorage/Dexie) with no PDF import or external sync.
+- KB Learning Machine: some manual card create/edit flows remain to be polished.
+- Learning Cockpit: uses a deterministic local coach; no external LLM integrations are present.
 
-These issues are noted for future code updates.
+Please refer to `docs/qa/msp_pd_smoke_test.md` for the latest verification checklist and deployment notes.
 
 ## App Location
 The application source code is located in the `/app` folder.

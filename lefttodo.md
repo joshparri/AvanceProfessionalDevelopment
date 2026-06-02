@@ -133,3 +133,14 @@ Latest locally checked routes:
 - Keep all new features local-first and privacy-safe.
 - Do not add real PSA, Google, email, or AI integrations without a separate privacy and credentials design.
 - Use generic examples and avoid passwords, secrets, private emails, hostnames, tenant IDs, or client-sensitive details.
+
+## Documents accuracy
+Some repository docs are out of sync with the current implementation. Quick audit shows these files contain statements that no longer match the codebase and should be reviewed/updated:
+
+- `TODO.md` — many Work Logs / Tasks items are still marked unchecked despite being implemented in `app/`.
+- `docs/deployment/vercel_deployment.md` — mentions 404s for pages that are now present / implemented.
+- `docs/qa/msp_pd_smoke_test.md` — contains smoke test items that are now satisfied or need retesting (navigation links, scenario persistence).
+- `README.md` and `lefttodo.md` — both are helpful but require a coordinated pass to ensure consistent status across summaries and checklists.
+- Various `docs/*` files (implementation plans, guides) reference future routes or missing features; run a cross-docs check after a repo audit.
+
+Recommended next step: perform a short doc-sync pass to update these files (or add a `docs/CHANGES.md` note) so `lefttodo.md` can remain the single source of truth.

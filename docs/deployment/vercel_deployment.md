@@ -15,7 +15,11 @@ Deploy from: https://github.com/joshparri/AvanceProfessionalDevelopment
 - Ensure the repository is set to deploy from the `main` branch.
 
 ## Current Deployment Status
-The app is successfully deployed at https://avance-professional-development.vercel.app/ with the MSP Professional Development features working. Some planned features (Work Logs, Tasks, etc.) are not yet implemented and will show 404 errors. See `docs/qa/msp_pd_smoke_test.md` for known issues.
+The app is successfully deployed at https://avance-professional-development.vercel.app/ with the MSP Professional Development features working. Recent implementation passes have added local-first routes for Work Logs, Tasks, Knowledge Base, Playbooks, and Clients.
+
+If you still see 404s for those pages on Vercel, trigger a new deployment (a rebuild) — the repository now contains the pages under `app/` and a full rebuild will publish them.
+
+See `docs/qa/msp_pd_smoke_test.md` for current smoke-test items and verification notes.
 
 ## Troubleshooting 404 Errors
 If you encounter a 404 NOT_FOUND error after deployment:
