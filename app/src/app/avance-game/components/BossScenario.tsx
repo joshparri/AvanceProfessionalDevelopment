@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { bossScenariosByNode } from '../data/bossScenarios';
 
@@ -14,7 +14,7 @@ type BossScenarioProps = {
 const TIMER_SECONDS = 90;
 
 export function BossScenario({ nodeId, nodeLabel, onComplete, onClose }: BossScenarioProps) {
-  const questions = bossScenariosByNode[nodeId] ?? [];
+  const questions = useMemo(() => bossScenariosByNode[nodeId] ?? [], [nodeId]);
   const [index, setIndex] = useState(0);
   const [answers, setAnswers] = useState<number[]>([]);
   const [selected, setSelected] = useState<number | null>(null);
@@ -29,7 +29,7 @@ export function BossScenario({ nodeId, nodeLabel, onComplete, onClose }: BossSce
     answersRef.current = answers;
   }, [answers]);
 
-  const endBoss = (finalAnswers: number[]) => {
+  const endBoss = useCallback((finalAnswers: number[]) => {
     if (completedRef.current) return;
     completedRef.current = true;
     const finalScore = finalAnswers.filter((a, i) => a === questions[i]?.correctIndex).length;
@@ -38,7 +38,7 @@ export function BossScenario({ nodeId, nodeLabel, onComplete, onClose }: BossSce
     setPassed(didPass);
     setFinished(true);
     onComplete(didPass);
-  };
+  }, [onComplete, questions]);
 
   useEffect(() => {
     if (finished || questions.length === 0) return;
@@ -53,7 +53,7 @@ export function BossScenario({ nodeId, nodeLabel, onComplete, onClose }: BossSce
       });
     }, 1000);
     return () => clearInterval(id);
-  }, [finished, questions.length]);
+  }, [endBoss, finished, questions.length]);
 
   const submitAnswer = () => {
     if (selected === null || finished) return;

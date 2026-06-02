@@ -68,7 +68,7 @@ export class AvanceDatabase extends Dexie {
     });
 
     // Add hooks for automatic timestamp updates
-    this.shifts.hook('creating', (primKey, obj, trans) => {
+    this.shifts.hook('creating', (_primKey, obj) => {
       obj.createdAt = new Date();
       obj.updatedAt = new Date();
     });
@@ -77,7 +77,7 @@ export class AvanceDatabase extends Dexie {
       touchUpdatedAt(modifications);
     });
 
-    this.workLogs.hook('creating', (primKey, obj, trans) => {
+    this.workLogs.hook('creating', (_primKey, obj) => {
       obj.createdAt = new Date();
       obj.updatedAt = new Date();
     });
@@ -86,7 +86,7 @@ export class AvanceDatabase extends Dexie {
       touchUpdatedAt(modifications);
     });
 
-    this.tasks.hook('creating', (primKey, obj, trans) => {
+    this.tasks.hook('creating', (_primKey, obj) => {
       obj.createdAt = new Date();
       obj.updatedAt = new Date();
     });
@@ -95,7 +95,7 @@ export class AvanceDatabase extends Dexie {
       touchUpdatedAt(modifications);
     });
 
-    this.pdAchievements.hook('creating', (primKey, obj, trans) => {
+    this.pdAchievements.hook('creating', (_primKey, obj) => {
       obj.createdAt = new Date();
       obj.updatedAt = new Date();
     });
@@ -104,7 +104,7 @@ export class AvanceDatabase extends Dexie {
       touchUpdatedAt(modifications);
     });
 
-    this.pdGoals.hook('creating', (primKey, obj, trans) => {
+    this.pdGoals.hook('creating', (_primKey, obj) => {
       obj.createdAt = new Date();
       obj.updatedAt = new Date();
     });
@@ -113,7 +113,7 @@ export class AvanceDatabase extends Dexie {
       touchUpdatedAt(modifications);
     });
 
-    this.clients.hook('creating', (primKey, obj, trans) => {
+    this.clients.hook('creating', (_primKey, obj) => {
       obj.createdAt = new Date();
       obj.updatedAt = new Date();
     });
@@ -122,7 +122,7 @@ export class AvanceDatabase extends Dexie {
       touchUpdatedAt(modifications);
     });
 
-    this.projects.hook('creating', (primKey, obj, trans) => {
+    this.projects.hook('creating', (_primKey, obj) => {
       obj.createdAt = new Date();
       obj.updatedAt = new Date();
     });
@@ -131,7 +131,7 @@ export class AvanceDatabase extends Dexie {
       touchUpdatedAt(modifications);
     });
 
-    this.appSettings.hook('creating', (primKey, obj, trans) => {
+    this.appSettings.hook('creating', (_primKey, obj) => {
       obj.updatedAt = new Date();
     });
 
@@ -139,7 +139,7 @@ export class AvanceDatabase extends Dexie {
       touchUpdatedAt(modifications);
     });
 
-    this.knowledgeEntries.hook('creating', (primKey, obj, trans) => {
+    this.knowledgeEntries.hook('creating', (_primKey, obj) => {
       obj.createdAt = new Date();
       obj.updatedAt = new Date();
     });
@@ -148,7 +148,7 @@ export class AvanceDatabase extends Dexie {
       touchUpdatedAt(modifications);
     });
 
-    this.playbooks.hook('creating', (primKey, obj, trans) => {
+    this.playbooks.hook('creating', (_primKey, obj) => {
       obj.createdAt = new Date();
       obj.updatedAt = new Date();
     });
@@ -157,7 +157,7 @@ export class AvanceDatabase extends Dexie {
       touchUpdatedAt(modifications);
     });
 
-    this.learningItems.hook('creating', (primKey, obj, trans) => {
+    this.learningItems.hook('creating', (_primKey, obj) => {
       obj.createdAt = new Date();
       obj.updatedAt = new Date();
     });
@@ -166,7 +166,7 @@ export class AvanceDatabase extends Dexie {
       touchUpdatedAt(modifications);
     });
 
-    this.invoices.hook('creating', (primKey, obj, trans) => {
+    this.invoices.hook('creating', (_primKey, obj) => {
       obj.createdAt = new Date();
       obj.updatedAt = new Date();
     });
@@ -175,7 +175,7 @@ export class AvanceDatabase extends Dexie {
       touchUpdatedAt(modifications);
     });
 
-    this.accounts.hook('creating', (primKey, obj, trans) => {
+    this.accounts.hook('creating', (_primKey, obj) => {
       obj.createdAt = new Date();
       obj.updatedAt = new Date();
     });
@@ -184,7 +184,7 @@ export class AvanceDatabase extends Dexie {
       touchUpdatedAt(modifications);
     });
 
-    this.syncMetadata.hook('creating', (primKey, obj, trans) => {
+    this.syncMetadata.hook('creating', (_primKey, obj) => {
       obj.updatedAt = new Date();
     });
 

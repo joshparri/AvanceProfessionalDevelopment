@@ -3,15 +3,14 @@
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 import { Layout } from '@/components/Layout';
-import { HeroPanel, PageShell, SectionHeader } from '@/components/academy';
+import { HeroPanel, PageShell } from '@/components/academy';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Textarea } from '@/components/ui/textarea';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { ClipboardCheck, ShieldCheck, CalendarDays } from 'lucide-react';
+import { ClipboardCheck, CalendarDays } from 'lucide-react';
 
 const STORAGE_KEY = 'avance.onsiteChecklist.v1';
 

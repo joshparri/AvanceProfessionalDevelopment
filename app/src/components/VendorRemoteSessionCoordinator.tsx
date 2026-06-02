@@ -119,7 +119,6 @@ function buildVendorNote(session: VendorSession) {
 
 export function VendorRemoteSessionCoordinator() {
   const [sessions, setSessions] = useState<VendorSession[]>(() => readStoredSessions());
-  const [hasLoadedStorage, setHasLoadedStorage] = useState(true);
   const [ticketId, setTicketId] = useState('');
   const [vendorCategory, setVendorCategory] = useState(vendorCategories[0]);
   const [accessType, setAccessType] = useState(accessTypes[0]);
@@ -129,10 +128,8 @@ export function VendorRemoteSessionCoordinator() {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    if (hasLoadedStorage) {
-      writeStoredSessions(sessions);
-    }
-  }, [hasLoadedStorage, sessions]);
+    writeStoredSessions(sessions);
+  }, [sessions]);
 
   const activeSessions = useMemo(
     () => [...sessions].filter((session) => session.status !== 'complete').sort((a, b) => a.nextAttemptAt - b.nextAttemptAt),

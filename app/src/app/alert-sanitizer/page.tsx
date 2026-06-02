@@ -5,10 +5,8 @@ import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { ClipboardCopy, ShieldCheck, ShieldAlert } from 'lucide-react';
+import { ClipboardCopy, ShieldAlert } from 'lucide-react';
 
 const patterns = [
   { label: 'User_Email', regex: /[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g },
