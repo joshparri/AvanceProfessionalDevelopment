@@ -1,132 +1,135 @@
-# Avance Work Companion — Remaining Work & Prioritized Backlog
+# Avance Work Companion - Remaining Work & Prioritized Backlog
 
-This file is now the active master backlog for the app.
+This file is the active master backlog for the app. Keep it current as work is completed.
 
 ## Current status
-- Core PD pages and learning flows exist
-- Universal search is implemented
-- Top navigation scroll and search page are live
-- Most operational modules are still unbuilt or incomplete
+- Core PD pages and learning flows exist.
+- Production build passes.
+- Lint passes with warnings only.
+- Universal search is live and now includes pages plus local tasks, work logs, knowledge entries, playbooks, clients, and learning items.
+- Work Logs, Tasks, Knowledge Base, Playbooks, and Clients now have local-first operational pages.
+- Settings includes JSON backup and restore.
+- Evidence Pack has a copy-summary button.
+- MSP Scenario Trainer progress persists locally and the dropdown contrast fix is pushed.
 
-## High-priority work
-These items should be tackled first.
+## Completed in the latest implementation pass
+- [x] Fix deploy-blocking lint errors.
+- [x] Verify `npm run lint`, `npm run test`, and `npm run build`.
+- [x] Push verified baseline to `main`.
+- [x] Add Work Log edit/delete.
+- [x] Add copyable Work Log handover summary.
+- [x] Add Task edit flow.
+- [x] Add Task overdue indicator.
+- [x] Add copyable Task carry-forward summary.
+- [x] Expand search to local records beyond pages.
+- [x] Add search type filter.
+- [x] Add recent search chips.
+- [x] Add result highlighting.
+- [x] Add Knowledge Base CRUD page.
+- [x] Add Playbooks page with checklist-style steps.
+- [x] Add Clients page for privacy-safe client references.
+- [x] Add Knowledge Base, Playbooks, and Clients to navigation.
 
-### 1. Core workflow modules
-- [ ] Work Logs
-  - [ ] Quick capture form for log entries
-  - [ ] Saved log list with search/filter
-  - [ ] Link logs to clients, tasks, and knowledge
-  - [ ] Export or copy handover summary
-- [ ] Tasks
-  - [ ] CRUD for tasks
-  - [ ] Priority, due date, and status workflow
-  - [ ] Overdue visual indicators
-  - [ ] Carry-forward follow-up tasks between shifts
-- [ ] Knowledge Base
-  - [ ] Entry editor with title/body/tags
-  - [ ] Confidence rating and verified status
-  - [ ] Searchable knowledge entries
-  - [ ] Link knowledge to playbooks and logs
-- [ ] Playbooks
-  - [ ] Create issue-driven playbooks with checks and escalation
-  - [ ] Track usage and field notes
-  - [ ] Search and categorize playbooks
-- [ ] Client references
-  - [ ] Client profile pages with notes and quirks
-  - [ ] Link clients to logs, tasks, and knowledge
-- [ ] Time / invoice tracking
-  - [ ] Shift/task time entry
-  - [ ] Invoice-cycle summary
-  - [ ] Invoice preview/export
+## High-priority remaining work
 
-### 2. MSP professional development
-- [ ] MSP Skills page improvements
-  - [ ] Persist readiness states reliably
-  - [ ] Improve search/filter behavior
-- [ ] MSP Scenarios
-  - [ ] Fix dropdown styling bug
-  - [ ] Persist scenario progress
-  - [ ] Add more practice scenarios
-- [ ] Ticket Notes Trainer
-  - [ ] Ensure accessible nav link
-  - [ ] Improve training flow and examples
-- [ ] Evidence Pack
-  - [ ] Add copy-summary button
-  - [ ] Improve output formatting
-- [ ] MSP Roadmap
-  - [ ] Show all stages clearly
-  - [ ] Tie roadmap recommendations to user progress
-- [ ] Next Best Action / PD coaching
-  - [ ] Recommend one clear next action
-  - [ ] Add “why this?” explanation
-  - [ ] Use local progress data for decisions
+### 1. Workflow depth
+- [ ] Link work logs to tasks, knowledge entries, clients, and playbooks.
+- [ ] Link tasks to work logs, clients, and knowledge entries.
+- [ ] Add shift detail improvements:
+  - [ ] Time logging per shift.
+  - [ ] Shift prep checklist refinements.
+  - [ ] Linked shift work logs and tasks.
+- [ ] Add time/invoice tracking:
+  - [ ] Shift/task time entry.
+  - [ ] Invoice-cycle summary.
+  - [ ] Invoice preview/export.
+- [ ] Add structured follow-up triage:
+  - [ ] Status.
+  - [ ] Due date.
+  - [ ] Next nudge.
+  - [ ] Priority.
+  - [ ] Editable wording templates.
 
-### 3. Navigation, branding, and polish
-- [ ] Fix broken / coming-soon links in navigation
-- [ ] Hide or label pages returning 404
-- [ ] Set proper app metadata and browser titles
-- [ ] Improve mobile/responsive layouts
-- [ ] Add empty states and loading states
-- [ ] Improve accessibility and keyboard navigation
-- [ ] Ensure local persistence works across refresh
+### 2. Knowledge and playbook maturity
+- [ ] Add confidence rating and verified status to Knowledge Base entries.
+- [ ] Link Knowledge Base entries to playbooks and logs.
+- [ ] Track Playbook usage and field notes.
+- [ ] Add Playbook runner completion state.
+- [ ] Add privacy linting or warnings for entries that look sensitive.
+- [ ] Add internal notes/backlog area for safe non-sensitive bullets.
 
-### 4. Search and discovery
-- [ ] Expand universal search to all content types
-  - [ ] Work logs
-  - [ ] Tasks
-  - [ ] Knowledge
-  - [ ] Playbooks
-  - [ ] Clients
-  - [ ] Learning items
-- [ ] Add type-based result filtering
-- [ ] Add search result highlighting
-- [ ] Add recent searches and suggested queries
+### 3. MSP professional development
+- [ ] Add client communication practice prompts and model responses.
+- [ ] Add more realistic scenarios:
+  - [ ] Microsoft 365.
+  - [ ] Endpoint support.
+  - [ ] Networking.
+  - [ ] Cybersecurity.
+  - [ ] Backup/DR.
+  - [ ] Communication.
+- [ ] Convert remaining static Learning Cockpit activities into interactive variants.
+- [ ] Improve Next Best Action / PD coaching:
+  - [ ] Recommend one clear next action.
+  - [ ] Explain "why this?"
+  - [ ] Use more local progress data for decisions.
+- [ ] Add manager-ready weekly PD review output.
 
-## Suggested implementation sequence
-1. Fix navigation, metadata, and page discovery
-2. Build Work Logs and Tasks
-3. Add Knowledge Base and Playbooks
-4. Add Client reference pages and time/invoice tracking
-5. Polish MSP PD flows and learning recommendations
-6. Expand search coverage and discovery
+### 4. KB Learning Machine
+- [ ] Add a dedicated learning queue.
+- [ ] Improve manual field card create/edit/delete flow.
+- [ ] Add review statuses:
+  - [ ] New.
+  - [ ] Due.
+  - [ ] Learning.
+  - [ ] Confident.
+  - [ ] Mastered.
+- [ ] Add more local KB hint seed data without importing private KB content.
 
-## Notes from the docs
-- The PRD requires shift prep, work logs, tasks, knowledge, playbooks, clients, time logging, and learning tracking.
-- User stories require quick capture, follow-up persistence, searchable knowledge, and invoice preparation.
-- QA doc calls out `/msp-skills`, `/msp-scenarios`, `/ticket-notes`, `/evidence-pack`, and `/msp-roadmap` as key pages.
-- Proposed improvements call for PendingActionTracker, OnsiteChecklist, tool primers, alert sanitization, and daily briefing flow.
+### 5. Search and discovery
+- [ ] Add richer search result ranking for live records.
+- [ ] Add direct record anchors or detail views for search results.
+- [ ] Add search coverage for invoices/time entries after those modules exist.
+- [ ] Add empty-state suggestions based on content type.
 
-## Immediate next actions
-- [x] Fix app metadata and browser title branding
-- [x] Add persistent follow-up tracking to the dashboard
-- [ ] Extend universal search to tasks and work logs
-- [ ] Add Evidence Pack copy-summary button
-- [ ] Fix MSP scenario dropdown styling and persistence
-- [x] Create initial Work Log and Task skeleton with local persistence
+### 6. Data quality, backup, and sync
+- [ ] Add import validation before restoring backup JSON.
+- [ ] Ensure backup export/import covers localStorage-based learning progress, not just Dexie tables.
+- [ ] Decide whether cloud sync remains simulated or gets a real Supabase design.
+- [ ] If real sync is pursued, design privacy, conflict resolution, and selective sync first.
 
-## Progress tracking
-- [x] Universal search added
-- [x] Top navigation scroll position fixed
-- [x] Search page created
-- [ ] Work Logs
-- [ ] Tasks
-- [ ] Knowledge Base
-- [ ] Playbooks
-- [ ] Clients
-- [ ] Time/invoice tracking
-- [ ] PD coaching and recommendation engine
-- [ ] Expanded search coverage
+### 7. QA and polish
+- [ ] Clear existing lint warnings.
+- [ ] Add unit tests for search helpers and recommendation rules.
+- [ ] Add integration tests for Work Logs, Tasks, Knowledge Base, Playbooks, and Clients.
+- [ ] Run mobile layout QA.
+- [ ] Run dark mode QA.
+- [ ] Run keyboard/accessibility QA.
+- [ ] Check seeded data for client-sensitive content.
+- [ ] Add user-facing empty/loading states where still thin.
 
-## What’s left
-The app still needs most of the operational capture and workflow features:
-- full log/task/client capture
-- knowledge and playbook linking
-- time/invoice support
-- improved PD recommendation
-- better navigation and discovery
-- mobile/responsive polish
-- accessibility and QA fixes
+## Suggested next implementation sequence
+1. Link Work Logs, Tasks, Knowledge Base, Clients, and Playbooks.
+2. Add time/invoice tracking.
+3. Improve KB Learning Machine editing and review states.
+4. Add communication practice and more MSP scenarios.
+5. Add backup validation and localStorage progress export.
+6. Clear lint warnings and add tests.
 
----
+## Verification baseline
+Latest verified commands:
+- `npm run lint` in `app/` passes with warnings.
+- `npm run test` in `app/` passes.
+- `npm run build` in `app/` passes.
 
-> Keep this file updated as work is completed. Use it as the single source of truth for what remains to be built.
+Latest locally checked routes:
+- `/tasks`
+- `/work-logs`
+- `/knowledge-base`
+- `/playbooks`
+- `/clients`
+- `/search?q=backup`
+
+## Notes
+- Keep all new features local-first and privacy-safe.
+- Do not add real PSA, Google, email, or AI integrations without a separate privacy and credentials design.
+- Use generic examples and avoid passwords, secrets, private emails, hostnames, tenant IDs, or client-sensitive details.
