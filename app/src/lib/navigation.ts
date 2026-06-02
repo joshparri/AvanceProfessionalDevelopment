@@ -20,6 +20,7 @@ import {
   GitPullRequestArrow,
   Settings,
   CheckSquare,
+  Building2,
 } from 'lucide-react';
 
 export interface NavigationItem {
@@ -58,6 +59,27 @@ export const navigation: NavigationItem[] = [
     icon: CheckSquare,
     description: 'Capture and manage follow-up tasks with priority, due date, and status.',
     tags: ['tasks', 'todo', 'priority', 'follow-up'],
+  },
+  {
+    name: 'Knowledge Base',
+    href: '/knowledge-base',
+    icon: BookOpen,
+    description: 'Capture and search privacy-safe troubleshooting notes, checks, and lessons.',
+    tags: ['knowledge', 'kb', 'notes', 'troubleshooting'],
+  },
+  {
+    name: 'Playbooks',
+    href: '/playbooks',
+    icon: ClipboardList,
+    description: 'Create repeatable troubleshooting playbooks and checklist-style workflows.',
+    tags: ['playbooks', 'checklists', 'workflow', 'troubleshooting'],
+  },
+  {
+    name: 'Clients',
+    href: '/clients',
+    icon: Building2,
+    description: 'Keep privacy-safe client reference notes and operational reminders.',
+    tags: ['clients', 'references', 'notes', 'environment'],
   },
   {
     name: 'Onsite Checklist',

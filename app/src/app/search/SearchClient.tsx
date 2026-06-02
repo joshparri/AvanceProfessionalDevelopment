@@ -1,21 +1,51 @@
 'use client';
 
-import { useEffect, useMemo, useState, FormEvent } from 'react';
+import { FormEvent, ReactNode, useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Layout } from '@/components/Layout';
 import { Search } from 'lucide-react';
 import { searchFuse } from '@/lib/searchIndex';
 import { db, initDatabase } from '@/lib/db';
-import { Task, WorkLog } from '@/types';
+import { Client, KnowledgeEntry, LearningItem, Playbook, Task, WorkLog } from '@/types';
+
+type DynamicSearchCategory = 'task' | 'worklog' | 'knowledge' | 'playbook' | 'client' | 'learning';
 
 type DynamicSearchItem = {
   id: string;
   href: string;
   title: string;
   description: string;
-  category: 'task' | 'worklog';
+  category: DynamicSearchCategory;
   tags: string[];
+};
+
+const RECENT_SEARCHES_KEY = 'avance_recent_searches_v1';
+
+const dynamicCategoryLabels: Record<DynamicSearchCategory, string> = {
+  task: 'Tasks',
+  worklog: 'Work logs',
+  knowledge: 'Knowledge',
+  playbook: 'Playbooks',
+  client: 'Clients',
+  learning: 'Learning',
+};
+
+const getInitialRecentSearches = () => {
+  if (typeof window === 'undefined') {
+    return [];
+  }
+
+  try {
+    const parsed = JSON.parse(window.localStorage.getItem(RECENT_SEARCHES_KEY) ?? '[]') as unknown;
+    if (Array.isArray(parsed)) {
+      return parsed.filter((item): item is string => typeof item === 'string').slice(0, 6);
+    }
+  } catch {
+    // Ignore invalid local search history.
+  }
+
+  return [];
 };
 
 const buildTaskResult = (task: Task): DynamicSearchItem => ({
@@ -24,7 +54,7 @@ const buildTaskResult = (task: Task): DynamicSearchItem => ({
   title: task.title,
   description: task.description || 'Task with follow-up action, priority, and due date.',
   category: 'task',
-  tags: [task.category, task.priority, ...task.tags],
+  tags: [task.category, task.priority, task.status, ...task.tags],
 });
 
 const buildWorkLogResult = (log: WorkLog): DynamicSearchItem => ({
@@ -36,13 +66,73 @@ const buildWorkLogResult = (log: WorkLog): DynamicSearchItem => ({
   tags: [log.category, ...log.tags],
 });
 
+const buildKnowledgeResult = (entry: KnowledgeEntry): DynamicSearchItem => ({
+  id: `knowledge-${entry.id}`,
+  href: `/knowledge-base?q=${encodeURIComponent(entry.title)}`,
+  title: entry.title,
+  description: entry.content.slice(0, 180) || 'Knowledge base entry.',
+  category: 'knowledge',
+  tags: [entry.category, ...entry.tags],
+});
+
+const buildPlaybookResult = (playbook: Playbook): DynamicSearchItem => ({
+  id: `playbook-${playbook.id}`,
+  href: `/playbooks?q=${encodeURIComponent(playbook.title)}`,
+  title: playbook.title,
+  description: playbook.description || 'Troubleshooting playbook.',
+  category: 'playbook',
+  tags: [playbook.category, ...playbook.tags],
+});
+
+const buildClientResult = (client: Client): DynamicSearchItem => ({
+  id: `client-${client.id}`,
+  href: `/clients?q=${encodeURIComponent(client.name)}`,
+  title: client.name,
+  description: client.notes || 'Client reference note.',
+  category: 'client',
+  tags: ['client'],
+});
+
+const buildLearningResult = (item: LearningItem): DynamicSearchItem => ({
+  id: `learning-${item.id}`,
+  href: `/learning-cockpit?q=${encodeURIComponent(item.title)}`,
+  title: item.title,
+  description: item.description || 'Learning item.',
+  category: 'learning',
+  tags: [item.category, item.status, item.priority],
+});
+
+const dynamicItemMatches = (item: DynamicSearchItem, lowerQuery: string) =>
+  item.title.toLowerCase().includes(lowerQuery) ||
+  item.description.toLowerCase().includes(lowerQuery) ||
+  item.tags.some((tag) => tag.toLowerCase().includes(lowerQuery));
+
+const highlightMatch = (text: string, query: string): ReactNode => {
+  const trimmed = query.trim();
+  if (!trimmed) return text;
+
+  const index = text.toLowerCase().indexOf(trimmed.toLowerCase());
+  if (index === -1) return text;
+
+  return (
+    <>
+      {text.slice(0, index)}
+      <mark className="rounded bg-yellow-100 px-1 text-yellow-900 dark:bg-yellow-400/20 dark:text-yellow-100">
+        {text.slice(index, index + trimmed.length)}
+      </mark>
+      {text.slice(index + trimmed.length)}
+    </>
+  );
+};
+
 export default function SearchClient() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const query = searchParams.get('q')?.trim() ?? '';
   const [searchInput, setSearchInput] = useState(query);
-  const [taskResults, setTaskResults] = useState<DynamicSearchItem[]>([]);
-  const [workLogResults, setWorkLogResults] = useState<DynamicSearchItem[]>([]);
+  const [dynamicResults, setDynamicResults] = useState<DynamicSearchItem[]>([]);
+  const [typeFilter, setTypeFilter] = useState<DynamicSearchCategory | 'all'>('all');
+  const [recentSearches, setRecentSearches] = useState<string[]>(getInitialRecentSearches);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -52,8 +142,7 @@ export default function SearchClient() {
       if (!query) {
         await Promise.resolve();
         if (!cancelled) {
-          setTaskResults([]);
-          setWorkLogResults([]);
+          setDynamicResults([]);
         }
         return;
       }
@@ -62,33 +151,28 @@ export default function SearchClient() {
       try {
         await initDatabase();
         const lowerQuery = query.toLowerCase();
-
-        const [tasks, workLogs] = await Promise.all([
+        const [tasks, workLogs, knowledgeEntries, playbooks, clients, learningItems] = await Promise.all([
           db.tasks.toArray(),
           db.workLogs.toArray(),
+          db.knowledgeEntries.toArray(),
+          db.playbooks.toArray(),
+          db.clients.toArray(),
+          db.learningItems.toArray(),
         ]);
 
-        const taskMatches = tasks
-          .filter((task) =>
-            task.title.toLowerCase().includes(lowerQuery) ||
-            task.description?.toLowerCase().includes(lowerQuery) ||
-            task.tags.some((tag) => tag.toLowerCase().includes(lowerQuery))
-          )
-          .slice(0, 5)
-          .map(buildTaskResult);
-
-        const workLogMatches = workLogs
-          .filter((log) =>
-            log.description.toLowerCase().includes(lowerQuery) ||
-            log.notes?.toLowerCase().includes(lowerQuery) ||
-            log.tags.some((tag) => tag.toLowerCase().includes(lowerQuery))
-          )
-          .slice(0, 5)
-          .map(buildWorkLogResult);
+        const matches = [
+          ...tasks.map(buildTaskResult),
+          ...workLogs.map(buildWorkLogResult),
+          ...knowledgeEntries.map(buildKnowledgeResult),
+          ...playbooks.map(buildPlaybookResult),
+          ...clients.map(buildClientResult),
+          ...learningItems.map(buildLearningResult),
+        ]
+          .filter((item) => dynamicItemMatches(item, lowerQuery))
+          .slice(0, 30);
 
         if (!cancelled) {
-          setTaskResults(taskMatches);
-          setWorkLogResults(workLogMatches);
+          setDynamicResults(matches);
         }
       } catch (error) {
         console.error('Failed to search local items:', error);
@@ -106,19 +190,30 @@ export default function SearchClient() {
   }, [query]);
 
   const pageResults = useMemo(() => {
-    if (!query) {
-      return [];
-    }
-
+    if (!query) return [];
     return searchFuse.search(query).map((result) => result.item);
   }, [query]);
 
+  const filteredDynamicResults = useMemo(
+    () => (typeFilter === 'all' ? dynamicResults : dynamicResults.filter((result) => result.category === typeFilter)),
+    [dynamicResults, typeFilter]
+  );
+
+  const totalResultCount = pageResults.length + filteredDynamicResults.length;
+
+  const runSearch = (term: string) => {
+    const trimmed = term.trim();
+    if (!trimmed) return;
+
+    const nextRecent = [trimmed, ...recentSearches.filter((item) => item.toLowerCase() !== trimmed.toLowerCase())].slice(0, 6);
+    setRecentSearches(nextRecent);
+    window.localStorage.setItem(RECENT_SEARCHES_KEY, JSON.stringify(nextRecent));
+    router.push(`/search?q=${encodeURIComponent(trimmed)}`);
+  };
+
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const trimmed = searchInput.trim();
-    if (trimmed) {
-      router.push(`/search?q=${encodeURIComponent(trimmed)}`);
-    }
+    runSearch(searchInput);
   };
 
   return (
@@ -130,7 +225,7 @@ export default function SearchClient() {
               Search the app
             </h1>
             <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">
-              Search pages, tools, learning content, tasks, and work logs from one place.
+              Search pages, tools, learning content, tasks, work logs, knowledge, playbooks, and client notes from one place.
             </p>
           </div>
           <form onSubmit={handleSubmit} className="flex w-full max-w-2xl gap-2">
@@ -155,6 +250,23 @@ export default function SearchClient() {
               Search
             </button>
           </form>
+          {recentSearches.length > 0 && (
+            <div className="flex flex-wrap gap-2">
+              {recentSearches.map((recent) => (
+                <button
+                  key={recent}
+                  type="button"
+                  onClick={() => {
+                    setSearchInput(recent);
+                    runSearch(recent);
+                  }}
+                  className="rounded-full border border-slate-200 px-3 py-1 text-xs text-slate-600 hover:border-blue-300 hover:text-blue-700 dark:border-slate-700 dark:text-slate-300"
+                >
+                  {recent}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
 
         <div className="rounded-3xl border border-slate-200 bg-white/90 p-6 shadow-sm shadow-slate-200/70 dark:border-slate-800 dark:bg-slate-950/80 dark:shadow-slate-950/20">
@@ -166,13 +278,25 @@ export default function SearchClient() {
                   {query}
                 </span>
                 <span>
-                  {pageResults.length + taskResults.length + workLogResults.length} result{pageResults.length + taskResults.length + workLogResults.length === 1 ? '' : 's'}
+                  {totalResultCount} result{totalResultCount === 1 ? '' : 's'}
                 </span>
+                <select
+                  value={typeFilter}
+                  onChange={(event) => setTypeFilter(event.target.value as DynamicSearchCategory | 'all')}
+                  className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200 sm:ml-auto"
+                >
+                  <option value="all">All content types</option>
+                  {Object.entries(dynamicCategoryLabels).map(([value, label]) => (
+                    <option key={value} value={value}>
+                      {label}
+                    </option>
+                  ))}
+                </select>
               </div>
 
               {isLoading ? (
                 <div className="rounded-3xl border border-slate-200 bg-slate-50 p-8 text-center text-slate-600 dark:border-slate-700 dark:bg-slate-950/50 dark:text-slate-300">
-                  Searching your local tasks and work logs...
+                  Searching your local records...
                 </div>
               ) : (
                 <div className="space-y-6">
@@ -187,10 +311,10 @@ export default function SearchClient() {
                             className="block rounded-3xl border border-slate-200 p-5 transition hover:border-blue-300 hover:bg-blue-50/50 dark:border-slate-800 dark:hover:border-blue-500 dark:hover:bg-blue-900/70"
                           >
                             <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
-                              {result.title}
+                              {highlightMatch(result.title, query)}
                             </h3>
                             <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-400">
-                              {result.description}
+                              {highlightMatch(result.description, query)}
                             </p>
                           </Link>
                         ))}
@@ -198,24 +322,27 @@ export default function SearchClient() {
                     </div>
                   )}
 
-                  {taskResults.length > 0 && (
+                  {filteredDynamicResults.length > 0 && (
                     <div className="space-y-3">
-                      <h2 className="text-sm font-semibold uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">Tasks</h2>
+                      <h2 className="text-sm font-semibold uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">Local records</h2>
                       <div className="grid gap-4 sm:grid-cols-2">
-                        {taskResults.map((task) => (
+                        {filteredDynamicResults.map((result) => (
                           <Link
-                            key={task.id}
-                            href={task.href}
+                            key={result.id}
+                            href={result.href}
                             className="block rounded-3xl border border-slate-200 p-5 transition hover:border-blue-300 hover:bg-blue-50/50 dark:border-slate-800 dark:hover:border-blue-500 dark:hover:bg-blue-900/70"
                           >
-                            <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
-                              {task.title}
+                            <span className="text-xs font-semibold uppercase tracking-[0.18em] text-blue-600 dark:text-blue-300">
+                              {dynamicCategoryLabels[result.category]}
+                            </span>
+                            <h3 className="mt-1 text-lg font-semibold text-slate-900 dark:text-slate-100">
+                              {highlightMatch(result.title, query)}
                             </h3>
                             <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-400">
-                              {task.description}
+                              {highlightMatch(result.description, query)}
                             </p>
                             <div className="mt-4 flex flex-wrap gap-2 text-xs uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">
-                              {task.tags.slice(0, 5).map((tag) => (
+                              {result.tags.slice(0, 5).map((tag) => (
                                 <span key={tag} className="rounded-full bg-slate-100 px-2.5 py-1 dark:bg-slate-800">
                                   {tag}
                                 </span>
@@ -227,36 +354,7 @@ export default function SearchClient() {
                     </div>
                   )}
 
-                  {workLogResults.length > 0 && (
-                    <div className="space-y-3">
-                      <h2 className="text-sm font-semibold uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">Work logs</h2>
-                      <div className="grid gap-4 sm:grid-cols-2">
-                        {workLogResults.map((log) => (
-                          <Link
-                            key={log.id}
-                            href={log.href}
-                            className="block rounded-3xl border border-slate-200 p-5 transition hover:border-blue-300 hover:bg-blue-50/50 dark:border-slate-800 dark:hover:border-blue-500 dark:hover:bg-blue-900/70"
-                          >
-                            <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
-                              {log.title}
-                            </h3>
-                            <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-400">
-                              {log.description}
-                            </p>
-                            <div className="mt-4 flex flex-wrap gap-2 text-xs uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">
-                              {log.tags.slice(0, 5).map((tag) => (
-                                <span key={tag} className="rounded-full bg-slate-100 px-2.5 py-1 dark:bg-slate-800">
-                                  {tag}
-                                </span>
-                              ))}
-                            </div>
-                          </Link>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {pageResults.length === 0 && taskResults.length === 0 && workLogResults.length === 0 && (
+                  {pageResults.length === 0 && filteredDynamicResults.length === 0 && (
                     <div className="rounded-3xl border border-dashed border-slate-300 bg-slate-50 p-8 text-center text-slate-600 dark:border-slate-700 dark:bg-slate-950/50 dark:text-slate-300">
                       No search results found. Try a broader term like <strong>KB</strong>, <strong>health</strong>, or <strong>tasks</strong>.
                     </div>
@@ -271,9 +369,17 @@ export default function SearchClient() {
               </p>
               <div className="grid gap-3 sm:grid-cols-3">
                 {['KB Learning Machine', 'Health & Outdoors', 'MSP Skills', 'Tasks', 'Work logs'].map((hint) => (
-                  <div key={hint} className="rounded-3xl border border-slate-200 bg-slate-50 p-5 text-sm dark:border-slate-800 dark:bg-slate-950/70">
+                  <button
+                    key={hint}
+                    type="button"
+                    onClick={() => {
+                      setSearchInput(hint);
+                      runSearch(hint);
+                    }}
+                    className="rounded-3xl border border-slate-200 bg-slate-50 p-5 text-left text-sm transition hover:border-blue-300 hover:text-blue-700 dark:border-slate-800 dark:bg-slate-950/70 dark:hover:border-blue-500"
+                  >
                     {hint}
-                  </div>
+                  </button>
                 ))}
               </div>
             </div>
