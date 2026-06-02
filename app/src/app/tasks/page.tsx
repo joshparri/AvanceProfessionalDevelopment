@@ -34,7 +34,13 @@ const categoryLabels: Record<TaskCategory, string> = {
   [TaskCategory.PD]: 'PD',
 };
 
-const getTodayDate = () => new Date().toISOString().slice(0, 10);
+const getInitialSearchTerm = () => {
+  if (typeof window === 'undefined') {
+    return '';
+  }
+
+  return new URLSearchParams(window.location.search).get('q')?.trim() ?? '';
+};
 
 const initialFormState = {
   title: '',
@@ -49,7 +55,7 @@ const initialFormState = {
 export default function TasksPage() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [formData, setFormData] = useState(initialFormState);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState(getInitialSearchTerm);
   const [statusFilter, setStatusFilter] = useState<TaskStatus | 'all'>('all');
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -59,18 +65,6 @@ export default function TasksPage() {
     const allTasks = await db.tasks.orderBy('createdAt').reverse().toArray();
     setTasks(allTasks);
   };
-
-  useEffect(() => {
-    if (typeof window === 'undefined') {
-      return;
-    }
-
-    const params = new URLSearchParams(window.location.search);
-    const query = params.get('q')?.trim() ?? '';
-    if (query) {
-      setSearchTerm(query);
-    }
-  }, []);
 
   useEffect(() => {
     const initialise = async () => {

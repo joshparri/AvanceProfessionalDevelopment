@@ -100,6 +100,19 @@ const toTicketNoteMarkdown = (note: TicketNoteDraft) =>
     .map(({ key, label }) => `${label}: ${note[key].trim() || 'Not captured yet.'}`)
     .join('\n');
 
+const parseStoredKbCard = (content: string): KbFieldCard | null => {
+  try {
+    const parsed = JSON.parse(content) as Partial<KbFieldCard>;
+    if (typeof parsed.id === 'string' && typeof parsed.title === 'string') {
+      return parsed as KbFieldCard;
+    }
+  } catch {
+    // Ignore records that are not stored KB field cards.
+  }
+
+  return null;
+};
+
 export default function KbLearningMachinePage() {
   const [progress, setProgress] = useState<KbProgressByCardId>(() => getKbLearningProgress());
   const [dbCards, setDbCards] = useState<KbFieldCard[] | null>(null);
@@ -116,7 +129,7 @@ export default function KbLearningMachinePage() {
             id: card.id,
             title: card.title,
             content: JSON.stringify(card),
-            category: (KnowledgeCategory.PROCEDURE as any) || 'other',
+            category: KnowledgeCategory.PROCEDURE,
             tags: [],
             relatedTasks: [],
             createdAt: new Date(),
@@ -127,14 +140,8 @@ export default function KbLearningMachinePage() {
         } else {
           const entries = await db.knowledgeEntries.toArray();
           const parsed = entries
-            .map((e) => {
-              try {
-                return JSON.parse(e.content) as KbFieldCard;
-              } catch (err) {
-                return null;
-              }
-            })
-            .filter(Boolean) as KbFieldCard[];
+            .map((entry) => parseStoredKbCard(entry.content))
+            .filter((card): card is KbFieldCard => card !== null);
           if (parsed.length > 0) setDbCards(parsed);
         }
       } catch (err) {
@@ -164,7 +171,7 @@ export default function KbLearningMachinePage() {
       id: newCard.id,
       title: newCard.title,
       content: JSON.stringify(newCard),
-      category: (KnowledgeCategory.OTHER as any) || 'other',
+      category: KnowledgeCategory.OTHER,
       tags: [],
       relatedTasks: [],
       createdAt: new Date(),

@@ -46,17 +46,18 @@ export default function SearchClient() {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    setSearchInput(query);
-  }, [query]);
-
-  useEffect(() => {
-    if (!query) {
-      setTaskResults([]);
-      setWorkLogResults([]);
-      return;
-    }
+    let cancelled = false;
 
     const loadLocalResults = async () => {
+      if (!query) {
+        await Promise.resolve();
+        if (!cancelled) {
+          setTaskResults([]);
+          setWorkLogResults([]);
+        }
+        return;
+      }
+
       setIsLoading(true);
       try {
         await initDatabase();
@@ -85,16 +86,23 @@ export default function SearchClient() {
           .slice(0, 5)
           .map(buildWorkLogResult);
 
-        setTaskResults(taskMatches);
-        setWorkLogResults(workLogMatches);
+        if (!cancelled) {
+          setTaskResults(taskMatches);
+          setWorkLogResults(workLogMatches);
+        }
       } catch (error) {
         console.error('Failed to search local items:', error);
       } finally {
-        setIsLoading(false);
+        if (!cancelled) {
+          setIsLoading(false);
+        }
       }
     };
 
-    loadLocalResults();
+    void loadLocalResults();
+    return () => {
+      cancelled = true;
+    };
   }, [query]);
 
   const pageResults = useMemo(() => {

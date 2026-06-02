@@ -26,6 +26,14 @@ const workCategoryLabels: Record<WorkCategory, string> = {
 
 const getTodayDate = () => format(new Date(), 'yyyy-MM-dd');
 
+const getInitialSearchTerm = () => {
+  if (typeof window === 'undefined') {
+    return '';
+  }
+
+  return new URLSearchParams(window.location.search).get('q')?.trim() ?? '';
+};
+
 const initialFormState = {
   description: '',
   category: WorkCategory.SUPPORT,
@@ -40,7 +48,7 @@ export default function WorkLogsPage() {
   const [workLogs, setWorkLogs] = useState<WorkLog[]>([]);
   const [shifts, setShifts] = useState<Shift[]>([]);
   const [formData, setFormData] = useState(initialFormState);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState(getInitialSearchTerm);
   const [categoryFilter, setCategoryFilter] = useState<WorkCategory | 'all'>('all');
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -55,18 +63,6 @@ export default function WorkLogsPage() {
     setWorkLogs(logs);
     setShifts(allShifts);
   };
-
-  useEffect(() => {
-    if (typeof window === 'undefined') {
-      return;
-    }
-
-    const params = new URLSearchParams(window.location.search);
-    const query = params.get('q')?.trim() ?? '';
-    if (query) {
-      setSearchTerm(query);
-    }
-  }, []);
 
   useEffect(() => {
     const initialise = async () => {

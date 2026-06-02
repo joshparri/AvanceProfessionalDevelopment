@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useLayoutEffect, useRef, useState, useEffect, FormEvent } from 'react';
+import { useLayoutEffect, useRef, useState, FormEvent } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { DarkModeToggle } from '@/components/DarkModeToggle';
@@ -25,12 +25,6 @@ export function Navigation() {
     }
   }, [pathname]);
 
-  useEffect(() => {
-    if (pathname !== '/search') {
-      setSearchQuery('');
-    }
-  }, [pathname]);
-
   const storeScrollPosition = () => {
     if (navRef.current) {
       sessionStorage.setItem(scrollKey, String(navRef.current.scrollLeft));
@@ -42,6 +36,7 @@ export function Navigation() {
     const query = searchQuery.trim();
     if (query) {
       router.push(`/search?q=${encodeURIComponent(query)}`);
+      setSearchQuery('');
     }
   };
 

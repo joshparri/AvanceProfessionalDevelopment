@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Layout } from '@/components/Layout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -16,22 +16,30 @@ import {
 
 const STORAGE_KEY = 'avance_decision_tree_history_v1';
 
-export default function DecisionTreePage() {
-  const [history, setHistory] = useState<string[]>([decisionTreeRootId]);
+const getInitialHistory = () => {
+  if (typeof window === 'undefined') {
+    return [decisionTreeRootId];
+  }
 
-  useEffect(() => {
-    const stored = window.localStorage.getItem(STORAGE_KEY);
-    if (stored) {
-      try {
-        const parsed = JSON.parse(stored) as string[];
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          setHistory(parsed);
-        }
-      } catch {
-        // ignore invalid storage state
-      }
+  const stored = window.localStorage.getItem(STORAGE_KEY);
+  if (!stored) {
+    return [decisionTreeRootId];
+  }
+
+  try {
+    const parsed = JSON.parse(stored) as unknown;
+    if (Array.isArray(parsed) && parsed.every((item) => typeof item === 'string') && parsed.length > 0) {
+      return parsed;
     }
-  }, []);
+  } catch {
+    // ignore invalid storage state
+  }
+
+  return [decisionTreeRootId];
+};
+
+export default function DecisionTreePage() {
+  const [history, setHistory] = useState<string[]>(getInitialHistory);
 
   const currentNode = useMemo<DecisionTreeNode>(() => {
     const id = history[history.length - 1] ?? decisionTreeRootId;
