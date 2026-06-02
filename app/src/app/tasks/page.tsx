@@ -10,7 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { db, initDatabase } from '@/lib/db';
-import { Task, TaskCategory, TaskPriority, TaskStatus } from '@/types';
+import { Client, KnowledgeEntry, Task, TaskCategory, TaskPriority, TaskStatus, WorkLog } from '@/types';
 import { CheckSquare, Copy, Plus, Search, Trash2 } from 'lucide-react';
 
 const priorityLabels: Record<TaskPriority, string> = {
@@ -49,11 +49,17 @@ const initialFormState = {
   priority: TaskPriority.MEDIUM,
   dueDate: '',
   category: TaskCategory.TECHNICAL,
+  clientId: '',
+  workLogId: '',
+  knowledgeEntryId: '',
   tags: '',
 };
 
 export default function TasksPage() {
   const [tasks, setTasks] = useState<Task[]>([]);
+  const [clients, setClients] = useState<Client[]>([]);
+  const [workLogs, setWorkLogs] = useState<WorkLog[]>([]);
+  const [knowledgeEntries, setKnowledgeEntries] = useState<KnowledgeEntry[]>([]);
   const [formData, setFormData] = useState(initialFormState);
   const [searchTerm, setSearchTerm] = useState(getInitialSearchTerm);
   const [statusFilter, setStatusFilter] = useState<TaskStatus | 'all'>('all');
@@ -64,8 +70,16 @@ export default function TasksPage() {
   const [copyMessage, setCopyMessage] = useState('');
 
   const loadTasks = async () => {
-    const allTasks = await db.tasks.orderBy('createdAt').reverse().toArray();
+    const [allTasks, allClients, allWorkLogs, allKnowledgeEntries] = await Promise.all([
+      db.tasks.orderBy('createdAt').reverse().toArray(),
+      db.clients.orderBy('name').toArray(),
+      db.workLogs.orderBy('date').reverse().toArray(),
+      db.knowledgeEntries.orderBy('title').toArray(),
+    ]);
     setTasks(allTasks);
+    setClients(allClients);
+    setWorkLogs(allWorkLogs);
+    setKnowledgeEntries(allKnowledgeEntries);
   };
 
   useEffect(() => {
@@ -117,6 +131,9 @@ export default function TasksPage() {
         priority: formData.priority,
         dueDate: formData.dueDate ? new Date(`${formData.dueDate}T12:00:00`) : undefined,
         category: formData.category,
+        clientId: formData.clientId || undefined,
+        workLogId: formData.workLogId || undefined,
+        knowledgeEntryId: formData.knowledgeEntryId || undefined,
         tags: formData.tags
           .split(',')
           .map((tag) => tag.trim())
@@ -160,6 +177,9 @@ export default function TasksPage() {
       priority: task.priority,
       dueDate: task.dueDate ? format(new Date(task.dueDate), 'yyyy-MM-dd') : '',
       category: task.category,
+      clientId: task.clientId ?? '',
+      workLogId: task.workLogId ?? '',
+      knowledgeEntryId: task.knowledgeEntryId ?? '',
       tags: task.tags.join(', '),
     });
   };
@@ -200,6 +220,10 @@ export default function TasksPage() {
     setCopyMessage('Task breakdown copied');
     window.setTimeout(() => setCopyMessage(''), 1800);
   };
+
+  const clientNameById = useMemo(() => new Map(clients.map((client) => [client.id, client.name])), [clients]);
+  const workLogTitleById = useMemo(() => new Map(workLogs.map((log) => [log.id, log.description])), [workLogs]);
+  const knowledgeTitleById = useMemo(() => new Map(knowledgeEntries.map((entry) => [entry.id, entry.title])), [knowledgeEntries]);
 
   return (
     <Layout>
@@ -309,6 +333,51 @@ export default function TasksPage() {
                     </div>
                   </div>
 
+                  <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+                    <div>
+                      <Label htmlFor="task-client">Client reference</Label>
+                      <select
+                        id="task-client"
+                        value={formData.clientId}
+                        onChange={(event) => setFormData((prev) => ({ ...prev, clientId: event.target.value }))}
+                        className="mt-1 flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                      >
+                        <option value="">No client link</option>
+                        {clients.map((client) => (
+                          <option key={client.id} value={client.id}>{client.name}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div>
+                      <Label htmlFor="task-work-log">Work log</Label>
+                      <select
+                        id="task-work-log"
+                        value={formData.workLogId}
+                        onChange={(event) => setFormData((prev) => ({ ...prev, workLogId: event.target.value }))}
+                        className="mt-1 flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                      >
+                        <option value="">No work log link</option>
+                        {workLogs.map((log) => (
+                          <option key={log.id} value={log.id}>{log.description}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div>
+                      <Label htmlFor="task-knowledge">KB entry</Label>
+                      <select
+                        id="task-knowledge"
+                        value={formData.knowledgeEntryId}
+                        onChange={(event) => setFormData((prev) => ({ ...prev, knowledgeEntryId: event.target.value }))}
+                        className="mt-1 flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                      >
+                        <option value="">No KB link</option>
+                        {knowledgeEntries.map((entry) => (
+                          <option key={entry.id} value={entry.id}>{entry.title}</option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+
                   <div>
                     <Label htmlFor="tags">Tags</Label>
                     <Input
@@ -413,6 +482,11 @@ export default function TasksPage() {
                                 ))}
                               </div>
                             )}
+                            <div className="flex flex-wrap gap-1">
+                              {task.clientId && <Badge variant="outline">Client: {clientNameById.get(task.clientId) ?? 'Linked'}</Badge>}
+                              {task.workLogId && <Badge variant="outline">Log: {workLogTitleById.get(task.workLogId) ?? 'Linked'}</Badge>}
+                              {task.knowledgeEntryId && <Badge variant="outline">KB: {knowledgeTitleById.get(task.knowledgeEntryId) ?? 'Linked'}</Badge>}
+                            </div>
                           </div>
                           <div className="flex flex-wrap gap-2">
                             <Button size="sm" variant="outline" onClick={() => editTask(task)}>

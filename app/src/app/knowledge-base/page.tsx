@@ -10,7 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { db, initDatabase } from '@/lib/db';
-import { KnowledgeCategory, KnowledgeEntry } from '@/types';
+import { KnowledgeCategory, KnowledgeEntry, Playbook, WorkLog } from '@/types';
 import { BookOpen, Filter, Plus, Search, Trash2 } from 'lucide-react';
 
 const categoryLabels: Record<KnowledgeCategory, string> = {
@@ -26,6 +26,8 @@ const initialFormState = {
   title: '',
   content: '',
   category: KnowledgeCategory.PROCEDURE,
+  relatedWorkLogId: '',
+  relatedPlaybookId: '',
   tags: '',
 };
 
@@ -39,6 +41,8 @@ const getInitialSearchTerm = () => {
 
 export default function KnowledgeBasePage() {
   const [entries, setEntries] = useState<KnowledgeEntry[]>([]);
+  const [workLogs, setWorkLogs] = useState<WorkLog[]>([]);
+  const [playbooks, setPlaybooks] = useState<Playbook[]>([]);
   const [formData, setFormData] = useState(initialFormState);
   const [searchTerm, setSearchTerm] = useState(getInitialSearchTerm);
   const [categoryFilter, setCategoryFilter] = useState<KnowledgeCategory | 'all'>('all');
@@ -48,8 +52,14 @@ export default function KnowledgeBasePage() {
   const [error, setError] = useState('');
 
   const loadEntries = async () => {
-    const savedEntries = await db.knowledgeEntries.orderBy('updatedAt').reverse().toArray();
+    const [savedEntries, savedWorkLogs, savedPlaybooks] = await Promise.all([
+      db.knowledgeEntries.orderBy('updatedAt').reverse().toArray(),
+      db.workLogs.orderBy('date').reverse().toArray(),
+      db.playbooks.orderBy('title').toArray(),
+    ]);
     setEntries(savedEntries);
+    setWorkLogs(savedWorkLogs);
+    setPlaybooks(savedPlaybooks);
   };
 
   useEffect(() => {
@@ -114,6 +124,8 @@ export default function KnowledgeBasePage() {
           .map((tag) => tag.trim())
           .filter(Boolean),
         relatedTasks: [],
+        relatedWorkLogs: formData.relatedWorkLogId ? [formData.relatedWorkLogId] : [],
+        relatedPlaybooks: formData.relatedPlaybookId ? [formData.relatedPlaybookId] : [],
         updatedAt: now,
       };
 
@@ -143,6 +155,8 @@ export default function KnowledgeBasePage() {
       title: entry.title,
       content: entry.content,
       category: entry.category,
+      relatedWorkLogId: entry.relatedWorkLogs?.[0] ?? '',
+      relatedPlaybookId: entry.relatedPlaybooks?.[0] ?? '',
       tags: entry.tags.join(', '),
     });
   };
@@ -154,6 +168,9 @@ export default function KnowledgeBasePage() {
     }
     await loadEntries();
   };
+
+  const workLogTitleById = useMemo(() => new Map(workLogs.map((log) => [log.id, log.description])), [workLogs]);
+  const playbookTitleById = useMemo(() => new Map(playbooks.map((playbook) => [playbook.id, playbook.title])), [playbooks]);
 
   return (
     <Layout>
@@ -220,6 +237,36 @@ export default function KnowledgeBasePage() {
                       onChange={(event) => setFormData((current) => ({ ...current, tags: event.target.value }))}
                       placeholder="outlook, m365, escalation"
                     />
+                  </div>
+                  <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                    <div>
+                      <Label htmlFor="kb-work-log">Linked work log</Label>
+                      <select
+                        id="kb-work-log"
+                        value={formData.relatedWorkLogId}
+                        onChange={(event) => setFormData((current) => ({ ...current, relatedWorkLogId: event.target.value }))}
+                        className="mt-1 flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                      >
+                        <option value="">No work log link</option>
+                        {workLogs.map((log) => (
+                          <option key={log.id} value={log.id}>{log.description}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div>
+                      <Label htmlFor="kb-playbook">Linked playbook</Label>
+                      <select
+                        id="kb-playbook"
+                        value={formData.relatedPlaybookId}
+                        onChange={(event) => setFormData((current) => ({ ...current, relatedPlaybookId: event.target.value }))}
+                        className="mt-1 flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                      >
+                        <option value="">No playbook link</option>
+                        {playbooks.map((playbook) => (
+                          <option key={playbook.id} value={playbook.id}>{playbook.title}</option>
+                        ))}
+                      </select>
+                    </div>
                   </div>
                   <div>
                     <Label htmlFor="kb-content">Entry body</Label>
@@ -317,6 +364,14 @@ export default function KnowledgeBasePage() {
                                 ))}
                               </div>
                             )}
+                            <div className="flex flex-wrap gap-1">
+                              {entry.relatedWorkLogs?.map((id) => (
+                                <Badge key={id} variant="outline">Log: {workLogTitleById.get(id) ?? 'Linked'}</Badge>
+                              ))}
+                              {entry.relatedPlaybooks?.map((id) => (
+                                <Badge key={id} variant="outline">Playbook: {playbookTitleById.get(id) ?? 'Linked'}</Badge>
+                              ))}
+                            </div>
                           </div>
                           <div className="flex flex-wrap gap-2">
                             <Button size="sm" variant="outline" onClick={() => editEntry(entry)}>

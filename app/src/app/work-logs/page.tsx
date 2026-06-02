@@ -11,7 +11,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { db, initDatabase } from '@/lib/db';
-import { Shift, WorkCategory, WorkLog } from '@/types';
+import { Client, KnowledgeEntry, Playbook, Shift, Task, WorkCategory, WorkLog } from '@/types';
 import { BookOpen, Clock, Filter, Plus, Search } from 'lucide-react';
 
 const workCategoryLabels: Record<WorkCategory, string> = {
@@ -40,6 +40,10 @@ const initialFormState = {
   duration: '15',
   date: getTodayDate(),
   shiftId: '',
+  clientId: '',
+  taskId: '',
+  knowledgeEntryId: '',
+  playbookId: '',
   tags: '',
   notes: '',
 };
@@ -47,6 +51,10 @@ const initialFormState = {
 export default function WorkLogsPage() {
   const [workLogs, setWorkLogs] = useState<WorkLog[]>([]);
   const [shifts, setShifts] = useState<Shift[]>([]);
+  const [clients, setClients] = useState<Client[]>([]);
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [knowledgeEntries, setKnowledgeEntries] = useState<KnowledgeEntry[]>([]);
+  const [playbooks, setPlaybooks] = useState<Playbook[]>([]);
   const [formData, setFormData] = useState(initialFormState);
   const [searchTerm, setSearchTerm] = useState(getInitialSearchTerm);
   const [categoryFilter, setCategoryFilter] = useState<WorkCategory | 'all'>('all');
@@ -57,13 +65,21 @@ export default function WorkLogsPage() {
   const [copyMessage, setCopyMessage] = useState('');
 
   const loadWorkLogs = async () => {
-    const [logs, allShifts] = await Promise.all([
+    const [logs, allShifts, allClients, allTasks, allKnowledgeEntries, allPlaybooks] = await Promise.all([
       db.workLogs.orderBy('date').reverse().toArray(),
       db.shifts.orderBy('date').reverse().toArray(),
+      db.clients.orderBy('name').toArray(),
+      db.tasks.orderBy('createdAt').reverse().toArray(),
+      db.knowledgeEntries.orderBy('title').toArray(),
+      db.playbooks.orderBy('title').toArray(),
     ]);
 
     setWorkLogs(logs);
     setShifts(allShifts);
+    setClients(allClients);
+    setTasks(allTasks);
+    setKnowledgeEntries(allKnowledgeEntries);
+    setPlaybooks(allPlaybooks);
   };
 
   useEffect(() => {
@@ -123,6 +139,10 @@ export default function WorkLogsPage() {
 
       const workLogPayload = {
         shiftId: formData.shiftId || undefined,
+        clientId: formData.clientId || undefined,
+        taskId: formData.taskId || undefined,
+        knowledgeEntryId: formData.knowledgeEntryId || undefined,
+        playbookId: formData.playbookId || undefined,
         date: new Date(`${formData.date}T12:00:00`),
         description: formData.description.trim(),
         category: formData.category,
@@ -149,6 +169,7 @@ export default function WorkLogsPage() {
         category: prev.category,
         duration: prev.duration,
         shiftId: prev.shiftId,
+        clientId: prev.clientId,
         date: getTodayDate(),
       }));
       await loadWorkLogs();
@@ -168,6 +189,10 @@ export default function WorkLogsPage() {
       duration: String(log.duration),
       date: format(new Date(log.date), 'yyyy-MM-dd'),
       shiftId: log.shiftId ?? '',
+      clientId: log.clientId ?? '',
+      taskId: log.taskId ?? '',
+      knowledgeEntryId: log.knowledgeEntryId ?? '',
+      playbookId: log.playbookId ?? '',
       tags: log.tags.join(', '),
       notes: log.notes ?? '',
     });
@@ -201,6 +226,11 @@ export default function WorkLogsPage() {
     setCopyMessage('Handover copied');
     window.setTimeout(() => setCopyMessage(''), 1800);
   };
+
+  const clientNameById = useMemo(() => new Map(clients.map((client) => [client.id, client.name])), [clients]);
+  const taskTitleById = useMemo(() => new Map(tasks.map((task) => [task.id, task.title])), [tasks]);
+  const knowledgeTitleById = useMemo(() => new Map(knowledgeEntries.map((entry) => [entry.id, entry.title])), [knowledgeEntries]);
+  const playbookTitleById = useMemo(() => new Map(playbooks.map((playbook) => [playbook.id, playbook.title])), [playbooks]);
 
   return (
     <Layout>
@@ -364,6 +394,65 @@ export default function WorkLogsPage() {
                       ))}
                     </select>
                   </div>
+
+                  <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                    <div>
+                      <Label htmlFor="client">Client reference</Label>
+                      <select
+                        id="client"
+                        value={formData.clientId}
+                        onChange={(event) => setFormData(prev => ({ ...prev, clientId: event.target.value }))}
+                        className="mt-1 flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                      >
+                        <option value="">No client link</option>
+                        {clients.map(client => (
+                          <option key={client.id} value={client.id}>{client.name}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div>
+                      <Label htmlFor="linked-task">Linked task</Label>
+                      <select
+                        id="linked-task"
+                        value={formData.taskId}
+                        onChange={(event) => setFormData(prev => ({ ...prev, taskId: event.target.value }))}
+                        className="mt-1 flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                      >
+                        <option value="">No task link</option>
+                        {tasks.map(task => (
+                          <option key={task.id} value={task.id}>{task.title}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div>
+                      <Label htmlFor="linked-knowledge">Linked KB entry</Label>
+                      <select
+                        id="linked-knowledge"
+                        value={formData.knowledgeEntryId}
+                        onChange={(event) => setFormData(prev => ({ ...prev, knowledgeEntryId: event.target.value }))}
+                        className="mt-1 flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                      >
+                        <option value="">No KB link</option>
+                        {knowledgeEntries.map(entry => (
+                          <option key={entry.id} value={entry.id}>{entry.title}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div>
+                      <Label htmlFor="linked-playbook">Linked playbook</Label>
+                      <select
+                        id="linked-playbook"
+                        value={formData.playbookId}
+                        onChange={(event) => setFormData(prev => ({ ...prev, playbookId: event.target.value }))}
+                        className="mt-1 flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                      >
+                        <option value="">No playbook link</option>
+                        {playbooks.map(playbook => (
+                          <option key={playbook.id} value={playbook.id}>{playbook.title}</option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
                   <div className="mt-3 flex flex-wrap items-center gap-2">
                     <Button type="button" size="sm" variant="outline" onClick={handleCopyHandover} disabled={filteredLogs.length === 0}>
                       Copy handover summary
@@ -411,6 +500,12 @@ export default function WorkLogsPage() {
                                 ))}
                               </div>
                             )}
+                            <div className="flex flex-wrap gap-1">
+                              {log.clientId && <Badge variant="outline">Client: {clientNameById.get(log.clientId) ?? 'Linked'}</Badge>}
+                              {log.taskId && <Badge variant="outline">Task: {taskTitleById.get(log.taskId) ?? 'Linked'}</Badge>}
+                              {log.knowledgeEntryId && <Badge variant="outline">KB: {knowledgeTitleById.get(log.knowledgeEntryId) ?? 'Linked'}</Badge>}
+                              {log.playbookId && <Badge variant="outline">Playbook: {playbookTitleById.get(log.playbookId) ?? 'Linked'}</Badge>}
+                            </div>
                           </div>
                           {log.shiftId && (
                             <Button size="sm" variant="outline" asChild>
