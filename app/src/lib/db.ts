@@ -200,6 +200,53 @@ export class AvanceDatabase extends Dexie {
 export let db = null as unknown as AvanceDatabase;
 
 export const DEFAULT_APP_SETTINGS_ID = 'default';
+const LOCAL_STORAGE_EXACT_BACKUP_KEYS = new Set([
+  'avancepd.currentUserId',
+  'avance_kb_learning_progress_v1',
+  'avance_kb_daily_plan',
+  'avance:game-progress',
+  'avance:game-progress-v2',
+  'avance:game-events',
+  'avance:health-outdoors-settings',
+  'avance:msp-skill-readiness',
+  'avance:msp-scenario-status',
+  'avance:msp-learning-progress',
+  'avance:learning-evidence',
+  'avance:pending-actions',
+  'avance:shift-sessions',
+  'avance:search-recent',
+]);
+
+const LOCAL_STORAGE_BACKUP_PREFIXES = ['avance:', 'avance_'];
+
+const backupTableNames = [
+  'shifts',
+  'workLogs',
+  'tasks',
+  'pdAchievements',
+  'pdGoals',
+  'clients',
+  'projects',
+  'appSettings',
+  'knowledgeEntries',
+  'playbooks',
+  'learningItems',
+  'invoices',
+  'accounts',
+  'syncMetadata',
+] as const;
+
+type BackupTableName = typeof backupTableNames[number];
+type BackupTableMap = Record<BackupTableName, unknown[]>;
+
+type AvanceBackupPayload = Partial<BackupTableMap> & {
+  _meta?: {
+    app?: string;
+    schemaVersion?: number;
+    exportedAt?: string;
+  };
+  localStorage?: Record<string, string>;
+};
 
 const defaultAppSettings: AppSettings = {
   id: DEFAULT_APP_SETTINGS_ID,
@@ -330,12 +377,95 @@ export const clearAllData = async () => {
     await db.syncMetadata.clear();
   });
   if (typeof window !== 'undefined') {
-    window.localStorage.removeItem('avancepd.currentUserId');
+    clearBackedUpLocalStorage();
   }
+};
+
+const shouldBackupLocalStorageKey = (key: string) =>
+  LOCAL_STORAGE_EXACT_BACKUP_KEYS.has(key) || LOCAL_STORAGE_BACKUP_PREFIXES.some((prefix) => key.startsWith(prefix));
+
+const collectLocalStorageBackup = () => {
+  const backup: Record<string, string> = {};
+
+  if (typeof window === 'undefined') return backup;
+
+  for (let index = 0; index < window.localStorage.length; index += 1) {
+    const key = window.localStorage.key(index);
+    if (!key || !shouldBackupLocalStorageKey(key)) continue;
+    const value = window.localStorage.getItem(key);
+    if (value !== null) backup[key] = value;
+  }
+
+  return backup;
+};
+
+const clearBackedUpLocalStorage = () => {
+  if (typeof window === 'undefined') return;
+
+  const keysToRemove: string[] = [];
+  for (let index = 0; index < window.localStorage.length; index += 1) {
+    const key = window.localStorage.key(index);
+    if (key && shouldBackupLocalStorageKey(key)) {
+      keysToRemove.push(key);
+    }
+  }
+  keysToRemove.forEach((key) => window.localStorage.removeItem(key));
+};
+
+const restoreLocalStorageBackup = (localStorageBackup?: Record<string, string>) => {
+  if (typeof window === 'undefined' || !localStorageBackup) return;
+
+  clearBackedUpLocalStorage();
+  Object.entries(localStorageBackup).forEach(([key, value]) => {
+    if (shouldBackupLocalStorageKey(key)) {
+      window.localStorage.setItem(key, value);
+    }
+  });
+};
+
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+  typeof value === 'object' && value !== null && !Array.isArray(value);
+
+export const validateBackupPayload = (payload: unknown): AvanceBackupPayload => {
+  if (!isRecord(payload)) {
+    throw new Error('Backup must be a JSON object.');
+  }
+
+  const hasKnownTable = backupTableNames.some((tableName) => tableName in payload);
+  const hasLocalStorage = 'localStorage' in payload;
+  if (!hasKnownTable && !hasLocalStorage) {
+    throw new Error('Backup does not contain Avance table or progress data.');
+  }
+
+  backupTableNames.forEach((tableName) => {
+    const tableValue = payload[tableName];
+    if (tableValue !== undefined && !Array.isArray(tableValue)) {
+      throw new Error(`Backup table "${tableName}" must be an array.`);
+    }
+  });
+
+  if (payload.localStorage !== undefined) {
+    if (!isRecord(payload.localStorage)) {
+      throw new Error('Backup localStorage section must be an object.');
+    }
+
+    Object.entries(payload.localStorage).forEach(([key, value]) => {
+      if (typeof value !== 'string') {
+        throw new Error(`Backup localStorage value "${key}" must be a string.`);
+      }
+    });
+  }
+
+  return payload as AvanceBackupPayload;
 };
 
 export const exportData = async () => {
   const data = {
+    _meta: {
+      app: 'AvanceWorkCompanion',
+      schemaVersion: 2,
+      exportedAt: new Date().toISOString(),
+    },
     shifts: await db.shifts.toArray(),
     workLogs: await db.workLogs.toArray(),
     tasks: await db.tasks.toArray(),
@@ -350,25 +480,45 @@ export const exportData = async () => {
     invoices: await db.invoices.toArray(),
     accounts: await db.accounts.toArray(),
     syncMetadata: await db.syncMetadata.toArray(),
+    localStorage: collectLocalStorageBackup(),
   };
   return data;
 };
 
-export const importData = async (data: Awaited<ReturnType<typeof exportData>>) => {
+export const importData = async (payload: unknown) => {
+  const data = validateBackupPayload(payload);
+
   await db.transaction('rw', [db.shifts, db.workLogs, db.tasks, db.pdAchievements, db.pdGoals, db.clients, db.projects, db.appSettings, db.knowledgeEntries, db.playbooks, db.learningItems, db.invoices, db.accounts, db.syncMetadata], async () => {
-    await db.shifts.bulkAdd(data.shifts);
-    await db.workLogs.bulkAdd(data.workLogs);
-    await db.tasks.bulkAdd(data.tasks);
-    await db.pdAchievements.bulkAdd(data.pdAchievements);
-    await db.pdGoals.bulkAdd(data.pdGoals);
-    await db.clients.bulkAdd(data.clients);
-    await db.projects.bulkAdd(data.projects);
-    await db.appSettings.bulkAdd(data.appSettings);
-    await db.knowledgeEntries.bulkAdd(data.knowledgeEntries);
-    await db.playbooks.bulkAdd(data.playbooks);
-    await db.learningItems.bulkAdd(data.learningItems);
-    await db.invoices.bulkAdd(data.invoices);
-    await db.accounts.bulkAdd(data.accounts);
-    await db.syncMetadata.bulkAdd(data.syncMetadata);
+    await db.shifts.clear();
+    await db.workLogs.clear();
+    await db.tasks.clear();
+    await db.pdAchievements.clear();
+    await db.pdGoals.clear();
+    await db.clients.clear();
+    await db.projects.clear();
+    await db.appSettings.clear();
+    await db.knowledgeEntries.clear();
+    await db.playbooks.clear();
+    await db.learningItems.clear();
+    await db.invoices.clear();
+    await db.accounts.clear();
+    await db.syncMetadata.clear();
+
+    await db.shifts.bulkPut((data.shifts ?? []) as Shift[]);
+    await db.workLogs.bulkPut((data.workLogs ?? []) as WorkLog[]);
+    await db.tasks.bulkPut((data.tasks ?? []) as Task[]);
+    await db.pdAchievements.bulkPut((data.pdAchievements ?? []) as PDAchievement[]);
+    await db.pdGoals.bulkPut((data.pdGoals ?? []) as PDGoal[]);
+    await db.clients.bulkPut((data.clients ?? []) as Client[]);
+    await db.projects.bulkPut((data.projects ?? []) as Project[]);
+    await db.appSettings.bulkPut((data.appSettings ?? []) as AppSettings[]);
+    await db.knowledgeEntries.bulkPut((data.knowledgeEntries ?? []) as KnowledgeEntry[]);
+    await db.playbooks.bulkPut((data.playbooks ?? []) as Playbook[]);
+    await db.learningItems.bulkPut((data.learningItems ?? []) as LearningItem[]);
+    await db.invoices.bulkPut((data.invoices ?? []) as Invoice[]);
+    await db.accounts.bulkPut((data.accounts ?? []) as Account[]);
+    await db.syncMetadata.bulkPut((data.syncMetadata ?? []) as SyncMetadata[]);
   });
+
+  restoreLocalStorageBackup(data.localStorage);
 };

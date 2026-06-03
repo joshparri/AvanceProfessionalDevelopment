@@ -36,6 +36,7 @@ This file is the active master backlog for the app. Keep it current as work is c
 - [x] Add Playbook runner completion state, usage tracking, and field notes.
 - [x] Add KB Learning Machine queue filters, field card editing, and review statuses.
 - [x] Add MSP Scenario Trainer communication prompts, model responses, and communication scenario coverage.
+- [x] Add backup import validation and include Avance localStorage progress in backup/restore.
 
 ## High-priority remaining work
 
@@ -100,8 +101,8 @@ This file is the active master backlog for the app. Keep it current as work is c
 - [ ] Add empty-state suggestions based on content type.
 
 ### 6. Data quality, backup, and sync
-- [ ] Add import validation before restoring backup JSON.
-- [ ] Ensure backup export/import covers localStorage-based learning progress, not just Dexie tables.
+- [x] Add import validation before restoring backup JSON.
+- [x] Ensure backup export/import covers localStorage-based learning progress, not just Dexie tables.
 - [ ] Decide whether cloud sync remains simulated or gets a real Supabase design.
 - [ ] If real sync is pursued, design privacy, conflict resolution, and selective sync first.
 
