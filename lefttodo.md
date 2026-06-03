@@ -5,7 +5,7 @@ This file is the active master backlog for the app. Keep it current as work is c
 ## Current status
 - Core PD pages and learning flows exist.
 - Production build passes.
-- Lint passes with warnings only.
+- Lint passes cleanly.
 - Universal search is live and now includes pages plus local tasks, work logs, knowledge entries, playbooks, clients, and learning items.
 - Work Logs, Tasks, Knowledge Base, Playbooks, and Clients now have local-first operational pages.
 - Settings includes JSON backup and restore.
@@ -29,33 +29,39 @@ This file is the active master backlog for the app. Keep it current as work is c
 - [x] Add Playbooks page with checklist-style steps.
 - [x] Add Clients page for privacy-safe client references.
 - [x] Add Knowledge Base, Playbooks, and Clients to navigation.
+- [x] Link Work Logs, Tasks, Knowledge Base, Clients, and Playbooks.
+- [x] Add local time/invoice tracking with shift/task links and invoice-cycle preview.
+- [x] Add structured follow-up triage with status, due date, next nudge, priority, and editable wording.
+- [x] Add Knowledge Base confidence ratings, verified status, playbook/log links, and privacy warnings.
+- [x] Add Playbook runner completion state, usage tracking, and field notes.
 
 ## High-priority remaining work
 
 ### 1. Workflow depth
-- [ ] Link work logs to tasks, knowledge entries, clients, and playbooks.
-- [ ] Link tasks to work logs, clients, and knowledge entries.
+- [x] Link work logs to tasks, knowledge entries, clients, and playbooks.
+- [x] Link tasks to work logs, clients, and knowledge entries.
 - [ ] Add shift detail improvements:
   - [ ] Time logging per shift.
   - [ ] Shift prep checklist refinements.
   - [ ] Linked shift work logs and tasks.
-- [ ] Add time/invoice tracking:
-  - [ ] Shift/task time entry.
-  - [ ] Invoice-cycle summary.
-  - [ ] Invoice preview/export.
-- [ ] Add structured follow-up triage:
-  - [ ] Status.
-  - [ ] Due date.
-  - [ ] Next nudge.
-  - [ ] Priority.
-  - [ ] Editable wording templates.
+- [x] Add time/invoice tracking:
+  - [x] Shift/task time entry.
+  - [x] Invoice-cycle summary.
+  - [x] Invoice preview.
+  - [ ] Invoice export file generation.
+- [x] Add structured follow-up triage:
+  - [x] Status.
+  - [x] Due date.
+  - [x] Next nudge.
+  - [x] Priority.
+  - [x] Editable wording templates.
 
 ### 2. Knowledge and playbook maturity
-- [ ] Add confidence rating and verified status to Knowledge Base entries.
-- [ ] Link Knowledge Base entries to playbooks and logs.
-- [ ] Track Playbook usage and field notes.
-- [ ] Add Playbook runner completion state.
-- [ ] Add privacy linting or warnings for entries that look sensitive.
+- [x] Add confidence rating and verified status to Knowledge Base entries.
+- [x] Link Knowledge Base entries to playbooks and logs.
+- [x] Track Playbook usage and field notes.
+- [x] Add Playbook runner completion state.
+- [x] Add privacy linting or warnings for entries that look sensitive.
 - [ ] Add internal notes/backlog area for safe non-sensitive bullets.
 
 ### 3. MSP professional development
@@ -88,7 +94,7 @@ This file is the active master backlog for the app. Keep it current as work is c
 ### 5. Search and discovery
 - [ ] Add richer search result ranking for live records.
 - [ ] Add direct record anchors or detail views for search results.
-- [ ] Add search coverage for invoices/time entries after those modules exist.
+- [x] Add search coverage for invoices/time entries after those modules exist.
 - [ ] Add empty-state suggestions based on content type.
 
 ### 6. Data quality, backup, and sync
@@ -98,7 +104,7 @@ This file is the active master backlog for the app. Keep it current as work is c
 - [ ] If real sync is pursued, design privacy, conflict resolution, and selective sync first.
 
 ### 7. QA and polish
-- [ ] Clear existing lint warnings.
+- [x] Clear existing lint warnings.
 - [ ] Add unit tests for search helpers and recommendation rules.
 - [ ] Add integration tests for Work Logs, Tasks, Knowledge Base, Playbooks, and Clients.
 - [ ] Run mobile layout QA.
@@ -108,16 +114,16 @@ This file is the active master backlog for the app. Keep it current as work is c
 - [ ] Add user-facing empty/loading states where still thin.
 
 ## Suggested next implementation sequence
-1. Link Work Logs, Tasks, Knowledge Base, Clients, and Playbooks.
-2. Add time/invoice tracking.
-3. Improve KB Learning Machine editing and review states.
-4. Add communication practice and more MSP scenarios.
-5. Add backup validation and localStorage progress export.
-6. Clear lint warnings and add tests.
+1. Improve KB Learning Machine editing and review states.
+2. Add communication practice and more MSP scenarios.
+3. Add shift detail improvements.
+4. Add backup validation and localStorage progress export.
+5. Add search ranking/detail anchors and empty-state suggestions.
+6. Add integration tests and mobile/dark/keyboard QA coverage.
 
 ## Verification baseline
 Latest verified commands:
-- `npm run lint` in `app/` passes with warnings.
+- `npm run lint` in `app/` passes cleanly.
 - `npm run test` in `app/` passes.
 - `npm run build` in `app/` passes.
 
@@ -128,6 +134,7 @@ Latest locally checked routes:
 - `/playbooks`
 - `/clients`
 - `/search?q=backup`
+- `/time-invoices`
 
 ## Notes
 - Keep all new features local-first and privacy-safe.

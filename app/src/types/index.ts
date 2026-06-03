@@ -277,6 +277,10 @@ export interface Playbook {
   steps: PlaybookStep[];
   tags: string[];
   clientId?: string;
+  fieldNotes?: string;
+  usageCount?: number;
+  lastRunAt?: Date;
+  lastCompletedAt?: Date;
   createdAt: Date;
   updatedAt: Date;
 }

@@ -10,7 +10,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { db, initDatabase } from '@/lib/db';
 import { Playbook, PlaybookCategory } from '@/types';
-import { ClipboardList, Plus, Search, Trash2 } from 'lucide-react';
+import { CheckCircle2, ClipboardList, Plus, RotateCcw, Search, Trash2 } from 'lucide-react';
 
 const categoryLabels: Record<PlaybookCategory, string> = {
   [PlaybookCategory.SETUP]: 'Setup',
@@ -32,6 +32,14 @@ const initialFormState = {
 const getInitialSearchTerm = () => {
   if (typeof window === 'undefined') return '';
   return new URLSearchParams(window.location.search).get('q')?.trim() ?? '';
+};
+
+const formatRunDate = (date?: Date) => {
+  if (!date) return 'Not run yet';
+  return new Intl.DateTimeFormat('en-AU', {
+    dateStyle: 'medium',
+    timeStyle: 'short',
+  }).format(new Date(date));
 };
 
 export default function PlaybooksPage() {
@@ -89,6 +97,10 @@ export default function PlaybooksPage() {
     }
 
     const now = new Date();
+    const existingPlaybook = editingPlaybookId ? await db.playbooks.get(editingPlaybookId) : undefined;
+    const existingCompletionByTitle = new Map(
+      existingPlaybook?.steps.map((step) => [step.title.toLowerCase(), step.completed]) ?? []
+    );
     const steps = formData.steps
       .split('\n')
       .map((step) => step.trim())
@@ -98,7 +110,7 @@ export default function PlaybooksPage() {
         title: step,
         description: step,
         order: index + 1,
-        completed: false,
+        completed: existingCompletionByTitle.get(step.toLowerCase()) ?? false,
       }));
 
     const payload = {
@@ -141,6 +153,55 @@ export default function PlaybooksPage() {
   const deletePlaybook = async (playbookId: string) => {
     await db.playbooks.delete(playbookId);
     if (editingPlaybookId === playbookId) resetForm();
+    await loadPlaybooks();
+  };
+
+  const updatePlaybookSteps = async (playbook: Playbook, completedStepIds: Set<string>) => {
+    const updatedSteps = playbook.steps.map((step) => ({
+      ...step,
+      completed: completedStepIds.has(step.id),
+    }));
+
+    await db.playbooks.update(playbook.id, {
+      steps: updatedSteps,
+      lastRunAt: new Date(),
+    });
+    await loadPlaybooks();
+  };
+
+  const toggleStep = async (playbook: Playbook, stepId: string) => {
+    const completedStepIds = new Set(playbook.steps.filter((step) => step.completed).map((step) => step.id));
+    if (completedStepIds.has(stepId)) {
+      completedStepIds.delete(stepId);
+    } else {
+      completedStepIds.add(stepId);
+    }
+
+    await updatePlaybookSteps(playbook, completedStepIds);
+  };
+
+  const completeRun = async (playbook: Playbook) => {
+    const now = new Date();
+    await db.playbooks.update(playbook.id, {
+      steps: playbook.steps.map((step) => ({ ...step, completed: true })),
+      usageCount: (playbook.usageCount ?? 0) + 1,
+      lastRunAt: now,
+      lastCompletedAt: now,
+    });
+    await loadPlaybooks();
+  };
+
+  const resetRun = async (playbook: Playbook) => {
+    await db.playbooks.update(playbook.id, {
+      steps: playbook.steps.map((step) => ({ ...step, completed: false })),
+      lastRunAt: new Date(),
+    });
+    await loadPlaybooks();
+  };
+
+  const saveFieldNotes = async (playbook: Playbook, fieldNotes: string) => {
+    if ((playbook.fieldNotes ?? '') === fieldNotes) return;
+    await db.playbooks.update(playbook.id, { fieldNotes });
     await loadPlaybooks();
   };
 
@@ -229,16 +290,37 @@ export default function PlaybooksPage() {
                   {filteredPlaybooks.map((playbook) => (
                     <Card key={playbook.id}>
                       <CardContent className="space-y-4 p-4">
+                        {(() => {
+                          const completedSteps = playbook.steps.filter((step) => step.completed).length;
+                          const progress = playbook.steps.length === 0 ? 0 : Math.round((completedSteps / playbook.steps.length) * 100);
+
+                          return (
+                            <>
                         <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                           <div className="space-y-2">
                             <div className="flex flex-wrap items-center gap-2">
                               <Badge variant="outline">{categoryLabels[playbook.category]}</Badge>
                               <Badge variant="secondary">{playbook.steps.length} steps</Badge>
+                              <Badge className={progress === 100 ? 'bg-green-100 text-green-800' : undefined} variant={progress === 100 ? 'default' : 'outline'}>
+                                {progress}% complete
+                              </Badge>
+                              <Badge variant="outline">Used {playbook.usageCount ?? 0} times</Badge>
                             </div>
                             <h2 className="text-lg font-semibold text-slate-900 dark:text-white">{playbook.title}</h2>
                             <p className="text-sm text-slate-600 dark:text-slate-400">{playbook.description}</p>
+                            <p className="text-xs text-muted-foreground">
+                              Last run: {formatRunDate(playbook.lastRunAt)}{playbook.lastCompletedAt ? ` | Last completed: ${formatRunDate(playbook.lastCompletedAt)}` : ''}
+                            </p>
                           </div>
                           <div className="flex flex-wrap gap-2">
+                            <Button size="sm" variant="outline" onClick={() => completeRun(playbook)}>
+                              <CheckCircle2 className="mr-2 h-4 w-4" />
+                              Complete run
+                            </Button>
+                            <Button size="sm" variant="outline" onClick={() => resetRun(playbook)}>
+                              <RotateCcw className="mr-2 h-4 w-4" />
+                              Reset
+                            </Button>
                             <Button size="sm" variant="outline" onClick={() => editPlaybook(playbook)}>Edit</Button>
                             <Button size="sm" variant="destructive" onClick={() => deletePlaybook(playbook.id)}>
                               <Trash2 className="mr-2 h-4 w-4" />
@@ -246,9 +328,34 @@ export default function PlaybooksPage() {
                             </Button>
                           </div>
                         </div>
-                        <ol className="list-decimal space-y-1 pl-5 text-sm text-slate-600 dark:text-slate-400">
-                          {playbook.steps.map((step) => <li key={step.id}>{step.title}</li>)}
-                        </ol>
+                        <div className="space-y-2">
+                          {playbook.steps.map((step) => (
+                            <label key={step.id} className="flex items-start gap-3 rounded-md border p-3 text-sm">
+                              <input
+                                type="checkbox"
+                                checked={step.completed}
+                                onChange={() => toggleStep(playbook, step.id)}
+                                className="mt-1 h-4 w-4"
+                              />
+                              <span className={step.completed ? 'text-muted-foreground line-through' : 'text-slate-700 dark:text-slate-300'}>
+                                {step.title}
+                              </span>
+                            </label>
+                          ))}
+                        </div>
+                        <div>
+                          <Label htmlFor={`field-notes-${playbook.id}`}>Field notes</Label>
+                          <Textarea
+                            id={`field-notes-${playbook.id}`}
+                            defaultValue={playbook.fieldNotes ?? ''}
+                            onBlur={(event) => saveFieldNotes(playbook, event.target.value)}
+                            rows={3}
+                            placeholder="Capture safe, non-sensitive lessons from this run."
+                          />
+                        </div>
+                            </>
+                          );
+                        })()}
                       </CardContent>
                     </Card>
                   ))}
