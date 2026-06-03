@@ -26,10 +26,19 @@ const initialFormState = {
   title: '',
   content: '',
   category: KnowledgeCategory.PROCEDURE,
+  confidenceRating: '3',
+  verified: false,
   relatedWorkLogId: '',
   relatedPlaybookId: '',
   tags: '',
 };
+
+const privacyPatterns = [
+  { label: 'email address', regex: /[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/ },
+  { label: 'IP address', regex: /\b(?:25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)){3}\b/ },
+  { label: 'password/secret wording', regex: /\b(password|passwd|secret|token|api key|credential)\b/i },
+  { label: 'URL', regex: /https?:\/\/[\w.-]+(?:\/[\w\-./?%&=]*)?/i },
+];
 
 const getInitialSearchTerm = () => {
   if (typeof window === 'undefined') {
@@ -92,6 +101,13 @@ export default function KnowledgeBasePage() {
     });
   }, [entries, searchTerm, categoryFilter]);
 
+  const privacyWarnings = useMemo(() => {
+    const combinedText = `${formData.title}\n${formData.content}\n${formData.tags}`;
+    return privacyPatterns
+      .filter((pattern) => pattern.regex.test(combinedText))
+      .map((pattern) => pattern.label);
+  }, [formData.content, formData.tags, formData.title]);
+
   const resetForm = () => {
     setEditingEntryId(null);
     setFormData(initialFormState);
@@ -119,6 +135,8 @@ export default function KnowledgeBasePage() {
         title: formData.title.trim(),
         content: formData.content.trim(),
         category: formData.category,
+        confidenceRating: Number(formData.confidenceRating),
+        verified: formData.verified,
         tags: formData.tags
           .split(',')
           .map((tag) => tag.trim())
@@ -155,6 +173,8 @@ export default function KnowledgeBasePage() {
       title: entry.title,
       content: entry.content,
       category: entry.category,
+      confidenceRating: String(entry.confidenceRating ?? 3),
+      verified: entry.verified ?? false,
       relatedWorkLogId: entry.relatedWorkLogs?.[0] ?? '',
       relatedPlaybookId: entry.relatedPlaybooks?.[0] ?? '',
       tags: entry.tags.join(', '),
@@ -229,6 +249,30 @@ export default function KnowledgeBasePage() {
                       ))}
                     </select>
                   </div>
+                  <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                    <div>
+                      <Label htmlFor="kb-confidence">Confidence</Label>
+                      <select
+                        id="kb-confidence"
+                        value={formData.confidenceRating}
+                        onChange={(event) => setFormData((current) => ({ ...current, confidenceRating: event.target.value }))}
+                        className="mt-1 flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                      >
+                        {[1, 2, 3, 4, 5].map((value) => (
+                          <option key={value} value={value}>{value}/5</option>
+                        ))}
+                      </select>
+                    </div>
+                    <label className="flex items-center gap-3 rounded-md border border-input px-3 py-2 text-sm">
+                      <input
+                        type="checkbox"
+                        checked={formData.verified}
+                        onChange={(event) => setFormData((current) => ({ ...current, verified: event.target.checked }))}
+                        className="h-4 w-4"
+                      />
+                      Verified / checked recently
+                    </label>
+                  </div>
                   <div>
                     <Label htmlFor="kb-tags">Tags</Label>
                     <Input
@@ -278,6 +322,11 @@ export default function KnowledgeBasePage() {
                       placeholder="What to check first, safe steps, common mistakes, escalation point, and follow-up notes."
                     />
                   </div>
+                  {privacyWarnings.length > 0 && (
+                    <div className="rounded-md border border-amber-300 bg-amber-50 p-3 text-sm text-amber-900 dark:border-amber-900 dark:bg-amber-950/40 dark:text-amber-200">
+                      Privacy warning: this entry appears to include {privacyWarnings.join(', ')}. Replace sensitive details with placeholders before saving or sharing.
+                    </div>
+                  )}
                   {error && <p className="text-sm text-red-600">{error}</p>}
                   <Button type="submit" disabled={isSubmitting} className="w-full">
                     {isSubmitting ? 'Saving...' : editingEntryId ? 'Update Entry' : 'Save Entry'}
@@ -349,6 +398,8 @@ export default function KnowledgeBasePage() {
                           <div className="space-y-2">
                             <div className="flex flex-wrap items-center gap-2">
                               <Badge variant="outline">{categoryLabels[entry.category]}</Badge>
+                              <Badge variant="secondary">Confidence {entry.confidenceRating ?? 3}/5</Badge>
+                              {entry.verified ? <Badge className="bg-green-100 text-green-800">Verified</Badge> : <Badge variant="outline">Unverified</Badge>}
                               <span className="text-sm text-muted-foreground">
                                 Updated {format(new Date(entry.updatedAt), 'MMM d')}
                               </span>

@@ -257,6 +257,8 @@ export interface KnowledgeEntry {
   title: string;
   content: string;
   category: KnowledgeCategory;
+  confidenceRating?: number;
+  verified?: boolean;
   tags: string[];
   clientId?: string;
   projectId?: string;
