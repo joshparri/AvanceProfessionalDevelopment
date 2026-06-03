@@ -392,7 +392,7 @@ export default function KnowledgeBasePage() {
               ) : (
                 <div className="space-y-3">
                   {filteredEntries.map((entry) => (
-                    <Card key={entry.id}>
+                    <Card key={entry.id} id={`knowledge-${entry.id}`}>
                       <CardContent className="space-y-4 p-4">
                         <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                           <div className="space-y-2">

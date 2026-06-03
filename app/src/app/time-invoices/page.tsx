@@ -328,7 +328,7 @@ export default function TimeInvoicesPage() {
               ) : (
                 <div className="space-y-3">
                   {invoices.map((invoice) => (
-                    <Card key={invoice.id}>
+                    <Card key={invoice.id} id={`invoice-${invoice.id}`}>
                       <CardContent className="flex flex-col gap-3 p-4 sm:flex-row sm:items-start sm:justify-between">
                         <div className="space-y-2">
                           <div className="flex flex-wrap items-center gap-2">

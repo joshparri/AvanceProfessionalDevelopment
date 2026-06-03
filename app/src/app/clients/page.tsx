@@ -174,7 +174,7 @@ export default function ClientsPage() {
               ) : (
                 <div className="space-y-3">
                   {filteredClients.map((client) => (
-                    <Card key={client.id}>
+                    <Card key={client.id} id={`client-${client.id}`}>
                       <CardContent className="flex flex-col gap-3 p-4 sm:flex-row sm:items-start sm:justify-between">
                         <div>
                           <div className="flex flex-wrap items-center gap-2">

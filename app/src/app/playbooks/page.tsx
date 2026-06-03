@@ -288,7 +288,7 @@ export default function PlaybooksPage() {
               ) : (
                 <div className="space-y-3">
                   {filteredPlaybooks.map((playbook) => (
-                    <Card key={playbook.id}>
+                    <Card key={playbook.id} id={`playbook-${playbook.id}`}>
                       <CardContent className="space-y-4 p-4">
                         {(() => {
                           const completedSteps = playbook.steps.filter((step) => step.completed).length;

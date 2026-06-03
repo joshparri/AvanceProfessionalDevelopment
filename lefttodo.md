@@ -37,6 +37,7 @@ This file is the active master backlog for the app. Keep it current as work is c
 - [x] Add KB Learning Machine queue filters, field card editing, and review statuses.
 - [x] Add MSP Scenario Trainer communication prompts, model responses, and communication scenario coverage.
 - [x] Add backup import validation and include Avance localStorage progress in backup/restore.
+- [x] Add richer search ranking, record anchors, and type-aware empty suggestions.
 
 ## High-priority remaining work
 
@@ -95,10 +96,10 @@ This file is the active master backlog for the app. Keep it current as work is c
 - [ ] Add more local KB hint seed data without importing private KB content.
 
 ### 5. Search and discovery
-- [ ] Add richer search result ranking for live records.
-- [ ] Add direct record anchors or detail views for search results.
+- [x] Add richer search result ranking for live records.
+- [x] Add direct record anchors or detail views for search results.
 - [x] Add search coverage for invoices/time entries after those modules exist.
-- [ ] Add empty-state suggestions based on content type.
+- [x] Add empty-state suggestions based on content type.
 
 ### 6. Data quality, backup, and sync
 - [x] Add import validation before restoring backup JSON.

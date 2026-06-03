@@ -18,6 +18,8 @@ type DynamicSearchItem = {
   description: string;
   category: DynamicSearchCategory;
   tags: string[];
+  score?: number;
+  matchReason?: string;
 };
 
 const RECENT_SEARCHES_KEY = 'avance_recent_searches_v1';
@@ -30,6 +32,17 @@ const dynamicCategoryLabels: Record<DynamicSearchCategory, string> = {
   client: 'Clients',
   learning: 'Learning',
   invoice: 'Invoices',
+};
+
+const emptySuggestions: Record<DynamicSearchCategory | 'all', string[]> = {
+  all: ['backup', 'outlook', 'invoice', 'follow up', 'communication'],
+  task: ['urgent', 'overdue', 'follow up', 'pd'],
+  worklog: ['support', 'handover', 'printer', 'outlook'],
+  knowledge: ['verified', 'troubleshooting', 'procedure', 'backup'],
+  playbook: ['security', 'setup', 'maintenance', 'troubleshooting'],
+  client: ['accounting', 'dental', 'school', 'motel'],
+  learning: ['microsoft 365', 'scenario', 'security', 'networking'],
+  invoice: ['draft', 'paid', 'hours', 'cycle'],
 };
 
 const getInitialRecentSearches = () => {
@@ -51,7 +64,7 @@ const getInitialRecentSearches = () => {
 
 const buildTaskResult = (task: Task): DynamicSearchItem => ({
   id: `task-${task.id}`,
-  href: `/tasks?q=${encodeURIComponent(task.title)}`,
+  href: `/tasks?q=${encodeURIComponent(task.title)}#task-${task.id}`,
   title: task.title,
   description: task.description || 'Task with follow-up action, priority, and due date.',
   category: 'task',
@@ -60,7 +73,7 @@ const buildTaskResult = (task: Task): DynamicSearchItem => ({
 
 const buildWorkLogResult = (log: WorkLog): DynamicSearchItem => ({
   id: `worklog-${log.id}`,
-  href: `/work-logs?q=${encodeURIComponent(log.description)}`,
+  href: `/work-logs?q=${encodeURIComponent(log.description)}#worklog-${log.id}`,
   title: log.description,
   description: log.notes || `Work log from ${new Date(log.date).toLocaleDateString()}`,
   category: 'worklog',
@@ -69,7 +82,7 @@ const buildWorkLogResult = (log: WorkLog): DynamicSearchItem => ({
 
 const buildKnowledgeResult = (entry: KnowledgeEntry): DynamicSearchItem => ({
   id: `knowledge-${entry.id}`,
-  href: `/knowledge-base?q=${encodeURIComponent(entry.title)}`,
+  href: `/knowledge-base?q=${encodeURIComponent(entry.title)}#knowledge-${entry.id}`,
   title: entry.title,
   description: entry.content.slice(0, 180) || 'Knowledge base entry.',
   category: 'knowledge',
@@ -78,7 +91,7 @@ const buildKnowledgeResult = (entry: KnowledgeEntry): DynamicSearchItem => ({
 
 const buildPlaybookResult = (playbook: Playbook): DynamicSearchItem => ({
   id: `playbook-${playbook.id}`,
-  href: `/playbooks?q=${encodeURIComponent(playbook.title)}`,
+  href: `/playbooks?q=${encodeURIComponent(playbook.title)}#playbook-${playbook.id}`,
   title: playbook.title,
   description: playbook.description || 'Troubleshooting playbook.',
   category: 'playbook',
@@ -87,7 +100,7 @@ const buildPlaybookResult = (playbook: Playbook): DynamicSearchItem => ({
 
 const buildClientResult = (client: Client): DynamicSearchItem => ({
   id: `client-${client.id}`,
-  href: `/clients?q=${encodeURIComponent(client.name)}`,
+  href: `/clients?q=${encodeURIComponent(client.name)}#client-${client.id}`,
   title: client.name,
   description: client.notes || 'Client reference note.',
   category: 'client',
@@ -105,17 +118,50 @@ const buildLearningResult = (item: LearningItem): DynamicSearchItem => ({
 
 const buildInvoiceResult = (invoice: Invoice): DynamicSearchItem => ({
   id: `invoice-${invoice.id}`,
-  href: `/time-invoices?q=${encodeURIComponent(invoice.notes || invoice.status)}`,
+  href: `/time-invoices?q=${encodeURIComponent(invoice.notes || invoice.status)}#invoice-${invoice.id}`,
   title: `Invoice ${invoice.hours}h - $${invoice.total}`,
   description: invoice.notes || `Invoice period ${new Date(invoice.period.start).toLocaleDateString()} to ${new Date(invoice.period.end).toLocaleDateString()}.`,
   category: 'invoice',
   tags: [invoice.status, String(invoice.hours), String(invoice.total)],
 });
 
-const dynamicItemMatches = (item: DynamicSearchItem, lowerQuery: string) =>
-  item.title.toLowerCase().includes(lowerQuery) ||
-  item.description.toLowerCase().includes(lowerQuery) ||
-  item.tags.some((tag) => tag.toLowerCase().includes(lowerQuery));
+const rankDynamicItem = (item: DynamicSearchItem, lowerQuery: string): DynamicSearchItem | null => {
+  const title = item.title.toLowerCase();
+  const description = item.description.toLowerCase();
+  const matchingTags = item.tags.filter((tag) => tag.toLowerCase().includes(lowerQuery));
+
+  let score = 0;
+  const reasons: string[] = [];
+
+  if (title === lowerQuery) {
+    score += 120;
+    reasons.push('exact title');
+  } else if (title.startsWith(lowerQuery)) {
+    score += 90;
+    reasons.push('title starts with query');
+  } else if (title.includes(lowerQuery)) {
+    score += 70;
+    reasons.push('title match');
+  }
+
+  if (matchingTags.length > 0) {
+    score += 45 + matchingTags.length * 5;
+    reasons.push(`tag: ${matchingTags.slice(0, 2).join(', ')}`);
+  }
+
+  if (description.includes(lowerQuery)) {
+    score += 25;
+    reasons.push('description match');
+  }
+
+  if (score === 0) return null;
+
+  return {
+    ...item,
+    score,
+    matchReason: reasons.join(' | '),
+  };
+};
 
 const highlightMatch = (text: string, query: string): ReactNode => {
   const trimmed = query.trim();
@@ -180,7 +226,9 @@ export default function SearchClient() {
           ...learningItems.map(buildLearningResult),
           ...invoices.map(buildInvoiceResult),
         ]
-          .filter((item) => dynamicItemMatches(item, lowerQuery))
+          .map((item) => rankDynamicItem(item, lowerQuery))
+          .filter((item): item is DynamicSearchItem => item !== null)
+          .sort((a, b) => (b.score ?? 0) - (a.score ?? 0) || a.title.localeCompare(b.title))
           .slice(0, 30);
 
         if (!cancelled) {
@@ -212,6 +260,7 @@ export default function SearchClient() {
   );
 
   const totalResultCount = pageResults.length + filteredDynamicResults.length;
+  const suggestionTerms = emptySuggestions[typeFilter];
 
   const runSearch = (term: string) => {
     const trimmed = term.trim();
@@ -353,6 +402,11 @@ export default function SearchClient() {
                             <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-400">
                               {highlightMatch(result.description, query)}
                             </p>
+                            {result.matchReason && (
+                              <p className="mt-3 text-xs text-slate-500 dark:text-slate-400">
+                                Best match: {result.matchReason}
+                              </p>
+                            )}
                             <div className="mt-4 flex flex-wrap gap-2 text-xs uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">
                               {result.tags.slice(0, 5).map((tag) => (
                                 <span key={tag} className="rounded-full bg-slate-100 px-2.5 py-1 dark:bg-slate-800">
@@ -368,7 +422,22 @@ export default function SearchClient() {
 
                   {pageResults.length === 0 && filteredDynamicResults.length === 0 && (
                     <div className="rounded-3xl border border-dashed border-slate-300 bg-slate-50 p-8 text-center text-slate-600 dark:border-slate-700 dark:bg-slate-950/50 dark:text-slate-300">
-                      No search results found. Try a broader term like <strong>KB</strong>, <strong>health</strong>, or <strong>tasks</strong>.
+                      <p>No search results found for this content type.</p>
+                      <div className="mt-4 flex flex-wrap justify-center gap-2">
+                        {suggestionTerms.map((suggestion) => (
+                          <button
+                            key={suggestion}
+                            type="button"
+                            onClick={() => {
+                              setSearchInput(suggestion);
+                              runSearch(suggestion);
+                            }}
+                            className="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs text-slate-600 hover:border-blue-300 hover:text-blue-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300"
+                          >
+                            Try {suggestion}
+                          </button>
+                        ))}
+                      </div>
                     </div>
                   )}
                 </div>

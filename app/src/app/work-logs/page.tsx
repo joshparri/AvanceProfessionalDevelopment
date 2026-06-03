@@ -479,7 +479,7 @@ export default function WorkLogsPage() {
               ) : (
                 <div className="space-y-3">
                   {filteredLogs.map(log => (
-                    <Card key={log.id}>
+                    <Card key={log.id} id={`worklog-${log.id}`}>
                       <CardContent className="p-4">
                         <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
                           <div className="space-y-2">
