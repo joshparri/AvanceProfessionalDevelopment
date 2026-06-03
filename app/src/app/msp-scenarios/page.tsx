@@ -16,7 +16,7 @@ import {
   MspScenarioStatusById,
   setStoredScenarioStatus,
 } from '@/lib/mspProgress';
-import { AlertTriangle, CheckCircle2, ClipboardList, ShieldAlert } from 'lucide-react';
+import { AlertTriangle, CheckCircle2, ClipboardList, MessageSquareText, ShieldAlert } from 'lucide-react';
 import { HeroPanel, PageShell } from '@/components/academy';
 import {
   LearningIllustration,
@@ -30,6 +30,17 @@ const difficultyClasses: Record<MspScenarioDifficulty, string> = {
     'border-amber-200 bg-amber-50 text-amber-800 dark:border-amber-800 dark:bg-amber-950 dark:text-amber-200',
   hard: 'border-red-200 bg-red-50 text-red-700 dark:border-red-800 dark:bg-red-950 dark:text-red-200',
 };
+
+const getCommunicationPrompts = (scenario: typeof mspScenarios[number]) =>
+  scenario.communicationPrompts ?? [
+    `Write your first response to the user for "${scenario.title}" in plain English.`,
+    'Explain what you will check first and why it is safe.',
+    'Set a next-step expectation without promising an unconfirmed fix time.',
+  ];
+
+const getModelClientResponse = (scenario: typeof mspScenarios[number]) =>
+  scenario.modelClientResponse ??
+  `Thanks for the detail. I will start by confirming the scope and checking the safest first indicators before making any changes. I will document what I find, avoid risky shortcuts, and let you know the next step once I can separate the likely cause from anything that needs escalation.`;
 
 function TrainingSection({
   title,
@@ -230,6 +241,34 @@ export default function MspScenariosPage() {
                   icon={<AlertTriangle className="h-5 w-5" />}
                 />
               </div>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-lg">
+                    <MessageSquareText className="h-5 w-5" />
+                    Client communication practice
+                  </CardTitle>
+                  <p className="text-xs text-muted-foreground mt-2">
+                    Practise the wording you would send before comparing it with the model response.
+                  </p>
+                </CardHeader>
+                <CardContent className="grid gap-4 lg:grid-cols-[0.9fr_1.1fr]">
+                  <div>
+                    <h3 className="text-sm font-semibold text-gray-900 dark:text-white">Practice prompts</h3>
+                    <ul className="mt-2 space-y-2 text-sm text-gray-700 dark:text-gray-300">
+                      {getCommunicationPrompts(selectedScenario).map((prompt) => (
+                        <li key={prompt}>- {prompt}</li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div className="academy-inset-panel">
+                    <h3 className="text-sm font-semibold text-gray-900 dark:text-white">Model client response</h3>
+                    <p className="mt-2 text-sm leading-6 text-gray-700 dark:text-gray-300">
+                      {getModelClientResponse(selectedScenario)}
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
 
               <Card>
                 <CardHeader>

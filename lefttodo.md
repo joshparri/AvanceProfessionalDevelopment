@@ -35,6 +35,7 @@ This file is the active master backlog for the app. Keep it current as work is c
 - [x] Add Knowledge Base confidence ratings, verified status, playbook/log links, and privacy warnings.
 - [x] Add Playbook runner completion state, usage tracking, and field notes.
 - [x] Add KB Learning Machine queue filters, field card editing, and review statuses.
+- [x] Add MSP Scenario Trainer communication prompts, model responses, and communication scenario coverage.
 
 ## High-priority remaining work
 
@@ -66,14 +67,14 @@ This file is the active master backlog for the app. Keep it current as work is c
 - [ ] Add internal notes/backlog area for safe non-sensitive bullets.
 
 ### 3. MSP professional development
-- [ ] Add client communication practice prompts and model responses.
-- [ ] Add more realistic scenarios:
-  - [ ] Microsoft 365.
-  - [ ] Endpoint support.
-  - [ ] Networking.
-  - [ ] Cybersecurity.
-  - [ ] Backup/DR.
-  - [ ] Communication.
+- [x] Add client communication practice prompts and model responses.
+- [x] Add more realistic scenarios:
+  - [x] Microsoft 365.
+  - [x] Endpoint support.
+  - [x] Networking.
+  - [x] Cybersecurity.
+  - [x] Backup/DR.
+  - [x] Communication.
 - [ ] Convert remaining static Learning Cockpit activities into interactive variants.
 - [ ] Improve Next Best Action / PD coaching:
   - [ ] Recommend one clear next action.
