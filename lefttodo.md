@@ -34,6 +34,7 @@ This file is the active master backlog for the app. Keep it current as work is c
 - [x] Add structured follow-up triage with status, due date, next nudge, priority, and editable wording.
 - [x] Add Knowledge Base confidence ratings, verified status, playbook/log links, and privacy warnings.
 - [x] Add Playbook runner completion state, usage tracking, and field notes.
+- [x] Add KB Learning Machine queue filters, field card editing, and review statuses.
 
 ## High-priority remaining work
 
@@ -81,14 +82,14 @@ This file is the active master backlog for the app. Keep it current as work is c
 - [ ] Add manager-ready weekly PD review output.
 
 ### 4. KB Learning Machine
-- [ ] Add a dedicated learning queue.
-- [ ] Improve manual field card create/edit/delete flow.
-- [ ] Add review statuses:
-  - [ ] New.
-  - [ ] Due.
-  - [ ] Learning.
-  - [ ] Confident.
-  - [ ] Mastered.
+- [x] Add a dedicated learning queue.
+- [x] Improve manual field card create/edit/delete flow.
+- [x] Add review statuses:
+  - [x] New.
+  - [x] Due.
+  - [x] Learning.
+  - [x] Confident.
+  - [x] Mastered.
 - [ ] Add more local KB hint seed data without importing private KB content.
 
 ### 5. Search and discovery

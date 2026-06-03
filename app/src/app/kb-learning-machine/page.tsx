@@ -24,6 +24,7 @@ import {
 } from '@/lib/learningEvidence';
 import {
   kbConfidenceLabels,
+  kbConfidenceRank,
   kbFieldCards,
   type KbConfidence,
   type KbFieldCard,
@@ -54,13 +55,30 @@ import {
   CalendarClock,
   CheckCircle,
   ClipboardCheck,
+  Edit3,
   FileText,
   Layers,
   Search,
+  Save,
   Target,
+  X,
 } from 'lucide-react';
 
 type TicketNoteDraft = Omit<KbTicketNotePractice, 'savedAt'>;
+type KbQueueFilter = 'all' | 'due' | 'new' | 'learning' | 'confident' | 'mastered';
+type KbReviewStatus = 'New' | 'Due' | 'Learning' | 'Confident' | 'Mastered';
+
+type CardDraft = {
+  title: string;
+  category: string;
+  whenToUse: string;
+  prerequisites: string;
+  firstChecks: string;
+  coreSteps: string;
+  commonMistake: string;
+  escalateIf: string;
+  relatedSkill: string;
+};
 
 const emptyTicketNote: TicketNoteDraft = {
   summary: '',
@@ -83,6 +101,15 @@ const confidenceOptions: KbConfidence[] = [
   'independent',
   'teach',
 ];
+
+const queueLabels: Record<KbQueueFilter, string> = {
+  all: 'All',
+  due: 'Due',
+  new: 'New',
+  learning: 'Learning',
+  confident: 'Confident',
+  mastered: 'Mastered',
+};
 
 const ticketNoteFields: Array<{ key: keyof TicketNoteDraft; label: string; placeholder: string }> = [
   { key: 'summary', label: 'Summary', placeholder: 'What was the request or issue?' },
@@ -112,6 +139,38 @@ const parseStoredKbCard = (content: string): KbFieldCard | null => {
 
   return null;
 };
+
+const startOfLocalToday = () => {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  return today;
+};
+
+const getKbReviewStatus = (card: KbFieldCard): KbReviewStatus => {
+  if (kbConfidenceRank[card.confidence] >= kbConfidenceRank.teach && card.reviewHistory.length >= 2) return 'Mastered';
+  if (kbConfidenceRank[card.confidence] >= kbConfidenceRank.independent) return 'Confident';
+  if (new Date(card.reviewDueDate) <= startOfLocalToday()) return 'Due';
+  if (card.reviewHistory.length === 0) return 'New';
+  return 'Learning';
+};
+
+const buildCardDraft = (card: KbFieldCard): CardDraft => ({
+  title: card.title,
+  category: card.category,
+  whenToUse: card.whenToUse,
+  prerequisites: card.prerequisites.join('\n'),
+  firstChecks: card.firstChecks.join('\n'),
+  coreSteps: card.coreSteps.join('\n'),
+  commonMistake: card.commonMistake,
+  escalateIf: card.escalateIf,
+  relatedSkill: card.relatedSkill,
+});
+
+const splitList = (value: string) =>
+  value
+    .split('\n')
+    .map((item) => item.trim())
+    .filter(Boolean);
 
 export default function KbLearningMachinePage() {
   const [progress, setProgress] = useState<KbProgressByCardId>(() => getKbLearningProgress());
@@ -191,12 +250,15 @@ export default function KbLearningMachinePage() {
   const [selectedCardId, setSelectedCardId] = useState(cards[0]?.id ?? '');
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('all');
+  const [queueFilter, setQueueFilter] = useState<KbQueueFilter>('due');
   const [activeFlashcardIndex, setActiveFlashcardIndex] = useState(0);
   const [showFlashcardAnswer, setShowFlashcardAnswer] = useState(false);
   const [scenarioResponse, setScenarioResponse] = useState('');
   const [ticketNote, setTicketNote] = useState<TicketNoteDraft>(emptyTicketNote);
   const [reflectionText, setReflectionText] = useState('');
   const [saveMessage, setSaveMessage] = useState('');
+  const [editingCardId, setEditingCardId] = useState<string | null>(null);
+  const [cardDraft, setCardDraft] = useState<CardDraft | null>(null);
   const reviewSaveStatus = useSaveStatus();
   const scenarioSaveStatus = useSaveStatus();
   const ticketSaveStatus = useSaveStatus();
@@ -210,6 +272,24 @@ export default function KbLearningMachinePage() {
   const evidenceSummary = getKbEvidenceSummary(cards, progress);
 
   const categories = Array.from(new Set(cards.map((card) => card.category))).sort();
+
+  const queueCounts = useMemo(() => {
+    const counts: Record<KbQueueFilter, number> = {
+      all: cards.length,
+      due: 0,
+      new: 0,
+      learning: 0,
+      confident: 0,
+      mastered: 0,
+    };
+
+    cards.forEach((card) => {
+      const status = getKbReviewStatus(card).toLowerCase() as Exclude<KbQueueFilter, 'all'>;
+      counts[status] += 1;
+    });
+
+    return counts;
+  }, [cards]);
 
   const filteredCards = cards.filter((card) => {
     const query = searchTerm.trim().toLowerCase();
@@ -228,7 +308,9 @@ export default function KbLearningMachinePage() {
         .toLowerCase()
         .includes(query);
     const matchesCategory = categoryFilter === 'all' || card.category === categoryFilter;
-    return matchesSearch && matchesCategory;
+    const status = getKbReviewStatus(card).toLowerCase() as Exclude<KbQueueFilter, 'all'>;
+    const matchesQueue = queueFilter === 'all' || status === queueFilter;
+    return matchesSearch && matchesCategory && matchesQueue;
   });
 
   const selectedFlashcards = selectedCard ? buildKbFlashcards(selectedCard) : [];
@@ -244,6 +326,8 @@ export default function KbLearningMachinePage() {
 
   const handleSelectCard = (card: KbFieldCard) => {
     setSelectedCardId(card.id);
+    setEditingCardId(null);
+    setCardDraft(null);
     setActiveFlashcardIndex(0);
     setShowFlashcardAnswer(false);
     setScenarioResponse(progress[card.id]?.scenarioPractice?.response ?? '');
@@ -280,6 +364,55 @@ export default function KbLearningMachinePage() {
   const handleConfidenceChange = (confidence: KbConfidence) => {
     if (!selectedCard) return;
     refreshProgress(updateKbConfidence(selectedCard.id, confidence), 'Confidence updated');
+  };
+
+  const handleEditCard = () => {
+    if (!selectedCard) return;
+    setEditingCardId(selectedCard.id);
+    setCardDraft(buildCardDraft(selectedCard));
+  };
+
+  const handleCancelCardEdit = () => {
+    setEditingCardId(null);
+    setCardDraft(null);
+  };
+
+  const handleSaveCard = async () => {
+    if (!selectedCard || !cardDraft || !cardDraft.title.trim()) return;
+
+    const updatedCard: KbFieldCard = {
+      ...selectedCard,
+      title: cardDraft.title.trim(),
+      category: cardDraft.category.trim() || 'General',
+      whenToUse: cardDraft.whenToUse.trim(),
+      prerequisites: splitList(cardDraft.prerequisites),
+      firstChecks: splitList(cardDraft.firstChecks),
+      coreSteps: splitList(cardDraft.coreSteps),
+      commonMistake: cardDraft.commonMistake.trim(),
+      escalateIf: cardDraft.escalateIf.trim(),
+      relatedSkill: cardDraft.relatedSkill.trim() || 'General MSP support',
+    };
+
+    await db.knowledgeEntries.put({
+      id: updatedCard.id,
+      title: updatedCard.title,
+      content: JSON.stringify(updatedCard),
+      category: KnowledgeCategory.PROCEDURE,
+      tags: [updatedCard.category, updatedCard.relatedSkill].filter(Boolean),
+      relatedTasks: [],
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
+
+    setDbCards((previous) => {
+      const baseCards = previous ?? cards;
+      const nextCards = baseCards.map((card) => (card.id === updatedCard.id ? updatedCard : card));
+      return nextCards.some((card) => card.id === updatedCard.id) ? nextCards : [updatedCard, ...nextCards];
+    });
+    setEditingCardId(null);
+    setCardDraft(null);
+    setSaveMessage('Field card updated');
+    window.setTimeout(() => setSaveMessage(''), 1800);
   };
 
   const handleSaveScenario = () => {
@@ -404,6 +537,25 @@ export default function KbLearningMachinePage() {
             </CardContent>
           </Card>
 
+          <Card>
+            <CardHeader>
+              <SectionHeader icon={CalendarClock} title="Learning queue" description="Filter cards by review state so the next study action is obvious." />
+            </CardHeader>
+            <CardContent className="flex flex-wrap gap-2">
+              {(Object.keys(queueLabels) as KbQueueFilter[]).map((filter) => (
+                <Button
+                  key={filter}
+                  type="button"
+                  size="sm"
+                  variant={queueFilter === filter ? 'default' : 'outline'}
+                  onClick={() => setQueueFilter(filter)}
+                >
+                  {queueLabels[filter]} ({queueCounts[filter]})
+                </Button>
+              ))}
+            </CardContent>
+          </Card>
+
           {dailyScenarioCard && (
             <ExternalLearningLinks
               skill={dailyScenarioCard.relatedSkill}
@@ -461,7 +613,10 @@ export default function KbLearningMachinePage() {
                             <p className="font-medium text-gray-900 dark:text-white">{card.title}</p>
                             <p className="mt-1 text-xs text-muted-foreground">{card.category}</p>
                           </div>
-                          <Badge variant="outline">{formatKbReviewDate(card.reviewDueDate)}</Badge>
+                          <div className="flex flex-col items-end gap-1">
+                            <Badge variant="outline">{getKbReviewStatus(card)}</Badge>
+                            <Badge variant="secondary">{formatKbReviewDate(card.reviewDueDate)}</Badge>
+                          </div>
                         </div>
                         <p className="mt-2 line-clamp-2 text-sm text-gray-600 dark:text-gray-400">{card.whenToUse}</p>
                         <div className="mt-3 flex flex-wrap gap-2">
@@ -470,6 +625,11 @@ export default function KbLearningMachinePage() {
                         </div>
                       </button>
                     ))}
+                    {filteredCards.length === 0 && (
+                      <div className="rounded-lg border border-dashed p-4 text-sm text-muted-foreground">
+                        No cards match this queue and search. Switch to All or create a new field card.
+                      </div>
+                    )}
                   </div>
                 </CardContent>
               </Card>
@@ -515,10 +675,117 @@ export default function KbLearningMachinePage() {
                       <div className="flex flex-wrap items-center gap-2">
                         <h2 className="text-xl font-semibold text-gray-900 dark:text-white">{selectedCard.title}</h2>
                         <Badge variant="outline">{selectedCard.category}</Badge>
+                        <Badge variant="secondary">{getKbReviewStatus(selectedCard)}</Badge>
+                        <Button variant="outline" size="sm" onClick={handleEditCard}>
+                          <Edit3 className="mr-2 h-4 w-4" />
+                          Edit Card
+                        </Button>
                         <Button variant="destructive" size="sm" onClick={() => handleDeleteCard(selectedCard.id)}>Delete Card</Button>
                       </div>
                       <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">{selectedCard.whenToUse}</p>
                     </div>
+
+                    {editingCardId === selectedCard.id && cardDraft && (
+                      <div className="space-y-4 rounded-lg border bg-slate-50 p-4 dark:bg-slate-900/50">
+                        <div className="grid gap-3 md:grid-cols-2">
+                          <div>
+                            <Label htmlFor="kb-card-title">Title</Label>
+                            <Input
+                              id="kb-card-title"
+                              value={cardDraft.title}
+                              onChange={(event) => setCardDraft((current) => current ? { ...current, title: event.target.value } : current)}
+                            />
+                          </div>
+                          <div>
+                            <Label htmlFor="kb-card-category">Category</Label>
+                            <Input
+                              id="kb-card-category"
+                              value={cardDraft.category}
+                              onChange={(event) => setCardDraft((current) => current ? { ...current, category: event.target.value } : current)}
+                            />
+                          </div>
+                        </div>
+                        <div>
+                          <Label htmlFor="kb-card-when">When to use</Label>
+                          <Textarea
+                            id="kb-card-when"
+                            value={cardDraft.whenToUse}
+                            onChange={(event) => setCardDraft((current) => current ? { ...current, whenToUse: event.target.value } : current)}
+                            rows={3}
+                          />
+                        </div>
+                        <div className="grid gap-3 md:grid-cols-3">
+                          <div>
+                            <Label htmlFor="kb-card-prereqs">Prerequisites</Label>
+                            <Textarea
+                              id="kb-card-prereqs"
+                              value={cardDraft.prerequisites}
+                              onChange={(event) => setCardDraft((current) => current ? { ...current, prerequisites: event.target.value } : current)}
+                              rows={5}
+                              placeholder="One per line"
+                            />
+                          </div>
+                          <div>
+                            <Label htmlFor="kb-card-checks">First checks</Label>
+                            <Textarea
+                              id="kb-card-checks"
+                              value={cardDraft.firstChecks}
+                              onChange={(event) => setCardDraft((current) => current ? { ...current, firstChecks: event.target.value } : current)}
+                              rows={5}
+                              placeholder="One per line"
+                            />
+                          </div>
+                          <div>
+                            <Label htmlFor="kb-card-steps">Core steps</Label>
+                            <Textarea
+                              id="kb-card-steps"
+                              value={cardDraft.coreSteps}
+                              onChange={(event) => setCardDraft((current) => current ? { ...current, coreSteps: event.target.value } : current)}
+                              rows={5}
+                              placeholder="One per line"
+                            />
+                          </div>
+                        </div>
+                        <div className="grid gap-3 md:grid-cols-3">
+                          <div>
+                            <Label htmlFor="kb-card-mistake">Common mistake</Label>
+                            <Textarea
+                              id="kb-card-mistake"
+                              value={cardDraft.commonMistake}
+                              onChange={(event) => setCardDraft((current) => current ? { ...current, commonMistake: event.target.value } : current)}
+                              rows={3}
+                            />
+                          </div>
+                          <div>
+                            <Label htmlFor="kb-card-escalate">Escalate if</Label>
+                            <Textarea
+                              id="kb-card-escalate"
+                              value={cardDraft.escalateIf}
+                              onChange={(event) => setCardDraft((current) => current ? { ...current, escalateIf: event.target.value } : current)}
+                              rows={3}
+                            />
+                          </div>
+                          <div>
+                            <Label htmlFor="kb-card-skill">Related skill</Label>
+                            <Input
+                              id="kb-card-skill"
+                              value={cardDraft.relatedSkill}
+                              onChange={(event) => setCardDraft((current) => current ? { ...current, relatedSkill: event.target.value } : current)}
+                            />
+                          </div>
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          <Button type="button" size="sm" onClick={handleSaveCard} disabled={!cardDraft.title.trim()}>
+                            <Save className="mr-2 h-4 w-4" />
+                            Save card
+                          </Button>
+                          <Button type="button" size="sm" variant="outline" onClick={handleCancelCardEdit}>
+                            <X className="mr-2 h-4 w-4" />
+                            Cancel
+                          </Button>
+                        </div>
+                      </div>
+                    )}
 
                     <div className="grid gap-4 md:grid-cols-2">
                       <div>
