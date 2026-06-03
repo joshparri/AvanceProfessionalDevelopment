@@ -1,5 +1,6 @@
 import Dexie, { Table } from 'dexie';
-import { addDays, isBefore, isSameDay, startOfDay, startOfWeek } from 'date-fns';
+import { isSameDay } from 'date-fns';
+import { getUpcomingMondayAndWednesday } from './date-utils';
 import {
   Shift,
   WorkLog,
@@ -194,8 +195,9 @@ export class AvanceDatabase extends Dexie {
   }
 }
 
-// Create and export a singleton instance
-export const db = new AvanceDatabase();
+// Create and export a lazy singleton instance.
+// This avoids browser-only Dexie initialization during Node-based test discovery.
+export let db = null as unknown as AvanceDatabase;
 
 export const DEFAULT_APP_SETTINGS_ID = 'default';
 
@@ -210,19 +212,6 @@ const defaultAppSettings: AppSettings = {
     end: '17:00',
   },
   updatedAt: new Date(),
-};
-
-export const getUpcomingMondayAndWednesday = (now = new Date()) => {
-  const today = startOfDay(now);
-  const mondayThisWeek = startOfWeek(today, { weekStartsOn: 1 });
-  const wednesdayThisWeek = addDays(mondayThisWeek, 2);
-  const nextMonday = addDays(mondayThisWeek, 7);
-  const nextWednesday = addDays(wednesdayThisWeek, 7);
-
-  const candidates = [mondayThisWeek, wednesdayThisWeek, nextMonday, nextWednesday];
-  const upcoming = candidates.filter((date) => !isBefore(date, today));
-
-  return [upcoming[0], upcoming[1]] as [Date, Date];
 };
 
 const isSeededDefaultShift = (shift: Shift) => {
@@ -274,6 +263,9 @@ export const migrateStaleSeededShiftDates = async (now = new Date()) => {
 // Initialize the database
 export const initDatabase = async () => {
   try {
+    if (!db) {
+      db = new AvanceDatabase();
+    }
     await db.open();
     await migrateStaleSeededShiftDates();
     console.log('Database initialized successfully');

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { getUpcomingMondayAndWednesday } from '@/lib/db';
+import { getUpcomingMondayAndWednesday } from '@/lib/date-utils';
 
 describe('getUpcomingMondayAndWednesday', () => {
   it('returns upcoming Monday and Wednesday in chronological order', () => {

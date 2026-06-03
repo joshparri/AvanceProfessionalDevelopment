@@ -305,6 +305,8 @@ export interface LearningItem {
 export interface Invoice {
   id: string;
   clientId: string;
+  shiftId?: string;
+  taskId?: string;
   period: {
     start: Date;
     end: Date;

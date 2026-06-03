@@ -7,9 +7,9 @@ import { Layout } from '@/components/Layout';
 import { Search } from 'lucide-react';
 import { searchFuse } from '@/lib/searchIndex';
 import { db, initDatabase } from '@/lib/db';
-import { Client, KnowledgeEntry, LearningItem, Playbook, Task, WorkLog } from '@/types';
+import { Client, Invoice, KnowledgeEntry, LearningItem, Playbook, Task, WorkLog } from '@/types';
 
-type DynamicSearchCategory = 'task' | 'worklog' | 'knowledge' | 'playbook' | 'client' | 'learning';
+type DynamicSearchCategory = 'task' | 'worklog' | 'knowledge' | 'playbook' | 'client' | 'learning' | 'invoice';
 
 type DynamicSearchItem = {
   id: string;
@@ -29,6 +29,7 @@ const dynamicCategoryLabels: Record<DynamicSearchCategory, string> = {
   playbook: 'Playbooks',
   client: 'Clients',
   learning: 'Learning',
+  invoice: 'Invoices',
 };
 
 const getInitialRecentSearches = () => {
@@ -102,6 +103,15 @@ const buildLearningResult = (item: LearningItem): DynamicSearchItem => ({
   tags: [item.category, item.status, item.priority],
 });
 
+const buildInvoiceResult = (invoice: Invoice): DynamicSearchItem => ({
+  id: `invoice-${invoice.id}`,
+  href: `/time-invoices?q=${encodeURIComponent(invoice.notes || invoice.status)}`,
+  title: `Invoice ${invoice.hours}h - $${invoice.total}`,
+  description: invoice.notes || `Invoice period ${new Date(invoice.period.start).toLocaleDateString()} to ${new Date(invoice.period.end).toLocaleDateString()}.`,
+  category: 'invoice',
+  tags: [invoice.status, String(invoice.hours), String(invoice.total)],
+});
+
 const dynamicItemMatches = (item: DynamicSearchItem, lowerQuery: string) =>
   item.title.toLowerCase().includes(lowerQuery) ||
   item.description.toLowerCase().includes(lowerQuery) ||
@@ -151,13 +161,14 @@ export default function SearchClient() {
       try {
         await initDatabase();
         const lowerQuery = query.toLowerCase();
-        const [tasks, workLogs, knowledgeEntries, playbooks, clients, learningItems] = await Promise.all([
+        const [tasks, workLogs, knowledgeEntries, playbooks, clients, learningItems, invoices] = await Promise.all([
           db.tasks.toArray(),
           db.workLogs.toArray(),
           db.knowledgeEntries.toArray(),
           db.playbooks.toArray(),
           db.clients.toArray(),
           db.learningItems.toArray(),
+          db.invoices.toArray(),
         ]);
 
         const matches = [
@@ -167,6 +178,7 @@ export default function SearchClient() {
           ...playbooks.map(buildPlaybookResult),
           ...clients.map(buildClientResult),
           ...learningItems.map(buildLearningResult),
+          ...invoices.map(buildInvoiceResult),
         ]
           .filter((item) => dynamicItemMatches(item, lowerQuery))
           .slice(0, 30);

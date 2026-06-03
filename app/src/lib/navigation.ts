@@ -21,6 +21,7 @@ import {
   Settings,
   CheckSquare,
   Building2,
+  DollarSign,
 } from 'lucide-react';
 
 export interface NavigationItem {
@@ -80,6 +81,13 @@ export const navigation: NavigationItem[] = [
     icon: Building2,
     description: 'Keep privacy-safe client reference notes and operational reminders.',
     tags: ['clients', 'references', 'notes', 'environment'],
+  },
+  {
+    name: 'Time & Invoices',
+    href: '/time-invoices',
+    icon: DollarSign,
+    description: 'Track local billable time, invoice-cycle summaries, and copyable billing handoffs.',
+    tags: ['time', 'invoice', 'billing', 'hours'],
   },
   {
     name: 'Onsite Checklist',

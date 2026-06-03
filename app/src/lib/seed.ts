@@ -1,4 +1,5 @@
-import { clearAllData, db, getUpcomingMondayAndWednesday } from './db';
+import { clearAllData, db } from './db';
+import { getUpcomingMondayAndWednesday } from './date-utils';
 import {
   Shift,
   WorkLog,
