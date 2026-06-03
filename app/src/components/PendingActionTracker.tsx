@@ -2,7 +2,7 @@
 
 import { FormEvent, useEffect, useMemo, useState } from 'react';
 import { format } from 'date-fns';
-import { AlarmClock, CheckCircle2, Plus, ShieldCheck } from 'lucide-react';
+import { AlarmClock, CheckCircle2, ClipboardCopy, Plus, ShieldCheck } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -26,8 +26,27 @@ export interface PendingActionReminder {
   ticketId: string;
   actionRequiredText: string;
   followUpDue: number;
+  status: 'waiting-client' | 'waiting-vendor' | 'waiting-internal' | 'ready';
+  priority: 'low' | 'medium' | 'high' | 'urgent';
+  nextNudgeText: string;
   createdAt: number;
 }
+
+const statusLabels: Record<PendingActionReminder['status'], string> = {
+  'waiting-client': 'Waiting client',
+  'waiting-vendor': 'Waiting vendor',
+  'waiting-internal': 'Waiting internal',
+  ready: 'Ready',
+};
+
+const priorityLabels: Record<PendingActionReminder['priority'], string> = {
+  low: 'Low',
+  medium: 'Medium',
+  high: 'High',
+  urgent: 'Urgent',
+};
+
+const defaultNudgeText = 'Hi, just following up on this ticket. Could you please confirm the next available time or provide the requested update?';
 
 function createId() {
   if (typeof crypto !== 'undefined' && 'randomUUID' in crypto) {
@@ -74,7 +93,12 @@ function readStoredReminders(): PendingActionReminder[] {
       && typeof item.ticketId === 'string'
       && typeof item.actionRequiredText === 'string'
       && typeof item.followUpDue === 'number'
-    ));
+    )).map((item) => ({
+      ...item,
+      status: item.status ?? 'waiting-client',
+      priority: item.priority ?? 'medium',
+      nextNudgeText: item.nextNudgeText ?? defaultNudgeText,
+    }));
   } catch {
     return [];
   }
@@ -96,6 +120,10 @@ export function PendingActionTracker() {
   const [ticketId, setTicketId] = useState('');
   const [actionRequiredText, setActionRequiredText] = useState('');
   const [followUpDue, setFollowUpDue] = useState(() => toDateTimeInputValue(defaultFollowUpDue()));
+  const [status, setStatus] = useState<PendingActionReminder['status']>('waiting-client');
+  const [priority, setPriority] = useState<PendingActionReminder['priority']>('medium');
+  const [nextNudgeText, setNextNudgeText] = useState(defaultNudgeText);
+  const [copyMessage, setCopyMessage] = useState('');
   const [error, setError] = useState('');
 
   useEffect(() => {
@@ -137,6 +165,9 @@ export function PendingActionTracker() {
     setTicketId('');
     setActionRequiredText('');
     setFollowUpDue(toDateTimeInputValue(defaultFollowUpDue()));
+    setStatus('waiting-client');
+    setPriority('medium');
+    setNextNudgeText(defaultNudgeText);
     setError('');
   };
 
@@ -162,6 +193,9 @@ export function PendingActionTracker() {
       ticketId: cleanTicketId,
       actionRequiredText: cleanActionRequiredText,
       followUpDue: fromDateTimeInputValue(followUpDue),
+      status,
+      priority,
+      nextNudgeText: nextNudgeText.trim() || defaultNudgeText,
       createdAt: Date.now(),
     };
 
@@ -172,6 +206,16 @@ export function PendingActionTracker() {
 
   const markComplete = (id: string) => {
     setReminders((current) => current.filter((item) => item.id !== id));
+  };
+
+  const copyNudge = async (reminder: PendingActionReminder) => {
+    await navigator.clipboard.writeText(reminder.nextNudgeText || defaultNudgeText);
+    setCopyMessage(`Copied wording for ticket ${reminder.ticketId}`);
+    window.setTimeout(() => setCopyMessage(''), 1800);
+  };
+
+  const updateReminder = (id: string, changes: Partial<PendingActionReminder>) => {
+    setReminders((current) => current.map((item) => (item.id === id ? { ...item, ...changes } : item)));
   };
 
   const renderReminder = (reminder: PendingActionReminder, isOverdue: boolean) => (
@@ -190,16 +234,42 @@ export function PendingActionTracker() {
             <Badge variant={isOverdue ? 'default' : 'outline'} className={isOverdue ? 'bg-cyan-400 text-slate-950 hover:bg-cyan-300' : ''}>
               Ticket {reminder.ticketId}
             </Badge>
+            <Badge variant="outline">{statusLabels[reminder.status]}</Badge>
+            <Badge variant={reminder.priority === 'urgent' || reminder.priority === 'high' ? 'default' : 'outline'}>
+              {priorityLabels[reminder.priority]}
+            </Badge>
             <span className="text-xs text-slate-500 dark:text-slate-400">
               Due {format(new Date(reminder.followUpDue), 'MMM d, h:mm a')}
             </span>
           </div>
           <p className="text-sm leading-6 text-slate-800 dark:text-slate-200">{reminder.actionRequiredText}</p>
+          <div className="grid gap-2 md:grid-cols-2">
+            <select
+              value={reminder.status}
+              onChange={(event) => updateReminder(reminder.id, { status: event.target.value as PendingActionReminder['status'] })}
+              className="h-9 rounded-md border border-slate-200 bg-white px-2 text-sm dark:border-slate-800 dark:bg-slate-950"
+            >
+              {Object.entries(statusLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
+            </select>
+            <select
+              value={reminder.priority}
+              onChange={(event) => updateReminder(reminder.id, { priority: event.target.value as PendingActionReminder['priority'] })}
+              className="h-9 rounded-md border border-slate-200 bg-white px-2 text-sm dark:border-slate-800 dark:bg-slate-950"
+            >
+              {Object.entries(priorityLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
+            </select>
+          </div>
         </div>
-        <Button type="button" variant="outline" size="sm" onClick={() => markComplete(reminder.id)} className="shrink-0">
-          <CheckCircle2 className="mr-2 h-4 w-4" />
-          Mark Complete
-        </Button>
+        <div className="flex shrink-0 flex-wrap gap-2">
+          <Button type="button" variant="outline" size="sm" onClick={() => copyNudge(reminder)}>
+            <ClipboardCopy className="mr-2 h-4 w-4" />
+            Copy wording
+          </Button>
+          <Button type="button" variant="outline" size="sm" onClick={() => markComplete(reminder.id)}>
+            <CheckCircle2 className="mr-2 h-4 w-4" />
+            Mark Complete
+          </Button>
+        </div>
       </div>
     </div>
   );
@@ -262,6 +332,39 @@ export function PendingActionTracker() {
                   required
                 />
               </div>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div className="space-y-2">
+                  <Label htmlFor="pending-status">Status</Label>
+                  <select
+                    id="pending-status"
+                    value={status}
+                    onChange={(event) => setStatus(event.target.value as PendingActionReminder['status'])}
+                    className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm"
+                  >
+                    {Object.entries(statusLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
+                  </select>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="pending-priority">Priority</Label>
+                  <select
+                    id="pending-priority"
+                    value={priority}
+                    onChange={(event) => setPriority(event.target.value as PendingActionReminder['priority'])}
+                    className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm"
+                  >
+                    {Object.entries(priorityLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
+                  </select>
+                </div>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="pending-nudge">Editable follow-up wording</Label>
+                <Textarea
+                  id="pending-nudge"
+                  value={nextNudgeText}
+                  onChange={(event) => setNextNudgeText(event.target.value)}
+                  placeholder={defaultNudgeText}
+                />
+              </div>
               <div className="rounded-md border border-cyan-500/30 bg-cyan-500/10 p-3 text-sm text-slate-700 dark:text-slate-200">
                 <div className="flex gap-2">
                   <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-cyan-500" />
@@ -290,6 +393,7 @@ export function PendingActionTracker() {
             {overdueReminders.length} due now
           </Badge>
           <Badge variant="outline">{upcomingReminders.length} scheduled</Badge>
+          {copyMessage && <span className="text-sm text-green-600 dark:text-green-400">{copyMessage}</span>}
         </div>
 
         {overdueReminders.length > 0 ? (
