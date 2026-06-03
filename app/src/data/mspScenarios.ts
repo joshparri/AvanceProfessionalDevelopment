@@ -13,6 +13,8 @@ export interface MspScenario {
   unsafeActions: string[];
   escalationTriggers: string[];
   idealTicketNotes: string;
+  communicationPrompts?: string[];
+  modelClientResponse?: string;
   learningPoints: string[];
   relatedSkillIds: string[];
 }
@@ -632,6 +634,54 @@ export const mspScenarios: MspScenario[] = [
       'Record business impact for prioritisation and escalation.',
     ],
     relatedSkillIds: ['networking-internet-outage', 'service-sla-priority', 'comm-outage-updates'],
+  },
+  {
+    id: 'manager-update-on-delayed-fix',
+    title: 'Manager asks for a clear delayed-fix update',
+    category: 'Client communication',
+    difficulty: 'medium',
+    ticketText:
+      'The original ticket said the finance app would be fixed this morning, but the user is still blocked. Their manager asks: "What is actually happening, what have you tried, and when will we know the next step?"',
+    userEmotion: 'Impatient and needs a reliable update',
+    hiddenCause: 'The technical work is blocked by vendor response, but the ticket has not explained current state, business impact, owner, or next update time.',
+    goodFirstQuestions: [
+      'What business process is blocked and who is affected?',
+      'What exact troubleshooting has already been completed?',
+      'Who owns the next action: us, the vendor, or the client?',
+      'What is the next realistic update time even if the fix is not complete?',
+    ],
+    expectedChecks: [
+      'Review ticket history for facts, not assumptions.',
+      'Confirm current impact and whether there is a workaround.',
+      'Confirm the vendor case or escalation owner.',
+      'Separate what is known, what is being checked, and what is waiting.',
+      'Set a specific next update time.',
+    ],
+    unsafeActions: [
+      'Promise a fix time when the next action depends on a vendor.',
+      'Hide uncertainty or use vague wording like "we are looking into it".',
+      'Blame the vendor without explaining what evidence was provided.',
+    ],
+    escalationTriggers: [
+      'No owner for the next action.',
+      'Business-critical finance, payroll, bookings, or compliance workflow blocked.',
+      'Manager asks for priority review or SLA clarification.',
+    ],
+    idealTicketNotes:
+      'Issue: Finance app remains unavailable after earlier target time. Impact: Finance workflow blocked for affected user/team. Checks: Reviewed prior troubleshooting, confirmed current symptom and business impact, checked workaround availability, and verified vendor case/escalation status. Action: Sent manager update with known facts, completed checks, current blocker, owner, and next update time. Result: Stakeholder has a clear status and expectation while vendor response is pending. Next step: Follow up with vendor and update manager by the agreed time even if there is no fix yet.',
+    communicationPrompts: [
+      'Write a two-sentence manager update that admits the delay without sounding defensive.',
+      'Explain the current blocker in plain English without blaming the vendor.',
+      'Set an expectation for the next update even if the fix is still pending.',
+    ],
+    modelClientResponse:
+      'Thanks for checking in. The issue is still active, and the current blocker is that the app is failing after the local checks we can complete from our side. We have confirmed the impact, gathered the troubleshooting evidence, and escalated it to the vendor with the relevant details. I will update you again by 2:30 PM today with either the fix outcome or the next confirmed action.',
+    learningPoints: [
+      'A good update names impact, evidence, blocker, owner, and next update time.',
+      'Clear communication can reduce escalation pressure even before the technical fix is complete.',
+      'Do not promise fix times that depend on another party.',
+    ],
+    relatedSkillIds: ['comm-plain-english', 'comm-outage-updates', 'service-sla-priority', 'docs-handover-notes'],
   },
 ];
 
