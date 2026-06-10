@@ -216,6 +216,7 @@ export interface AppSettings {
   theme: 'light' | 'dark' | 'system';
   notifications: boolean;
   autoBackup: boolean;
+  lastBackupAt?: Date;
   defaultWorkCategory: WorkCategory;
   workingHours: {
     start: string;

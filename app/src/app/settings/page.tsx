@@ -85,7 +85,10 @@ export default function SettingsPage() {
       anchor.download = `avancepd-backup-${new Date().toISOString()}.json`;
       anchor.click();
       URL.revokeObjectURL(url);
-      setStatus('Backup file downloaded successfully.');
+      
+      const now = new Date();
+      await updateSetting({ lastBackupAt: now });
+      setStatus('Backup file downloaded and last backup date updated.');
     } catch (error) {
       console.error('Export failed:', error);
       setStatus('Backup export failed.');

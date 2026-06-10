@@ -172,7 +172,7 @@ export default function MspScenariosPage() {
                       className="mt-2 h-10 w-full rounded-md border border-slate-300 bg-white px-3 text-sm text-slate-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:focus:border-blue-400 dark:focus:ring-blue-400 md:w-64"
                     >
                       {mspScenarioStatusOptions.map((option) => (
-                        <option key={option} value={option}>
+                        <option key={option} value={option} className="bg-white text-slate-900 dark:bg-slate-900 dark:text-slate-100">
                           {mspScenarioStatusLabels[option]}
                         </option>
                       ))}

@@ -2,14 +2,14 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { format, isToday, isTomorrow } from 'date-fns';
-import { db, initDatabase } from '@/lib/db';
+import { format, isToday, isTomorrow, differenceInDays } from 'date-fns';
+import { db, initDatabase, getAppSettings } from '@/lib/db';
 import { seedDatabase } from '@/lib/seed';
-import { Shift, WorkLog, Task } from '@/types';
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { Shift, WorkLog, Task, AppSettings } from '@/types';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Calendar, Clock, Plus, CheckSquare, TrendingUp, Lightbulb, BookOpen } from 'lucide-react';
+import { Calendar, Clock, Plus, CheckSquare, TrendingUp, Lightbulb, BookOpen, ShieldAlert, Download } from 'lucide-react';
 import { mspLearningActivities, type MspLearningActivity } from '@/data/mspLearningActivities';
 import { getLearningStats, getDueReviewSuggestions } from '@/lib/mspLearningProgress';
 import { PendingActionTracker } from '@/components/PendingActionTracker';
@@ -32,6 +32,7 @@ export function Dashboard() {
   const [isLoading, setIsLoading] = useState(true);
   const [learningStats, setLearningStats] = useState(getLearningStats());
   const [nextBestActivity, setNextBestActivity] = useState<MspLearningActivity | null>(null);
+  const [showBackupReminder, setShowBackupReminder] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
 
   const reloadTasks = async () => {
@@ -101,6 +102,19 @@ export function Dashboard() {
         if (recommendations.length > 0) {
           const nextActivity = mspLearningActivities.find(a => a.id === recommendations[0]);
           setNextBestActivity(nextActivity || null);
+        }
+
+        // Check for backup reminder
+        const settings = await getAppSettings();
+        if (settings.autoBackup) {
+          if (!settings.lastBackupAt) {
+            setShowBackupReminder(true);
+          } else {
+            const daysSinceBackup = differenceInDays(now, new Date(settings.lastBackupAt));
+            if (daysSinceBackup >= 7) {
+              setShowBackupReminder(true);
+            }
+          }
         }
 
       } catch (error) {
@@ -175,6 +189,28 @@ export function Dashboard() {
         </>
       }
     >
+        {showBackupReminder && (
+          <Card className="border-amber-200 bg-amber-50 dark:border-amber-800 dark:bg-amber-950/30 mb-6">
+            <CardContent className="p-4 flex items-center justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-amber-100 dark:bg-amber-900/50 rounded-full">
+                  <ShieldAlert className="w-5 h-5 text-amber-600 dark:text-amber-400" />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-amber-900 dark:text-amber-100">Backup suggested</p>
+                  <p className="text-xs text-amber-700 dark:text-amber-300">Your last local data backup was over a week ago.</p>
+                </div>
+              </div>
+              <Button size="sm" variant="outline" className="border-amber-200 hover:bg-amber-100 dark:border-amber-800 dark:hover:bg-amber-900/50" asChild>
+                <Link href="/settings">
+                  <Download className="w-4 h-4 mr-2" />
+                  Backup now
+                </Link>
+              </Button>
+            </CardContent>
+          </Card>
+        )}
+
         <DailyBriefing
           nextShift={nextShift}
           pendingTasks={pendingTasks}
