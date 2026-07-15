@@ -381,3 +381,89 @@ claim otherwise is outdated.**
 A parallel build, **AvancePD** (separate repo, Vite/React instead of Next.js), covers
 the same MSP-skills/scenario-trainer/evidence-pack ground. Worth deciding which repo is
 canonical before adding the missing cert content above, so it isn't built twice.
+
+# Audit Addendum — Content Accuracy, Security Depth, and Real Limits
+
+*Follow-up to APP_AUDIT_REPORT.md. This covers what could actually be checked further,
+and is explicit about what still can't be — no filling gaps with plausible-sounding
+guesses.*
+
+## Content accuracy — spot-checked, not exhaustively verified
+
+I read the actual quiz questions and scenario data (not just counted them) and checked
+technical correctness on a sample: **~12 of the 49 quiz questions** across networking,
+Wi-Fi, DNS, SSO, BitLocker, Google Workspace, SPF, and VLAN topics, plus a **full read of
+2 of the 16 ticket scenarios** (password reset/MFA, Outlook mailbox sync).
+
+**Findings: technically sound on everything sampled.** Examples of what checked out —
+`nslookup` correctly identified as the first DNS troubleshooting tool over `ping`;
+domain changes correctly requiring both DNS *and* SPN updates for SSO; BitLocker
+recovery correctly requiring identity verification before handing over a key; SPF
+misconfiguration correctly tied to both spam-marking and non-delivery, not just one.
+The scenario data goes further than a quiz — each has hidden causes, safe vs. unsafe
+actions, and escalation triggers that reflect real judgement calls (e.g. treating
+unexpected MFA prompts as a possible security event, not just an annoyance).
+
+**What this does and doesn't tell you:** the sample I checked is accurate. I have not
+verified the other ~37 questions or 14 scenarios line by line — that would take
+deliberately going through each one, and at 49 questions + 16 scenarios that's a real
+chunk of reading. If you want that done properly, say so and I'll work through the rest
+systematically rather than spot-checking. What I can't do at all is tell you whether the
+content is *pedagogically* good — whether the difficulty curve makes sense, whether
+explanations actually teach the underlying concept vs. just stating the answer — that's
+a judgement call, not a fact-check, and it's worth your own read given you're the one
+who has to trust it enough to study from it.
+
+## Security — beyond dependency versions
+
+**Unsafe rendering (XSS surface):** checked directly — **zero** uses of
+`dangerouslySetInnerHTML`, `eval()`, or `new Function()` anywhere in the codebase. React
+escapes rendered text by default and nothing here bypasses that. This is a genuinely
+clean result, not an absence-of-evidence situation.
+
+**Backup import validation — real but partial:** there is a `validateBackupPayload`
+function that runs before any import. It checks the payload is an object, that known
+tables are arrays, and that `localStorage` values are strings — so a completely
+malformed file (random text, wrong shape) gets rejected with an error rather than
+silently corrupting the database. **What it doesn't do:** validate individual records
+against their actual type definitions (a task missing a required field, or with a
+wrong-typed field, would pass the shape check and get written anyway — there's a `zod`
+dependency in the project but it's only wired up in one form, `ShiftForm.tsx`, not in
+the import path). It's also worth knowing import is destructive-by-default: a valid-shaped
+but wrong import fully clears each table before writing the new data, so a bad import
+still overwrites everything rather than merging.
+
+**`sync.ts` if ever wired up for real:** right now it's genuinely just a status
+tracker — no network calls, no real sync logic exists to audit for bugs. If you ever
+build it out into an actual sync engine, that'll need its own security pass at that
+time (conflict resolution, auth on whatever endpoint it talks to, etc.) — nothing to
+assess today because there's no logic there yet.
+
+## Content gaps — conceptual check, not just keyword grep
+
+Went back and searched for AZ-104/Network+ *concepts*, not just the exact terms, in
+case the content covers the ideas under different phrasing. Searched for resource
+groups, subscriptions, virtual machines, ARM templates, Azure Portal, OSI model, CIDR,
+routing tables — **still essentially nothing.** One incidental subnet/VPN mention in the
+gamified content, one "Azure AD user properties" quiz question (which is really an Entra
+ID/identity question, already covered elsewhere). The earlier keyword-based finding
+holds up under a conceptual check too — this isn't a case of the content being there
+under different terminology.
+
+## What genuinely still needs you (can't be faked from here)
+
+- **Live click-through / UX flow** — I can read component structure but not experience
+  navigation friction, dead-end states, or confusing flows. If you want this properly
+  covered, the honest options are: you walk through it with me describing what you hit,
+  or a browser-automation tool actually clicks through it and reports back — static
+  code reading can't substitute for either.
+- **Real performance** — load times, memory growth over months of real IndexedDB use,
+  whether 60 activities + the datasets feel slow on your actual laptop. No way to
+  produce real numbers without it running on your hardware over time.
+- **Usage data** — which of the 30 routes you actually open vs. which are novelty.
+  Nothing in the code tracks this, so it doesn't exist to check. If you want this going
+  forward, that means adding actual usage logging, which is a build task, not an audit
+  task.
+- **Browser/device compatibility** — this was read as TypeScript/React source, not run
+  in Safari, mobile Chrome, or anywhere else. Framework choice (Next 16, React 19) makes
+  broad compatibility likely but not verified.
