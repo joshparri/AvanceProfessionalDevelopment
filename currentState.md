@@ -467,3 +467,169 @@ under different terminology.
 - **Browser/device compatibility** — this was read as TypeScript/React source, not run
   in Safari, mobile Chrome, or anywhere else. Framework choice (Next 16, React 19) makes
   broad compatibility likely but not verified.
+
+  # Audit Addendum 2 — Structural, Integrity, and Documentation Issues
+
+*Every claim below was independently re-checked against the actual code, not accepted
+on faith. All confirmed true unless noted. This corrects real gaps in the first two
+audit documents — including one place where an earlier statement of mine was wrong.*
+
+**Audited commit:** `ef10d8d` (2026-07-10 13:20 +1000) · Node v22.22.2 · npm 10.9.7 ·
+checked 2026-07-15
+
+---
+
+## 1. There are two apps in this one repo — confirmed, this is real
+
+The repo root has its own `package.json` (`avanceworkcompanion`, version `0.0.0`),
+`vite.config.js`, and `index.html` — a **completely separate, untouched Vite/React
+starter app**, sitting alongside the real Next.js app in `/app` (version `0.1.0`).
+
+I opened it: `src/App.jsx` is the literal Vite default template — the counter button,
+Vite/React logos, "Edit src/App.jsx and save to test HMR," links to vite.dev and
+react.dev. It has never been built on. There's also one orphaned file,
+`src/components/OnsiteChecklist.jsx`, that isn't imported or rendered anywhere — dead
+code sitting next to the dead starter.
+
+**Deployment risk, checked specifically:** `docs/deployment/vercel_deployment.md` does
+correctly specify **Root Directory: app** for the Vercel project, so on paper the live
+site should be building from the right place, not the stray starter. That's a real
+mitigating fact the original critique didn't have — but it doesn't make the repo
+structure less confusing, and a root-directory setting is one dashboard toggle away
+from someone (or a future you) accidentally deploying the wrong thing. This should be
+deleted, not just correctly configured around.
+
+## 2. "Cloud sync" — confirmed fake, and the UI actively says otherwise
+
+I read `performSync()` in full. It does exactly this:
+1. sets status to "syncing"
+2. checks `navigator.onLine`
+3. `await new Promise(resolve => setTimeout(resolve, 700))` — waits 700ms, nothing else
+4. sets status to "synced"
+
+No network request. No data read or written anywhere except the local sync-status
+record. And the Settings page UI, on success, sets the visible status message to
+**"Cloud sync completed."** — verified verbatim in `app/settings/page.tsx`.
+
+I called this "metadata scaffolding" in the first report. That undersold it. This is a
+**false-success UI element** — pressing the button and reading "Cloud sync completed"
+would reasonably lead anyone to believe their data now exists somewhere other than this
+one browser. It doesn't. If this ships anywhere near real use, it should either be
+removed or relabeled honestly ("local save only — no cloud sync exists yet") until real
+sync logic is built.
+
+## 3. Backup integrity — worse than the first pass reported
+
+Two new confirmed issues on top of what Addendum 1 already covered:
+
+- **Schema version mismatch, confirmed by reading the code:** the live database is on
+  Dexie schema version 3 (three real `this.version()` migrations in `db.ts`). But
+  `exportData()` hardcodes `schemaVersion: 2` into every backup file's `_meta` block.
+  Any future schema-aware import logic checking that number would misjudge every
+  existing backup.
+- **Backups contain password hashes,** confirmed: `exportData()` includes
+  `await db.accounts.toArray()` in the export, and the `Account` type has a
+  `passwordHash` field. Every JSON backup file this app produces contains every
+  account's hashed password, plus the current session's user ID via the localStorage
+  section. A backup file is meant to be something you might casually keep in a
+  downloads folder or send to another device — that's not a place password hashes
+  should casually end up.
+
+Addendum 1 already covered the shallow shape-only validation and the destructive
+clear-then-overwrite import behaviour — those stand as reported.
+
+## 4. "Full" meant "page exists," not "feature verified" — fair, and the repo says so itself
+
+The repo has its own QA doc, `docs/qa/msp_pd_smoke_test.md`. I read it directly: **every
+item on the core checklist is still unchecked** — pages loading, persistence after
+refresh, navigation, successful build, lint. Underneath, a second contradictory list
+claims two of those same items are `[x]` done. The document contradicts itself within
+the same file.
+
+It also documents a real navigation bug: **the Ticket Notes Trainer isn't in the nav
+menu** — only reachable via direct URL. That's a genuine "page exists but the feature
+is practically undiscoverable" case, exactly the gap the "Full" label glossed over.
+
+**Correction to my earlier statement:** I described the scenario-dropdown contrast bug
+as a current, unresolved known issue in both prior documents. The repo's own README
+says it **"has been fixed in the latest implementation pass; verify visually in a
+deployed build."** I should have caught that discrepancy instead of repeating the older
+claim — I was going on the QA doc's older unchecked note without cross-referencing the
+README. Correct status: **disputed / needs a live visual check**, not "confirmed
+broken." I got this wrong the first two times.
+
+## 5. Documentation health is its own problem, not just noise
+
+Counted for real: this repo alone has README.md, TODO.md, VISION.md, audit.md,
+`lefttodo.md`, and `egsegseg.md` (an odd filename, unclear purpose, worth asking
+whether it's meant to still be there) — on top of the three audit documents I've now
+personally added to the pile. The TODO.md contradiction is real too: line 13 marks
+**"Set up PWA capabilities for offline use" as `[x]` done**, while lines 134 and 269
+still list "Add service worker for caching" and "Configure PWA manifest" as `[ ]` not
+done. I checked directly: **there is no manifest file and no service worker file
+anywhere in `/app`.** The `[x]` is simply wrong.
+
+## 6–7. Security framing and the authentication question — fair criticism, direct answer
+
+The first security section reasoned "no backend → limited API/compliance risk," which
+is true as far as it goes but was too narrow. On the specific auth question raised —
+why does a single-user local app have a login system at all — my honest read: it
+doesn't buy you real protection. It's a localStorage user-ID pointer to a local IndexedDB
+record; anyone with access to the browser profile has access to the data regardless of
+whether they know the password, because nothing is encrypted at rest keyed to that
+password. It adds real complexity (password reset flows, the account-export issue
+above) without creating an actual security boundary. If cross-device sync is ever built
+for real, that's the point where genuine remote auth would earn its complexity — until
+then, a simple local PIN/lock (or nothing at all, given it's your own device) would do
+the same practical job with far less surface area.
+
+## 8. PWA claims — confirmed false, covered in point 5 above.
+
+## 9. Accessibility — the earlier count-based check was real but shallow, agreed
+
+Counting `aria-label`s tells you where labels are missing, not whether keyboard
+navigation, focus trapping in dialogs, screen-reader announcements, or contrast actually
+work. None of that was tested and I didn't claim it was, but it's fair to say the
+earlier section could have been clearer that a source-code count is a screening step,
+not an accessibility audit.
+
+One correction: the "zero `<img>` tags" finding was accurate for `/app`, but I hadn't
+looked at the root Vite app at that point — which does contain several `<img>` elements
+(the hero image, React logo, Vite logo in the untouched starter template). Doesn't
+change the practical accessibility picture since that app isn't the real product, but
+the earlier claim should have been scoped to "`/app`" explicitly rather than stated as
+if it covered the whole repository.
+
+## 10. Whether the learning content is correct against Avance's actual practice
+
+Addendum 1 spot-checked general MSP/IT technical correctness and it held up. What I
+still can't do, and want to be direct about: I have no visibility into Avance's actual
+internal tools, procedures, or vendor-specific configurations, so I can't verify the
+content is aligned with *your* company's real environment specifically — only that it's
+sound general MSP/M365 practice. That gap is permanent from my end; only you (or
+someone at Avance) can close it.
+
+## 11. Deployment and operational review
+
+Checked what's checkable from a clone: Vercel root directory is correctly documented as
+`app`. Not checkable from here: the actual live production URL's current deployed
+commit, CI checks, branch protection, Dependabot/Renovate status, or rollback process —
+those require access to the Vercel/GitHub dashboards themselves, not just the repo
+contents.
+
+## 12. Reproducibility record for this audit
+
+- Commit: `ef10d8d62fd775da4cb173c6ae4720085cd0ef23` (2026-07-10 13:20 +1000)
+- Checked: 2026-07-15, Node v22.22.2, npm 10.9.7
+- Commands run from `/app` unless noted: `npm install`, `npm audit --json`,
+  `npx tsc --noEmit`, `npx eslint .`, `npx vitest run`, `npx next build`
+- `npm audit`: 10 advisories total. `next` (high) is a **production** dependency;
+  `vite`/`vite-node`/`vitest` (critical/moderate) are **dev-only** (test tooling, not
+  shipped to users); `form-data` (high) is transitive.
+- Scoring rubric behind the earlier "C+": informal, weighted toward the
+  critical-vulnerability and data-loss-risk findings over the cleaner lint/type-check
+  results — not a formal rubric. Given everything in this addendum (fake sync, exported
+  password hashes, contradictory QA status, a second untouched app sitting in the repo),
+  **the grade should move down, not stay at C+.** A more honest label for the whole
+  package of documents so far: a static code inventory with a partial content
+  spot-check — not a verified functional, security, or data-integrity audit.
