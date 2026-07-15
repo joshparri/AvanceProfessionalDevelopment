@@ -1,3 +1,214 @@
+# Avance Professional Development — App Audit Report
+
+*Built by running actual tooling against the codebase (npm audit, tsc, eslint, vitest,
+a production build attempt) — not just reading files. Where a pillar genuinely can't be
+assessed without a running/deployed app or a live userbase, that's stated plainly rather
+than filled in with guesswork.*
+
+---
+
+## 1. Executive Summary
+
+**App:** Avance Professional Development (repo: `AvanceProfessionalDevelopment`)
+**Platform:** Web (Next.js 16 / React 19), local-first, single device, no backend
+**Version:** 0.1.0
+**Audience:** Personal tool, single user (Josh) — not a shipped multi-user product
+
+**Health score: C+**
+
+Reasoning: substantial, working feature set with clean lint and passing tests, but a
+critical-severity dependency vulnerability, a broken production build in a sandboxed
+network, near-zero test coverage, and a genuine risk of data loss (single-device
+storage, no real backup enforcement) hold it back from a higher grade.
+
+**Key findings & impact:**
+- **Critical:** one dependency (`vitest`) has a critical-severity known vulnerability;
+  `next` itself has 3 high-severity CVEs on the installed version (16.2.4 vs patched
+  16.2.6+). Fixing this is a `npm audit fix` away for most of it — low effort, real risk
+  reduction.
+- **High:** all your PD data lives in one browser's IndexedDB with no automatic backup.
+  A wiped browser profile or new machine loses everything unless you've manually used
+  the settings-page export. This is the single biggest practical risk to the project.
+- **Medium:** test coverage is effectively 1 test covering 1 utility function across a
+  ~15,000-line codebase. Any regression in the 60 learning activities, 47 skills, or
+  scenario logic would go undetected until you personally notice it.
+- **Low:** two parallel repos (this one and `AvancePD`) duplicate the same feature set,
+  splitting effort for no benefit.
+
+---
+
+## 2. UI/UX Evaluation
+
+*Scope note: this is a static-code read, not a live click-through — I haven't run the
+app in a browser and interacted with it. Findings below are what's inferable from the
+component code; a real usability pass would need you walking me through it live or me
+running it with a browser tool.*
+
+**Usability & navigation:** Single shared `Navigation.tsx` and `Layout.tsx` wrap all 30
+routes, which is good for consistency — one nav pattern instead of 30 bespoke ones.
+`AuthGuard.tsx` gates authenticated routes. Global `/search` exists via `fuse.js`
+fuzzy search.
+
+**Accessibility (real gap, measured):**
+- Zero `<img>` tags in the codebase — no raster images, so no alt-text problem by
+  omission, but also means icon-only UI (`lucide-react`, used in 50 files) carries the
+  weight, and icons need `aria-label`s to be screen-reader usable.
+- Only **9 `aria-label` occurrences** across those 50+ icon-using files. That's a real
+  accessibility gap — most icon-only buttons (save, delete, filter, expand, etc.) likely
+  have no accessible name.
+- Semantic HTML is present but thin: 1 `<nav>`, 1 `<header>`, 1 `<footer>`, 3 `<main>`
+  across 30 routes — most pages likely reuse the shared layout's landmarks rather than
+  adding their own, which is fine, but worth confirming nothing's nested wrong.
+- Color contrast and font sizing can't be assessed from code alone — that needs a
+  rendered check (browser devtools contrast checker or an automated tool like axe/Lighthouse
+  run against the live app).
+
+**Design consistency:** Uses shadcn/ui-style primitives (`ui/button.tsx`, `ui/card.tsx`,
+`ui/dialog.tsx`, etc.) — a real design system, not one-off styled divs per page. Dark
+mode is implemented (`dark-mode.tsx` context + toggle). This is a genuine strength —
+consistent component library beats bespoke styling per route.
+
+---
+
+## 3. Technical & Codebase Analysis
+
+**Architecture:** Next.js App Router, one route folder per feature (30 total), shared
+component library split into general (`components/`), design-system primitives (`ui/`),
+and learning-specific widgets (`academy/`, `learning/`). Data layer is Dexie (IndexedDB)
+with a single `AvanceDatabase` class, now at schema version 3 (three real migrations —
+shows the schema has evolved, not been static). Reasonably clean separation: `lib/` for
+logic, `data/` for static content, `types/` for shared interfaces.
+
+**Code quality — measured, not estimated:**
+- `eslint`: **clean pass, zero errors, zero warnings.**
+- `tsc --noEmit`: after a full dependency install, **zero real type errors** in
+  application code. (An earlier partial-install run threw module-resolution errors —
+  those were artifacts of an incomplete install, not real bugs; worth knowing in case
+  you see similar noise locally with a stale `node_modules`.)
+- Real TODO/FIXME comments in code: **zero.** (An earlier grep flagged 10 hits, but they
+  were all `TaskStatus.TODO` / `LearningStatus.TODO` enum values, not actual "fix this
+  later" comments — false positive, corrected here.)
+- `console.log/error/warn` calls: **32** across the codebase — worth a pass to remove
+  debug logging before treating this as production-grade, though harmless for a
+  personal tool.
+- No `any` types found — decent type discipline.
+
+**Third-party libraries:** 14 direct dependencies, all current-generation (Next 16,
+React 19, Dexie 4, Zod 4, Tailwind 4). No obvious redundancy or bloat — each dependency
+maps to a real, distinct purpose (Dexie for storage, Zod for schema validation, Fuse.js
+for search, date-fns for dates, Radix + shadcn for UI primitives). Nothing looks
+speculative or unused at a glance.
+
+**Test coverage — the weakest technical point:** exactly **one test file**
+(`db-utils.test.ts`), **one test**, passing. For a codebase with 30 routes and ~6,000
+lines of structured learning content plus the logic that drives it, this is
+effectively no safety net. A change to `mspProgress.ts` or the scenario-scoring logic
+could silently break and you wouldn't know until you personally hit the bug.
+
+**Crashlytics & logs:** not applicable — there's no crash reporting service wired up
+(expected for a local-only personal tool with no analytics backend). If you ever want
+visibility into errors you hit while using it day-to-day, that would need to be added
+deliberately (e.g. logging to a local file or an opt-in error log page) since there's
+no server to report to.
+
+---
+
+## 4. Security & Compliance
+
+**Data encryption & privacy:**
+- No data leaves the device — everything is IndexedDB, no server calls, no API layer.
+  There's genuinely nothing to intercept in transit because nothing is transmitted.
+- Data **at rest is not encrypted** — IndexedDB in the browser is plaintext, readable
+  by anything with access to the browser profile/device. For this app's content
+  (PD notes, tasks, work logs) that's a low-stakes gap, but worth naming as a gap.
+- GDPR/CCPA: not applicable in any meaningful sense — no data collection, no third
+  party has your data, single local user. Compliance frameworks assume a data
+  controller/processor relationship that doesn't exist here.
+
+**Auth:** Local-only. Email + password, hashed client-side with SHA-256 before storage
+in IndexedDB (`lib/auth.ts`). Two things worth flagging plainly:
+- **SHA-256 alone is not a secure password hash** — it's fast, which is exactly wrong
+  for password storage (makes brute-forcing cheap). A proper approach uses a slow,
+  salted hash (bcrypt/scrypt/Argon2). Low real-world risk here since there's no server
+  to attack and no remote login surface, but if this pattern ever gets reused in
+  something with real exposure, it should be replaced.
+- No JWT/OAuth because there's no backend to authenticate against — auth here is really
+  just "gate the local UI," not a real authentication boundary.
+
+**API & backend security:** not applicable — there is no backend, no API endpoints, no
+network-facing surface. This pillar is close to N/A for this specific app.
+
+**Vulnerability scanning (ran `npm audit`, real results):**
+
+| Package | Severity | Fix available |
+|---|---|---|
+| vitest | **Critical** | Yes (major version bump) |
+| next | **High** | Yes (patch: 16.2.4 → 16.2.6+) |
+| form-data | High | Yes |
+| vite | High | Yes |
+| brace-expansion | Moderate | Yes |
+| esbuild | Moderate | Yes |
+| js-yaml | Moderate | Yes |
+| postcss | Moderate | Yes |
+| vite-node | Moderate | Yes |
+| @babel/core | Low | Yes |
+
+10 vulnerabilities total (1 critical, 3 high, 5 moderate, 1 low), **all with fixes
+available.** The `next` one is the most consequential since it's a direct dependency —
+two of its three advisories are DoS and middleware-bypass issues in App Router, patched
+in 16.2.6. Recommend `npm audit fix` first (non-breaking fixes), then evaluate the
+`vitest` major-version bump separately since that one's flagged as a breaking change.
+
+---
+
+## 5. Performance Metrics
+
+**Honest scope limit:** none of this can be measured without a running, deployed
+instance and real usage over time. I can't produce launch times, memory profiles, or
+battery drain from static code — anyone claiming to hand you real numbers here without
+running the app is making them up.
+
+**What I could check, and did:**
+- **Production build:** attempted `next build` — it **failed** in this sandbox because
+  the build process needs to fetch Geist/Geist Mono from Google Fonts at build time and
+  my environment's network is restricted to a small allowlist that doesn't include
+  `fonts.googleapis.com`. This may well succeed fine on your machine or in Vercel's
+  build environment where that domain isn't blocked — but it does surface a real
+  characteristic worth knowing: **the build has a hard dependency on live internet
+  access to Google's font CDN**, which is a bit of an odd requirement for an app whose
+  whole selling point is local-first/offline. Worth checking it builds cleanly in your
+  actual deploy pipeline, and considering self-hosting the fonts if you want build-time
+  resilience.
+- **Bundle size, caching strategy, offline functionality:** not assessable without a
+  successful build to inspect, or the running app to test with devtools' network panel
+  offline-throttling.
+
+**Recommendation:** if performance is something you actually care about tracking, the
+practical move is running Lighthouse against the deployed Vercel URL — that gives real
+launch/interactivity/accessibility/best-practices scores in about 30 seconds, and I can
+walk through the results with you if you paste them in.
+
+---
+
+## 6. Actionable Roadmap & Recommendations
+
+| Priority | Issue | Effort | Action |
+|---|---|---|---|
+| **High** | Critical/high npm vulnerabilities (vitest, next, form-data, vite) | Low | Run `npm audit fix`; separately evaluate the vitest major-version bump |
+| **High** | Single point of data-loss failure — no enforced backup | Medium | Add a reminder/prompt to use the existing export feature on a schedule, or auto-export to a downloads folder periodically |
+| **High** | Near-zero test coverage on core learning/progress logic | Medium-High | Prioritize tests for `mspProgress.ts`, `mspQuizProgress.ts`, scoring/progress calculation — the logic most likely to silently break |
+| **Medium** | Icon-only buttons largely missing `aria-label` | Medium | Sweep `lucide-react` icon usages, add labels — mechanical but time-consuming across 50 files |
+| **Medium** | Two parallel repos (this one + AvancePD) duplicating effort | Decision, not build effort | Pick one as canonical, archive/retire the other |
+| **Medium** | Build's hard dependency on live Google Fonts fetch | Low | Self-host Geist/Geist Mono fonts instead of `next/font/google` |
+| **Low** | Password hashing is SHA-256, not a proper slow hash | Low | Swap to bcrypt/Argon2 if this auth model ever gets real exposure (low urgency for a local-only tool) |
+| **Low** | 32 stray `console.log/error/warn` calls | Low | Clean up before treating as "production-grade," harmless otherwise |
+| **N/A** | Missing cert content (AZ-104, Ubiquiti, Network+/Security+/SC-900, ITIL) | Medium-High | Carried over from earlier audit — this is a content gap, not a code-quality issue, but it's the actual reason this tool exists so still worth top billing in your own priority list |
+
+**Strategic call:** refactor, don't rebuild. The architecture is sound (clean lint,
+zero type errors, real schema migrations, sensible dependency choices) — the gaps are
+in coverage (tests), hardening (deps, auth hash), and content (the certs), not in
+fundamental design. Nothing here justifies a rewrite.
+
 # Avance Professional Development — Current State
 
 *Written from a direct read of the source code (not the README), July 2026. The existing
