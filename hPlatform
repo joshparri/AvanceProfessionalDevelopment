@@ -1,0 +1,5 @@
+[33mcommit 25b0e9109e5d389963bfc88783d0bd2ec002ab9e[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m
+Author: Josh Parris <joshuaparrisdadlan@gmail.com>
+Date:   Wed Jun 10 11:41:04 2026 +1000
+
+    Fix build issues and update configuration
