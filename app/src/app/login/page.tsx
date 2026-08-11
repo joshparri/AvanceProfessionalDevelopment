@@ -45,7 +45,7 @@ export default function LoginPage() {
         </CardHeader>
         <CardContent>
           <form className="space-y-6" onSubmit={handleSubmit}>
-            <div>
+            <div suppressHydrationWarning>
               <label htmlFor="email" className="block text-sm font-medium text-slate-700 dark:text-slate-200">
                 Email address
               </label>
@@ -58,7 +58,7 @@ export default function LoginPage() {
                 className="mt-2 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:focus:border-blue-400 dark:focus:ring-blue-500/20"
               />
             </div>
-            <div>
+            <div suppressHydrationWarning>
               <label htmlFor="password" className="block text-sm font-medium text-slate-700 dark:text-slate-200">
                 Password
               </label>
